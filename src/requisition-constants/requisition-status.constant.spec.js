@@ -69,6 +69,12 @@ describe("REQUISITION_STATUS", function() {
 
             expect(displayName).toBe('Skipped');
         });
+
+        it('should get display name for REJECTED status', function() {
+            var displayName = RequisitionStatus.$getDisplayName('REJECTED');
+
+            expect(displayName).toBe('Rejected');
+        });
     });
 
     describe('toList', function() {
@@ -83,6 +89,7 @@ describe("REQUISITION_STATUS", function() {
             expect(returnedList[4].label).toBe('APPROVED');
             expect(returnedList[5].label).toBe('RELEASED');
             expect(returnedList[6].label).toBe('SKIPPED');
+            expect(returnedList[7].label).toBe('REJECTED');
         });
     });
 });

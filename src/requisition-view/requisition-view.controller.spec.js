@@ -77,7 +77,7 @@ describe('RequisitionViewController', function() {
 
             deferred = $q.defer();
             requisition = jasmine.createSpyObj('requisition',
-                ['$skip', '$isInitiated', '$isSubmitted', '$isAuthorized', '$isInApproval', '$isReleased', '$save', '$authorize', '$submit', '$remove', '$approve', '$reject']);
+                ['$skip', '$isInitiated', '$isSubmitted', '$isAuthorized', '$isInApproval', '$isReleased', '$isRejected', '$save', '$authorize', '$submit', '$remove', '$approve', '$reject']);
             requisition.id = '1';
             requisition.program = {
                 id: '2',
@@ -86,6 +86,7 @@ describe('RequisitionViewController', function() {
             };
             requisition.$isInitiated.andReturn(true);
             requisition.$isReleased.andReturn(false);
+            requisition.$isRejected.andReturn(false);
             requisition.$skip.andReturn(deferred.promise);
             requisition.$save.andReturn(deferred.promise);
             requisition.$authorize.andReturn(deferred.promise);
@@ -120,6 +121,14 @@ describe('RequisitionViewController', function() {
 
     it('should display skip button', function() {
         authorizationServiceSpy.hasRight.andReturn(true);
+        expect(vm.displaySkip()).toBe(true);
+    });
+
+    it('should display skip button when requisition is rejected', function() {
+        authorizationServiceSpy.hasRight.andReturn(true);
+        requisition.$isInitiated.andReturn(false);
+        requisition.$isRejected.andReturn(true);
+
         expect(vm.displaySkip()).toBe(true);
     });
 
@@ -195,6 +204,18 @@ describe('RequisitionViewController', function() {
         expect(vm.displaySync()).toBe(true);
     });
 
+    it('should display sync button when rejected', function() {
+        authorizationServiceSpy.hasRight.andReturn(true);
+
+        vm.requisition.$isInitiated.andReturn(false);
+        vm.requisition.$isSubmitted.andReturn(false);
+        vm.requisition.$isAuthorized.andReturn(false);
+        vm.requisition.$isInApproval.andReturn(false);
+        vm.requisition.$isRejected.andReturn(true);
+
+        expect(vm.displaySync()).toBe(true);
+    });
+
     it('should display sync button when submitted', function() {
         authorizationServiceSpy.hasRight.andReturn(true);
 
@@ -243,6 +264,16 @@ describe('RequisitionViewController', function() {
 
         expect(vm.displayDelete()).toBe(true);
     });
+
+    it('should display delete button when rejected', function() {
+        authorizationServiceSpy.hasRight.andReturn(true);
+
+        vm.requisition.$isInitiated.andReturn(false);
+        vm.requisition.$isRejected.andReturn(true);
+
+        expect(vm.displayDelete()).toBe(true);
+    });
+
 
     it('should display delete button when submitted', function() {
         authorizationServiceSpy.hasRight.andReturn(true);

@@ -118,7 +118,7 @@
          * Checks if the current requisition template has a skip column, and if the requisition state allows for skipping.
          */
         function areSkipControlsVisible(){
-            if(!requisition.$isSubmitted() && !requisition.$isInitiated()){
+            if(!requisition.$isSubmitted() && !requisition.$isInitiated() && !requisition.$isRejected()){
                 return false;
             }
 

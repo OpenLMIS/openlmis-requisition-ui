@@ -87,7 +87,7 @@ describe('periodFactory', function() {
                 emergency: emergency,
                 facility: facilityId,
                 program: programId,
-                requisitionStatus: [REQUISITION_STATUS.INITIATED, REQUISITION_STATUS.SUBMITTED]
+                requisitionStatus: [REQUISITION_STATUS.INITIATED, REQUISITION_STATUS.SUBMITTED, REQUISITION_STATUS.REJECTED]
             });
         });
 

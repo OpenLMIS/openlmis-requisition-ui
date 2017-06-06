@@ -415,6 +415,22 @@ describe('Requisition', function() {
         expect(isReleased).toBe(false);
     });
 
+    it('should return true if requisition status is rejected', function() {
+        requisition.status = REQUISITION_STATUS.REJECTED;
+
+        var isRejected = requisition.$isRejected();
+
+        expect(isRejected).toBe(true);
+    });
+
+    it('should return false if requisition status is not rejected', function() {
+        requisition.status = REQUISITION_STATUS.INITIATED;
+
+        var isRejected = requisition.$isRejected();
+
+        expect(isRejected).toBe(false);
+    });
+
     describe('isAfterAuthorize', function() {
         it('should return false for requisition status INITIATED', function() {
             requisition.status = REQUISITION_STATUS.INITIATED;

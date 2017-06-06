@@ -58,7 +58,7 @@
                 program: programId,
                 facility: facilityId,
                 emergency: emergency,
-                requisitionStatus: emergency ? [REQUISITION_STATUS.INITIATED, REQUISITION_STATUS.SUBMITTED] : undefined
+                requisitionStatus: emergency ? [REQUISITION_STATUS.INITIATED, REQUISITION_STATUS.SUBMITTED, REQUISITION_STATUS.REJECTED] : undefined
             }));
 
             $q.all(promises).then(function(response) {
