@@ -34,38 +34,26 @@ describe('FullSupplyController', function() {
     });
 
     beforeEach(function($rootScope) {
-        requisition = {
-            template: jasmine.createSpyObj('RequisitionTemplate', ['getColumns']),
-            requisitionLineItems: [
-                lineItem('One', true),
-                lineItem('Two', true),
-                lineItem('One', true),
-                lineItem('Two', true),
-                lineItem('Three', false)
-            ]
-        };
+        requisition = jasmine.createSpyObj('requisition', ['$isInitiated', '$isSubmitted','$isRejected']);
+        requisition.template = jasmine.createSpyObj('RequisitionTemplate', ['getColumns']);
+        requisition.requisitionLineItems = [
+            lineItem('One', true),
+            lineItem('Two', true),
+            lineItem('One', true),
+            lineItem('Two', true),
+            lineItem('Three', false)
+        ];
 
         lineItems = [
             requisition.requisitionLineItems[0],
             requisition.requisitionLineItems[1],
             requisition.requisitionLineItems[2],
-            requisition.requisitionLineItems[3],
+            requisition.requisitionLineItems[3]
         ];
 
-        requisitionStatus = "INITIALIZED";
-
-        requisition.$isSubmitted = function(){
-            if(requisitionStatus == "SUBMITTED"){
-                return true;
-            }
-            return false;
-        }
-        requisition.$isInitiated = function(){
-            if(requisitionStatus == "INITIALIZED"){
-                return true;
-            }
-            return false;
-        }
+        requisition.$isInitiated.andReturn(false);
+        requisition.$isSubmitted.andReturn(false);
+        requisition.$isRejected.andReturn(false);
 
         columns = [{
             name: 'skipped'
@@ -131,27 +119,37 @@ describe('FullSupplyController', function() {
         expect(requisition.requisitionLineItems[4].skipped).toBe(false);
     });
 
-    it('should only show skip controls if the requistions status is INITIALIZED or SUBMITTED', function(){
-        // requisition status is INITIALIZED
-        expect(vm.areSkipControlsVisible()).toBe(true);
-
-        requisitionStatus = "SUBMITTED";
-        expect(vm.areSkipControlsVisible()).toBe(true);
-
-        requisitionStatus = "AUTHORIZED";
-        expect(vm.areSkipControlsVisible()).toBe(false);
-
-        requisitionStatus = "foo";
+    it('should not show skip controls', function(){
         expect(vm.areSkipControlsVisible()).toBe(false);
     });
 
-    it('should only show skip controls if the requisition template has a skip columm', function(){
-        // There is a column named skip
+    it('should show skip controls if the requistions status is INITIATED', function(){
+        requisition.$isInitiated.andReturn(true);
         expect(vm.areSkipControlsVisible()).toBe(true);
+    });
 
+    it('should show skip controls if the requistions status is SUBMITTED', function(){
+        requisition.$isSubmitted.andReturn(true);
+        expect(vm.areSkipControlsVisible()).toBe(true);
+    });
+
+    it('should show skip controls if the requistions status is REJECTED', function(){
+        requisition.$isRejected.andReturn(true);
+        expect(vm.areSkipControlsVisible()).toBe(true);
+    });
+
+    it('should show skip controls if the requisition template has a skip columm', function(){
+        requisition.$isInitiated.andReturn(true);
+        columns[0].name = 'skipped';
+
+        expect(vm.areSkipControlsVisible()).toBe(true);
+    });
+
+
+    it('should not show skip controls if the requisition template doesnt have a skip columm', function(){
+        requisition.$isInitiated.andReturn(true);
         columns[0].name = 'foo';
 
         expect(vm.areSkipControlsVisible()).toBe(false);
     });
-
 });
