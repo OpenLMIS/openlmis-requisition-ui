@@ -385,7 +385,7 @@
          * @return {Boolean} should submit button be displayed
          */
         function displaySubmit() {
-            return (vm.requisition.$isInitiated() || vm.requisition.$isRejected) && hasRightForProgram(REQUISITION_RIGHTS.REQUISITION_CREATE);
+            return (vm.requisition.$isInitiated() || vm.requisition.$isRejected()) && hasRightForProgram(REQUISITION_RIGHTS.REQUISITION_CREATE);
         }
 
         /**
