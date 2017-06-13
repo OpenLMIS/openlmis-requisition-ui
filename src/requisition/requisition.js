@@ -124,11 +124,11 @@
          * @return {Promise} requisition promise
          */
         function authorize() {
-            var availableOffline = this.$availableOffline;
+            var requisition = this;
             return handlePromise(resource.authorize({
                 id: this.id
             }, {}).$promise, function(authorized) {
-                saveToStorage(authorized, availableOffline);
+                updateRequisition(requisition, authorized);
             });
         }
 
@@ -162,8 +162,8 @@
          * @return {Promise} requisition promise
          */
         function save() {
-            var availableOffline = this.$availableOffline;
-            var id = this.id
+            var availableOffline = this.$availableOffline,
+                id = this.id;
             return handlePromise(resource.save({
                 id: this.id
             }, this).$promise, function(saved) {
@@ -187,11 +187,11 @@
          * @return {Promise} requisition promise
          */
         function submit() {
-            var availableOffline = this.$availableOffline;
+            var requisition = this;
             return handlePromise(resource.submit({
                 id: this.id
             }, {}).$promise, function(submitted) {
-                saveToStorage(submitted, availableOffline);
+                updateRequisition(requisition, submitted);
             });
         }
 
@@ -206,11 +206,11 @@
          * @return {Promise} promise that resolves when requisition is approved
          */
         function approve() {
-            var availableOffline = this.$availableOffline;
+            var requisition = this;
             return handlePromise(resource.approve({
                 id: this.id
             }, {}).$promise, function(approved) {
-                saveToStorage(approved, availableOffline);
+                updateRequisition(requisition, approved);
             });
         }
 
@@ -225,11 +225,11 @@
          * @return {Promise} promise that resolves when requisition is rejected
          */
         function reject() {
-            var availableOffline = this.$availableOffline;
+            var requisition = this;
             return handlePromise(resource.reject({
                 id: this.id
             }, {}).$promise, function(rejected) {
-                saveToStorage(rejected, availableOffline);
+                updateRequisition(requisition, rejected);
             });
         }
 
@@ -393,6 +393,14 @@
             });
 
             return deferred.promise;
+        }
+
+        function updateRequisition(requisition, updated) {
+            var availableOffline = requisition.$availableOffline;
+
+            requisition.status = updated.status;
+            requisition.statusChanges = updated.statusChanges;
+            saveToStorage(requisition, availableOffline);
         }
 
         function saveToStorage(requisition, shouldSave) {
