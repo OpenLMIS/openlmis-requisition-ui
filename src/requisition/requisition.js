@@ -129,7 +129,6 @@
                 id: this.id
             }, {}).$promise, function(authorized) {
                 updateRequisition(requisition, authorized);
-                populateApprovedQuantity(requisition);
             });
         }
 
@@ -401,6 +400,11 @@
 
             requisition.status = updated.status;
             requisition.statusChanges = updated.statusChanges;
+
+            if (requisition.isAuthorized()) {
+                populateApprovedQuantity(requisition);
+            }
+            
             saveToStorage(requisition, availableOffline);
         }
 
