@@ -31,12 +31,12 @@
     requisitionFactory.$inject = [
         '$q', '$resource', 'openlmisUrlFactory', 'requisitionUrlFactory', 'RequisitionTemplate',
         'LineItem', 'REQUISITION_STATUS', 'COLUMN_SOURCES', 'localStorageFactory', 'offlineService',
-        'dateUtils', '$filter'
+        'dateUtils', '$filter', 'TEMPLATE_COLUMNS'
     ];
 
     function requisitionFactory($q, $resource, openlmisUrlFactory, requisitionUrlFactory,
                                 RequisitionTemplate, LineItem, REQUISITION_STATUS, COLUMN_SOURCES,
-                                localStorageFactory, offlineService, dateUtils, $filter) {
+                                localStorageFactory, offlineService, dateUtils, $filter, TEMPLATE_COLUMNS) {
 
         var offlineRequisitions = localStorageFactory('requisitions'),
             offlineStockAdjustmentReasons = localStorageFactory('stockAdjustmentReasons'),
@@ -129,6 +129,7 @@
                 id: this.id
             }, {}).$promise, function(authorized) {
                 updateRequisition(requisition, authorized);
+                populateApprovedQuantity(requisition);
             });
         }
 
@@ -408,6 +409,26 @@
                 requisition.$modified = false;
                 requisition.$availableOffline = true;
                 offlineRequisitions.put(requisition);
+            }
+        }
+
+        function populateApprovedQuantity(requisition) {
+            if (requisition.template.getColumn(TEMPLATE_COLUMNS.CALCULATED_ORDER_QUANTITY).isDisplayed) {
+                angular.forEach(requisition.requisitionLineItems, function (lineItem) {
+                    if (!(lineItem.skipped)) {
+                        if (lineItem.requestedQuantity === null) {
+                            lineItem.approvedQuantity = lineItem.calculatedOrderQuantity;
+                        } else {
+                            lineItem.approvedQuantity = lineItem.requestedQuantity;
+                        }
+                    }
+                });
+            } else {
+                angular.forEach(requisition.requisitionLineItems, function (lineItem) {
+                    if (!(lineItem.skipped)) {
+                        lineItem.approvedQuantity = lineItem.requestedQuantity;
+                    }
+                });
             }
         }
 
