@@ -40,7 +40,8 @@ describe('Requisition', function() {
                 id: '1',
                 programId: '1',
                 columnsMap : {
-                begginingBalance : begginingBalance
+                begginingBalance : begginingBalance,
+                calculatedOrderQuantity: calculatedOrderQuantity
             }},
             processingPeriod: {
                 startDate: new Date(2017, 0, 1),
@@ -64,17 +65,22 @@ describe('Requisition', function() {
             label: 'BG',
             source: 'USER_INPUT',
             columnDefinition: columnDefinition
+        },
+        calculatedOrderQuantity = {
+            isDisplayed: false
         };
 
     beforeEach(module('requisition'));
 
     beforeEach(module(function($provide){
-        var template = jasmine.createSpyObj('template', ['getColumns']),
+        var template = jasmine.createSpyObj('template', ['getColumns', 'getColumn']),
             TemplateSpy = jasmine.createSpy('RequisitionTemplate').andReturn(template);
 
         template.getColumns.andCallFake(function(nonFullSupply) {
             return nonFullSupply ? nonFullSupplyColumns() : fullSupplyColumns();
         });
+
+        template.getColumn.andReturn(calculatedOrderQuantity);
 
         offlineRequisitions = jasmine.createSpyObj('offlineRequisitions', ['put', 'remove', 'removeBy']);
         var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);

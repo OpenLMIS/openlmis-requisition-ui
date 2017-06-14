@@ -401,7 +401,7 @@
             requisition.status = updated.status;
             requisition.statusChanges = updated.statusChanges;
 
-            if (requisition.isAuthorized()) {
+            if (requisition.$isAuthorized()) {
                 populateApprovedQuantity(requisition);
             }
             
