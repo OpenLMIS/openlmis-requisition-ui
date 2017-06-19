@@ -28,6 +28,18 @@ describe('Requisition', function() {
             id: '1',
             name: 'program'
         },
+        lineItem1 = {
+            calculatedOrderQuantity: 100,
+            requestedQuantity: 90,
+            approvedQuantity: null,
+            skipped: false
+        },
+        lineItem2 = {
+            calculatedOrderQuantity: 100,
+            requestedQuantity: null,
+            approvedQuantity: null,
+            skipped: false
+        },
         sourceRequisition = {
             id: '1',
             name: 'requisition',
@@ -35,14 +47,14 @@ describe('Requisition', function() {
             facility: facility,
             program: program,
             supplyingFacility: facility,
-            requisitionLineItems: [],
+            requisitionLineItems: [lineItem1, lineItem2],
             template: {
                 id: '1',
                 programId: '1',
                 columnsMap : {
-                begginingBalance : begginingBalance,
+                beginningBalance : beginningBalance,
                 calculatedOrderQuantity: calculatedOrderQuantity
-            }},
+                }},
             processingPeriod: {
                 startDate: new Date(2017, 0, 1),
                 endDate: new Date(2017, 0, 31)
@@ -54,20 +66,20 @@ describe('Requisition', function() {
         },
         columnDefinition = {
             id: '1',
-            name: 'begginingBalance',
+            name: 'beginningBalance',
             label: 'BG',
             sources: ['USER_INPUT'],
             columnType: 'NUMERIC',
             mandatory: true
         },
-        begginingBalance = {
-            name: 'begginingBalance',
+        beginningBalance = {
+            name: 'beginningBalance',
             label: 'BG',
             source: 'USER_INPUT',
             columnDefinition: columnDefinition
         },
         calculatedOrderQuantity = {
-            isDisplayed: false
+            isDisplayed: true
         };
 
     beforeEach(module('requisition'));
@@ -243,6 +255,82 @@ describe('Requisition', function() {
         expect(requisition.$isAuthorized()).toBe(true);
         expect(offlineRequisitions.put).not.toHaveBeenCalled();
     });
+
+    it('should set approved quantity to requested quantity when requested quantity is not empty', function() {
+        var storedRequisition;
+        offlineRequisitions.put.andCallFake(function(argument) {
+            storedRequisition = argument;
+        });
+
+        requisition.status = REQUISITION_STATUS.AUTHORIZED;
+        requisition.template.getColumn('calculatedOrderQuantity').isDisplayed = true;
+        requisition.requisitionLineItems[0].requestedQuantity = 10;
+        requisition.requisitionLineItems[1].requestedQuantity = 15;
+
+        httpBackend.when('POST', requisitionUrlFactory('/api/requisitions/' + requisition.id + '/authorize'))
+            .respond(200, requisition);
+
+        requisition.$availableOffline = false;
+        requisition.$authorize();
+
+        httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(requisition.$isAuthorized()).toBe(true);
+        expect(requisition.requisitionLineItems[0].approvedQuantity).toBe(requisition.requisitionLineItems[0].requestedQuantity);
+        expect(requisition.requisitionLineItems[1].approvedQuantity).toBe(requisition.requisitionLineItems[1].requestedQuantity);
+    });
+
+    it('should set approved quantity to calculated quantity when calculated quantity is displayed and requested quantity is empty', function() {
+        var storedRequisition;
+        offlineRequisitions.put.andCallFake(function(argument) {
+            storedRequisition = argument;
+        });
+
+        requisition.status = REQUISITION_STATUS.AUTHORIZED;
+        requisition.template.getColumn('calculatedOrderQuantity').isDisplayed = true;
+        requisition.requisitionLineItems[0].requestedQuantity = null;
+        requisition.requisitionLineItems[1].requestedQuantity = null;
+
+        httpBackend.when('POST', requisitionUrlFactory('/api/requisitions/' + requisition.id + '/authorize'))
+            .respond(200, requisition);
+
+        requisition.$availableOffline = false;
+        requisition.$authorize();
+
+        httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(requisition.$isAuthorized()).toBe(true);
+        expect(requisition.requisitionLineItems[0].approvedQuantity).toBe(requisition.requisitionLineItems[0].calculatedOrderQuantity);
+        expect(requisition.requisitionLineItems[1].approvedQuantity).toBe(requisition.requisitionLineItems[1].calculatedOrderQuantity);
+    });
+
+    it('should set approved quantity to requested quantity when calculated quantity is not displayed', function() {
+        var storedRequisition;
+        offlineRequisitions.put.andCallFake(function(argument) {
+            storedRequisition = argument;
+        });
+
+        requisition.status = REQUISITION_STATUS.AUTHORIZED;
+        requisition.template.getColumn('calculatedOrderQuantity').isDisplayed = false;
+        requisition.requisitionLineItems[0].requestedQuantity = 15;
+        requisition.requisitionLineItems[1].requestedQuantity = null;
+
+        httpBackend.when('POST', requisitionUrlFactory('/api/requisitions/' + requisition.id + '/authorize'))
+            .respond(200, requisition);
+
+        requisition.$availableOffline = false;
+        requisition.$authorize();
+
+        httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(requisition.$isAuthorized()).toBe(true);
+        expect(requisition.requisitionLineItems[0].approvedQuantity).toBe(requisition.requisitionLineItems[0].requestedQuantity);
+        expect(requisition.requisitionLineItems[1].approvedQuantity).toBe(requisition.requisitionLineItems[1].requestedQuantity);
+    });
+
 
     it('should approve requisition that is not available offline', function() {
         var storedRequisition;
