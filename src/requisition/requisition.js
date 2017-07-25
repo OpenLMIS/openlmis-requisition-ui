@@ -414,6 +414,7 @@
         function updateRequisition(requisition, updated) {
             var availableOffline = requisition.$availableOffline;
 
+            requisition.modifiedDate = updated.modifiedDate;
             requisition.status = updated.status;
             requisition.statusChanges = updated.statusChanges;
 
