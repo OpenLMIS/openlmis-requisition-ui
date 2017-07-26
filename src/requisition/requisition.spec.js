@@ -42,6 +42,7 @@ describe('Requisition', function() {
         },
         sourceRequisition = {
             id: '1',
+            modifiedDate: [2016, 4, 30, 16, 21, 33],
             name: 'requisition',
             status: 'INITIATED',
             facility: facility,
@@ -134,6 +135,7 @@ describe('Requisition', function() {
 
     it('should submit requisition that is available offline', function() {
         var storedRequisition;
+
         offlineRequisitions.put.andCallFake(function(argument) {
             storedRequisition = argument;
         });
@@ -156,6 +158,55 @@ describe('Requisition', function() {
         expect(storedRequisition.$modified).toBe(false);
         expect(storedRequisition.$availableOffline).toBe(true);
         expect(storedRequisition.id).toEqual(requisition.id);
+    });
+
+    it('should update modifiedDate, status and statusChanges of a requisition', function() {
+        var storedRequisition, updatedRequisition;
+
+        offlineRequisitions.put.andCallFake(function(argument) {
+            storedRequisition = argument;
+        });
+
+        updatedRequisition = angular.copy(requisition);
+        updatedRequisition.status = REQUISITION_STATUS.SUBMITTED;
+        updatedRequisition.modifiedDate = [2016, 4, 31, 16, 25, 33];
+        updatedRequisition.statusChanges = 'statusChanges';
+
+        httpBackend.when('POST', requisitionUrlFactory('/api/requisitions/' + requisition.id + '/submit'))
+            .respond(200, updatedRequisition);
+
+        requisition.$availableOffline = true;
+        requisition.$submit();
+
+        httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(offlineRequisitions.put).toHaveBeenCalled();
+        expect(storedRequisition.modifiedDate).toEqual(updatedRequisition.modifiedDate);
+        expect(storedRequisition.status).toEqual(updatedRequisition.status);
+        expect(storedRequisition.statusChanges).toEqual(updatedRequisition.statusChanges);
+    });
+
+    it('should save requisition to local storage after updating it', function() {
+        var storedRequisition, updatedRequisition;
+
+        offlineRequisitions.put.andCallFake(function(argument) {
+            storedRequisition = argument;
+        });
+
+        updatedRequisition = angular.copy(requisition);
+
+        httpBackend.when('POST', requisitionUrlFactory('/api/requisitions/' + requisition.id + '/submit'))
+            .respond(200, updatedRequisition);
+
+        requisition.$availableOffline = true;
+        requisition.$submit();
+
+        httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(offlineRequisitions.put).toHaveBeenCalled();
+        expect(storedRequisition.id).toEqual(updatedRequisition.id);
     });
 
     it('should authorize requisition that is available offline', function() {
