@@ -632,7 +632,7 @@ describe('Requisition', function() {
     });
 
 
-    ddescribe('isEditable', function() {
+    describe('isEditable', function() {
 
         beforeEach(function() {
             userHasApproveRight = false;
