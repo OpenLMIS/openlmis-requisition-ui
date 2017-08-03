@@ -36,6 +36,7 @@
         'openlmis-pagination',
         'openlmis-rights',
         'openlmis-urls',
+        'openlmis-auth',
         'ui.router'
     ]);
 

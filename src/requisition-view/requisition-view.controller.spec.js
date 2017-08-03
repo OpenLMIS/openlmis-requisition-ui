@@ -28,7 +28,7 @@ describe('RequisitionViewController', function() {
 
             confirmSpy = jasmine.createSpyObj('confirmService', ['confirm', 'confirmDestroy']);
 
-            authorizationServiceSpy = jasmine.createSpyObj('authorizationService', ['hasRight']);
+            authorizationServiceSpy = jasmine.createSpyObj('authorizationService', ['hasRight', 'isAuthenticated']);
             accessTokenFactorySpy = jasmine.createSpyObj('accessTokenFactory', ['addAccessToken']);
 
             requisitionValidatorMock = jasmine.createSpyObj('requisitionValidator', [

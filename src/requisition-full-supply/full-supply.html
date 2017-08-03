@@ -4,7 +4,7 @@
 		<li><a ng-click="vm.skipAll()">{{'requisitionFullSupply.all' | message}}</a></li>
 		<li><a ng-click="vm.unskipAll()">{{'requisitionFullSupply.none' | message}}</a></li>
 	</ul>
-	<saving-indicator class="requisition-indicator" object="vm.requisition.requisitionLineItems"/>
+	<saving-indicator  ng-show="vm.canEditRequisition()" class="requisition-indicator" object="vm.requisition.requisitionLineItems"/>
 	<table>
 		<thead>
 			<tr>

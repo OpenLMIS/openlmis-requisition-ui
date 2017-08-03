@@ -17,7 +17,8 @@
 describe('Requisition', function() {
 
     var $rootScope, httpBackend, q, REQUISITION_STATUS, requisitionUrlFactory, openlmisUrl,
-        LineItemSpy, offlineRequisitions;
+        LineItemSpy, offlineRequisitions, authorizationServiceSpy, userHasApproveRight,
+        userHasAuthorizeRight, userHasCreateRight, userHasDeleteRight, REQUISITION_RIGHTS;
 
     var requisition,
         facility = {
@@ -108,6 +109,27 @@ describe('Requisition', function() {
                 return offlineRequisitions;
             };
         });
+
+        authorizationServiceSpy = jasmine.createSpyObj('authorizationService', ['hasRight', 'isAuthenticated']);
+        $provide.service('authorizationService', function() {
+            return authorizationServiceSpy;
+        });
+
+        authorizationServiceSpy.hasRight.andCallFake(function(right){
+            if(userHasApproveRight && right == REQUISITION_RIGHTS.REQUISITION_APPROVE) {
+                return true;
+            }
+            if(userHasAuthorizeRight && right == REQUISITION_RIGHTS.REQUISITION_AUTHORIZE) {
+                return true;
+            }
+            if(userHasCreateRight && right == REQUISITION_RIGHTS.REQUISITION_CREATE){
+                return true;
+            }
+            if (userHasDeleteRight && right == REQUISITION_RIGHTS.REQUISITION_DELETE) {
+                return true;
+            }
+            return false;
+        });
     }));
 
     beforeEach(module(function($provide){
@@ -121,13 +143,14 @@ describe('Requisition', function() {
     }));
 
     beforeEach(inject(function(_$httpBackend_, _$rootScope_, Requisition, _requisitionUrlFactory_,
-                               openlmisUrlFactory, _REQUISITION_STATUS_, $q) {
+                               openlmisUrlFactory, _REQUISITION_STATUS_, $q, _REQUISITION_RIGHTS_) {
 
         httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         requisitionUrlFactory = _requisitionUrlFactory_;
         openlmisUrl = openlmisUrlFactory;
         REQUISITION_STATUS = _REQUISITION_STATUS_;
+        REQUISITION_RIGHTS = _REQUISITION_RIGHTS_;
         q = $q;
 
         requisition = new Requisition(sourceRequisition, {});
@@ -607,6 +630,129 @@ describe('Requisition', function() {
             expect(requisition.$isAfterAuthorize()).toBe(true);
         });
     });
+
+
+    ddescribe('isEditable', function() {
+
+        beforeEach(function() {
+            userHasApproveRight = false;
+            userHasAuthorizeRight = false;
+            userHasCreateRight = false;
+            userHasDeleteRight = false;
+        });
+
+
+        it('should return true if user has REQUISITION_CREATE right and requisition is initiated', function() {
+            requisition.status = REQUISITION_STATUS.INITIATED;
+            userHasCreateRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_CREATE right and requisition is rejected', function() {
+            requisition.status = REQUISITION_STATUS.REJECTED;
+            userHasCreateRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_APPROVE right and requisition is authorized', function() {
+            requisition.status = REQUISITION_STATUS.AUTHORIZED;
+            userHasApproveRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_APPROVE right and requisition is in aproval', function() {
+            requisition.status = REQUISITION_STATUS.IN_APPROVAL;
+            userHasApproveRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_DELETE and REQUISITION_CREATE rights and requisition is initiated', function() {
+            requisition.status = REQUISITION_STATUS.INITIATED;
+            userHasDeleteRight = true;
+            userHasCreateRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_DELETE and REQUISITION_CREATE rights and requisition is rejected', function() {
+            requisition.status = REQUISITION_STATUS.REJECTED;
+            userHasDeleteRight = true;
+            userHasCreateRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_DELETE and REQUISITION_AUTHORIZE rights and requisition is submitted', function() {
+            requisition.status = REQUISITION_STATUS.SUBMITTED;
+            userHasDeleteRight = true;
+            userHasAuthorizeRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_AUTHORIZE right and requisition is initiated', function() {
+            requisition.status = REQUISITION_STATUS.INITIATED;
+            userHasAuthorizeRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_AUTHORIZE right and requisition is rejected', function() {
+            requisition.status = REQUISITION_STATUS.REJECTED;
+            userHasAuthorizeRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return true if user has REQUISITION_AUTHORIZE right and requisition is submitted', function() {
+            requisition.status = REQUISITION_STATUS.SUBMITTED;
+            userHasAuthorizeRight = true;
+
+            expect(requisition.$isEditable()).toBe(true);
+        });
+
+        it('should return false if user does not have REQUISITION_CREATE right and requisition is initiated', function() {
+            requisition.status = REQUISITION_STATUS.INITIATED;
+
+            expect(requisition.$isEditable()).toBe(false);
+        });
+
+        it('should return false if user has REQUISITION_CREATE right and requisition is submitted', function() {
+            requisition.status = REQUISITION_STATUS.SUBMITTED;
+            userHasCreateRight = true;
+
+            expect(requisition.$isEditable()).toBe(false);
+        });
+
+        it('should return false if user has REQUISITION_AUTHORIZE right and requisition is authorized', function() {
+            requisition.status = REQUISITION_STATUS.AUTHORIZED;
+            userHasAuthorizeRight = true;
+
+            expect(requisition.$isEditable()).toBe(false);
+        });
+
+        it('should return false if user has REQUISITION_APPROVE right and requisition is approved', function() {
+            requisition.status = REQUISITION_STATUS.APPROVED;
+            userHasApproveRight = true;
+
+            expect(requisition.$isEditable()).toBe(false);
+        });
+
+        it('should return false if requisition is released', function() {
+            requisition.status = REQUISITION_STATUS.RELEASED;
+            userHasAuthorizeRight = true;
+            userHasCreateRight = true;
+            userHasApproveRight = true;
+            userHasDeleteRight = true;
+
+            expect(requisition.$isEditable()).toBe(false);
+        });
+    });
+
 
     function fullSupplyCategories() {
         return [

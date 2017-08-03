@@ -1,6 +1,6 @@
 <div class="non-full-supply openlmis-table-container">
 	<button class="add" ng-show="vm.displayAddProductButton()" ng-click="vm.addProduct()" >{{'requisitionNonFullSupply.addProduct' | message}}</button>
-	<saving-indicator class="requisition-indicator" object="vm.requisition.requisitionLineItems"/>
+	<saving-indicator ng-show="vm.canEditRequisition()" class="requisition-indicator" object="vm.requisition.requisitionLineItems"/>
 	<table>
 		<caption ng-if="!vm.items.length">{{'requisitionNonFullSupply.noProducts' | message}}</caption>
 		<thead>

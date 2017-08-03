@@ -31,12 +31,13 @@
     requisitionFactory.$inject = [
         '$q', '$resource', 'openlmisUrlFactory', 'requisitionUrlFactory', 'RequisitionTemplate',
         'LineItem', 'REQUISITION_STATUS', 'COLUMN_SOURCES', 'localStorageFactory', 'offlineService',
-        'dateUtils', '$filter', 'TEMPLATE_COLUMNS'
+        'dateUtils', '$filter', 'TEMPLATE_COLUMNS', 'authorizationService', 'REQUISITION_RIGHTS'
     ];
 
     function requisitionFactory($q, $resource, openlmisUrlFactory, requisitionUrlFactory,
                                 RequisitionTemplate, LineItem, REQUISITION_STATUS, COLUMN_SOURCES,
-                                localStorageFactory, offlineService, dateUtils, $filter, TEMPLATE_COLUMNS) {
+                                localStorageFactory, offlineService, dateUtils, $filter, TEMPLATE_COLUMNS,
+                                authorizationService, REQUISITION_RIGHTS) {
 
         var offlineRequisitions = localStorageFactory('requisitions'),
             offlineStockAdjustmentReasons = localStorageFactory('stockAdjustmentReasons'),
@@ -83,6 +84,7 @@
         Requisition.prototype.$isRejected = isRejected;
         Requisition.prototype.$isAfterAuthorize = isAfterAuthorize;
         Requisition.prototype.$getProducts = getProducts;
+        Requisition.prototype.$isEditable = isEditable;
 
         return Requisition;
 
@@ -376,6 +378,25 @@
         /**
          * @ngdoc method
          * @methodOf requisition.Requisition
+         * @name isEditable
+         *
+         * @description
+         * Checks if this requisition is editable based on its status and user rights.
+         *
+         * @return {Boolean} true if this requisition' is editable, false otherwise
+         */
+        function isEditable() {
+            var requisition = this;
+            return hasRight(REQUISITION_RIGHTS.REQUISITION_CREATE, requisition) && (requisition.$isInitiated() || requisition.$isRejected())
+                || hasRight(REQUISITION_RIGHTS.REQUISITION_APPROVE, requisition) && (requisition.$isAuthorized() || requisition.$isInApproval())
+                || hasRight(REQUISITION_RIGHTS.REQUISITION_DELETE, requisition) && hasRight(REQUISITION_RIGHTS.REQUISITION_CREATE, requisition) && (requisition.$isInitiated() || requisition.$isRejected())
+                || hasRight(REQUISITION_RIGHTS.REQUISITION_DELETE, requisition) && hasRight(REQUISITION_RIGHTS.REQUISITION_AUTHORIZE, requisition) && requisition.$isSubmitted()
+                || hasRight(REQUISITION_RIGHTS.REQUISITION_AUTHORIZE, requisition) && (requisition.$isInitiated() || requisition.$isRejected() || requisition.$isSubmitted());
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition.Requisition
          * @name getProducts
          *
          * @description
@@ -477,6 +498,12 @@
                 if (!column.$display || column.source === COLUMN_SOURCES.CALCULATED) {
                     lineItem[column.name] = null;
                 }
+            });
+        }
+
+        function hasRight(right, requisition) {
+            return authorizationService.hasRight(right, {
+                programCode: requisition.program.code
             });
         }
     }
