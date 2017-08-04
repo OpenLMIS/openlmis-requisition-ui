@@ -43,7 +43,7 @@
         vm.deleteLineItem = deleteLineItem;
         vm.addProduct = addProduct;
         vm.displayDeleteColumn = displayDeleteColumn;
-        vm.canEditRequisition = canEditRequisition;
+        vm.canEditRequisition = requisition.$isEditable;
 
         /**
          * @ngdoc method
@@ -180,20 +180,6 @@
                 display = display || lineItem.$deletable;
             });
             return display;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf requisition-non-full-supply.controller:NonFullSupplyController
-         * @name canEditRequisition
-         *
-         * @description
-         * Determines whether the requisition is editable.
-         *
-         * @return {Boolean} true if requisition is editable
-         */
-        function canEditRequisition() {
-            return requisition.$isEditable();
         }
 
         function makeProductVisible(productName) {
