@@ -38,7 +38,7 @@
         vm.skipAll = skipAll;
         vm.unskipAll = unskipAll;
         vm.isSkipColumn = isSkipColumn;
-        vm.canEditRequisition = requisition.$isEditable;
+        vm.canEditRequisition = canEditRequisition;
 
         /**
          * @ngdoc property
@@ -169,6 +169,20 @@
          */
         function isSkipColumn(column) {
             return column.name === TEMPLATE_COLUMNS.SKIPPED;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-full-supply.controller:FullSupplyController
+         * @name canEditRequisition
+         *
+         * @description
+         * Determines whether the requisition is editable.
+         *
+         * @return {Boolean} true if requisition is editable
+         */
+        function canEditRequisition() {
+            return requisition.$isEditable();
         }
 
         function setSkipAll(value) {
