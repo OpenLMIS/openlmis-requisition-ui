@@ -8,12 +8,13 @@ Improvements:
 * [OLMIS-3181:](https://openlmis.atlassian.net/browse/OLMIS-3181) Added front-end validation to the requisition batch approval screen.
 * [OLMIS-3233:](https://openlmis.atlassian.net/browse/OLMIS-3233) Added ability to delete requisitions with "skipped" status.
 * [OLMIS-3246:](https://openlmis.atlassian.net/browse/OLMIS-3246) Added 'show' field to reason assignments
+* [OLMIS-3471:](https://openlmis.atlassian.net/browse/OLMIS-3471) Explanation field on Non Full supply tab is no longer mandatory
 * Updated dev-ui version to 6.
 
 Bug fixes:
 * [OLMIS-3151:](https://openlmis.atlassian.net/browse/OLMIS-3151) Fixed automatically resolving mathematical error with adjustments.
 * [OLMIS-3255:](https://openlmis.atlassian.net/browse/OLMIS-3255) Fixed auto-select the "Supplying facility" on Requisition Convert to Order.
-* [OLMIS-3296:](https://openlmis.atlassian.net/browse/OLMIS-3296) Reworked facility-program select component to use cached rograms, minimal facilities and permission strings.
+* [OLMIS-3296:](https://openlmis.atlassian.net/browse/OLMIS-3296) Reworked facility-program select component to use cached programs, minimal facilities and permission strings.
 * [OLMIS-3322:](https://openlmis.atlassian.net/browse/OLMIS-3322) Added storing initiated requisition in offline cache.
 
 5.1.1 / 2017-09-01

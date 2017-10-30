@@ -92,10 +92,9 @@
                 requestedQuantityExplanation = lineItem.requestedQuantityExplanation,
                 requestedQuantity = lineItem.requestedQuantity;
 
-            if (isDisplayed(requestedQuantityColumn) && isDisplayed(calculatedOrderQuantityColumn) &&
-                    isFilled(requestedQuantity) &&
-                    !requestedQuantityExplanation) {
-
+            if (!lineItem.isNonFullSupply() && isDisplayed(requestedQuantityColumn)
+                && isDisplayed(calculatedOrderQuantityColumn) && isFilled(requestedQuantity)
+                && !requestedQuantityExplanation) {
                 return messageService.get('requisitionValidation.required');
             }
             return;

@@ -149,6 +149,15 @@ describe('validationFactory', function() {
                 .toEqual('required');
         });
 
+        it('should return undefined if requestedQuantity has value, explanation is missing and line item is non full supply', function() {
+            lineItem.requestedQuantity = 10;
+            lineItem.requestedQuantityExplanation = 'explanation';
+            lineItem.isNonFullSupply.andReturn(true);
+
+            expect(validationFactory.requestedQuantityExplanation(lineItem, requisitionMock))
+                .toBeUndefined();
+        });
+
         it('should return undefined if requestedQuantity has value and explanation is present', function() {
             lineItem.requestedQuantity = 10;
             lineItem.requestedQuantityExplanation = 'explanation';
