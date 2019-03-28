@@ -15,81 +15,86 @@
 
 describe('REQUISITION_STATUS', function() {
 
-    var RequisitionStatus;
-
     beforeEach(function() {
 
         module('requisition-constants');
 
-        inject(function(_REQUISITION_STATUS_) {
-            RequisitionStatus = _REQUISITION_STATUS_;
+        inject(function($injector) {
+            this.RequisitionStatus = $injector.get('REQUISITION_STATUS');
         });
     });
 
     describe('getDisplayName', function() {
 
         it('should get display name for INITIATED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('INITIATED');
+            var displayName = this.RequisitionStatus.$getDisplayName('INITIATED');
 
-            expect(displayName).toBe('Initiated');
+            expect(displayName).toBe('requisitionConstants.initiated');
         });
 
         it('should get display name for SUBMITTED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('SUBMITTED');
+            var displayName = this.RequisitionStatus.$getDisplayName('SUBMITTED');
 
-            expect(displayName).toBe('Submitted');
+            expect(displayName).toBe('requisitionConstants.submitted');
         });
 
         it('should get display name for AUTHORIZED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('AUTHORIZED');
+            var displayName = this.RequisitionStatus.$getDisplayName('AUTHORIZED');
 
-            expect(displayName).toBe('Authorized');
+            expect(displayName).toBe('requisitionConstants.authorized');
         });
 
         it('should get display name for IN_APPROVAL status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('IN_APPROVAL');
+            var displayName = this.RequisitionStatus.$getDisplayName('IN_APPROVAL');
 
-            expect(displayName).toBe('In approval');
+            expect(displayName).toBe('requisitionConstants.inApproval');
         });
 
         it('should get display name for APPROVED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('APPROVED');
+            var displayName = this.RequisitionStatus.$getDisplayName('APPROVED');
 
-            expect(displayName).toBe('Approved');
+            expect(displayName).toBe('requisitionConstants.approved');
         });
 
         it('should get display name for RELEASED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('RELEASED');
+            var displayName = this.RequisitionStatus.$getDisplayName('RELEASED');
 
-            expect(displayName).toBe('Released');
+            expect(displayName).toBe('requisitionConstants.released');
         });
 
         it('should get display name for SKIPPED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('SKIPPED');
+            var displayName = this.RequisitionStatus.$getDisplayName('SKIPPED');
 
-            expect(displayName).toBe('Skipped');
+            expect(displayName).toBe('requisitionConstants.skipped');
         });
 
         it('should get display name for REJECTED status', function() {
-            var displayName = RequisitionStatus.$getDisplayName('REJECTED');
+            var displayName = this.RequisitionStatus.$getDisplayName('REJECTED');
 
-            expect(displayName).toBe('Rejected');
+            expect(displayName).toBe('requisitionConstants.rejected');
+        });
+
+        it('should get display name for REJECTED_WITHOUT_ORDER status', function() {
+            var displayName = this.RequisitionStatus.$getDisplayName('RELEASED_WITHOUT_ORDER');
+
+            expect(displayName).toBe('requisitionConstants.releasedWithoutOrder');
         });
     });
 
     describe('toList', function() {
 
         it('should return list of all requisition statuses', function() {
-            var returnedList = RequisitionStatus.$toList();
+            var returnedList = this.RequisitionStatus.$toList();
 
             expect(returnedList[0].label).toBe('INITIATED');
-            expect(returnedList[1].label).toBe('SUBMITTED');
-            expect(returnedList[2].label).toBe('AUTHORIZED');
-            expect(returnedList[3].label).toBe('IN_APPROVAL');
-            expect(returnedList[4].label).toBe('APPROVED');
-            expect(returnedList[5].label).toBe('RELEASED');
-            expect(returnedList[6].label).toBe('SKIPPED');
-            expect(returnedList[7].label).toBe('REJECTED');
+            expect(returnedList[1].label).toBe('REJECTED');
+            expect(returnedList[2].label).toBe('SUBMITTED');
+            expect(returnedList[3].label).toBe('AUTHORIZED');
+            expect(returnedList[4].label).toBe('IN_APPROVAL');
+            expect(returnedList[5].label).toBe('APPROVED');
+            expect(returnedList[6].label).toBe('RELEASED');
+            expect(returnedList[7].label).toBe('RELEASED_WITHOUT_ORDER');
+            expect(returnedList[8].label).toBe('SKIPPED');
         });
     });
 });

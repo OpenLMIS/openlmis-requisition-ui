@@ -32,14 +32,13 @@
         .module('requisition-status-messages')
         .filter('requisitionStatus', filter);
 
-    filter.$inject = ['REQUISITION_STATUS'];
+    filter.$inject = ['REQUISITION_STATUS', 'messageService'];
 
-    function filter(REQUISITION_STATUS) {
+    function filter(REQUISITION_STATUS, messageService) {
         return statusFilter;
 
         function statusFilter(status) {
-            return REQUISITION_STATUS.$getDisplayName(status);
+            return messageService.get(REQUISITION_STATUS.$getDisplayName(status));
         }
     }
-
 })();

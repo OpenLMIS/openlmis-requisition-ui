@@ -65,7 +65,7 @@
                 <td>{{requisition.processingPeriod.startDate | openlmisDate}}</td>
                 <td>{{requisition.processingPeriod.endDate | openlmisDate}}</td>
                 <td>{{requisition.createdDate | openlmisDate}}</td>
-                <td>{{requisition.status}}</td>
+                <td>{{requisition.status | requisitionStatus}}</td>
                 <td class="col-emergency">
                     <i ng-class="{'icon-ok': requisition.emergency}"></i>
                 </td>

@@ -32,13 +32,14 @@
 
         return {
             INITIATED: 'INITIATED',
+            REJECTED: 'REJECTED',
             SUBMITTED: 'SUBMITTED',
             AUTHORIZED: 'AUTHORIZED',
             IN_APPROVAL: 'IN_APPROVAL',
             APPROVED: 'APPROVED',
             RELEASED: 'RELEASED',
+            RELEASED_WITHOUT_ORDER: 'RELEASED_WITHOUT_ORDER',
             SKIPPED: 'SKIPPED',
-            REJECTED: 'REJECTED',
             $toList: toList,
             $getDisplayName: getDisplayName
         };
@@ -75,25 +76,26 @@
          * Retrieves display name for the given requisition status.
          */
         function getDisplayName(status) {
-            var displayName;
             if (status === this.INITIATED) {
-                displayName = 'Initiated';
-            } else if (status === this.SUBMITTED) {
-                displayName = 'Submitted';
-            } else if (status === this.AUTHORIZED) {
-                displayName = 'Authorized';
-            } else if (status === this.IN_APPROVAL) {
-                displayName = 'In approval';
-            } else if (status === this.APPROVED) {
-                displayName = 'Approved';
-            } else if (status === this.RELEASED) {
-                displayName = 'Released';
-            } else if (status === this.SKIPPED) {
-                displayName = 'Skipped';
+                return 'requisitionConstants.initiated';
             } else if (status === this.REJECTED) {
-                displayName = 'Rejected';
+                return 'requisitionConstants.rejected';
+            } else if (status === this.SUBMITTED) {
+                return 'requisitionConstants.submitted';
+            } else if (status === this.AUTHORIZED) {
+                return 'requisitionConstants.authorized';
+            } else if (status === this.IN_APPROVAL) {
+                return 'requisitionConstants.inApproval';
+            } else if (status === this.APPROVED) {
+                return 'requisitionConstants.approved';
+            } else if (status === this.RELEASED) {
+                return 'requisitionConstants.released';
+            } else if (status === this.RELEASED_WITHOUT_ORDER) {
+                return 'requisitionConstants.releasedWithoutOrder';
+            } else if (status === this.SKIPPED) {
+                return 'requisitionConstants.skipped';
             }
-            return displayName;
+            return status;
         }
     }
 

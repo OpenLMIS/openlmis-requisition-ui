@@ -39,7 +39,7 @@
                 <td>{{period.name}}</td>
                 <td>{{period.startDate | openlmisDate}}</td>
                 <td>{{period.endDate | openlmisDate}}</td>
-                <td>{{period.rnrStatus}}</td>
+                <td>{{period.rnrStatus | requisitionStatus}}</td>
                 <td>
                     <input id="proceedButton" type="button" ng-click="vm.initRnr(period)"
                            value="{{'requisitionInitiate.proceed'| message}}" class="primary"
