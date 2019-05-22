@@ -31,6 +31,7 @@
         'referencedata-facility',
         'requisition',
         'requisition-constants',
+        'requisition-status-messages',
         'ui.router',
         'referencedata-supervisory-node',
         'referencedata-requisition-group',

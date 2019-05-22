@@ -12,24 +12,25 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 describe('RequisitionSearchController', function() {
 
-    var vm, $q, $rootScope, $controller, $stateParams, $state, offlineService, confirmService, facilities, items;
-
     beforeEach(function() {
+
         module('requisition-search');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            $controller = $injector.get('$controller');
-            $stateParams = $injector.get('$stateParams');
-            $state = $injector.get('$state');
-            offlineService = $injector.get('offlineService');
-            confirmService = $injector.get('confirmService');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$controller = $injector.get('$controller');
+            this.$stateParams = $injector.get('$stateParams');
+            this.$state = $injector.get('$state');
+            this.offlineService = $injector.get('offlineService');
+            this.confirmService = $injector.get('confirmService');
+            this.REQUISITION_STATUS = $injector.get('REQUISITION_STATUS');
         });
 
-        facilities = [{
+        this.facilities = [{
             name: 'facilityOne',
             id: 'facility-one'
         }, {
@@ -44,7 +45,7 @@ describe('RequisitionSearchController', function() {
             }]
         }];
 
-        items = [
+        this.items = [
             'itemOne', 'itemTwo'
         ];
     });
@@ -55,125 +56,147 @@ describe('RequisitionSearchController', function() {
 
         beforeEach(function() {
             $controllerMock = jasmine.createSpy('$controller').andCallFake(function() {
-                vm.stateParams = {};
+                this.vm.stateParams = {};
             });
 
-            vm = $controller('RequisitionSearchController', {
-                requisitions: items,
-                facilities: facilities,
+            this.vm = this.$controller('RequisitionSearchController', {
+                requisitions: this.items,
+                facilities: this.facilities,
                 $controller: $controllerMock
             });
 
         });
 
         it('should expose facilities', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.facilities).toBe(facilities);
+            expect(this.vm.facilities).toBe(this.facilities);
+        });
+
+        it('should expose statuses', function() {
+            this.vm.$onInit();
+
+            expect(this.vm.statuses).toEqual(this.REQUISITION_STATUS.$toList());
         });
 
         it('should set searchOffline to true if true was passed through state parameters', function() {
-            $stateParams.offline = 'true';
+            this.$stateParams.offline = 'true';
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.offline).toEqual(true);
+            expect(this.vm.offline).toEqual(true);
         });
 
         it('should set searchOffline to true if application is in offline mode', function() {
-            spyOn(offlineService, 'isOffline').andReturn(true);
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.offline).toEqual(true);
+            expect(this.vm.offline).toEqual(true);
         });
 
         it('should set searchOffline to false if false was passed the URL and application is not in offline mode',
             function() {
-                $stateParams.offline = 'false';
-                spyOn(offlineService, 'isOffline').andReturn(false);
+                this.$stateParams.offline = 'false';
+                spyOn(this.offlineService, 'isOffline').andReturn(false);
 
-                vm.$onInit();
+                this.vm.$onInit();
 
-                expect(vm.offline).toEqual(false);
+                expect(this.vm.offline).toEqual(false);
             });
 
         it('should set selectedFacility if facility ID was passed the URL', function() {
-            $stateParams.facility = 'facility-two';
+            this.$stateParams.facility = 'facility-two';
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.selectedFacility).toBe(facilities[1]);
+            expect(this.vm.selectedFacility).toBe(this.facilities[1]);
         });
 
         it('should not set selectedFacility if facility ID was not passed through the URL', function() {
-            $stateParams.facility = undefined;
+            this.$stateParams.facility = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.selectedFacility).toBeUndefined();
+            expect(this.vm.selectedFacility).toBeUndefined();
         });
 
         it('should set selectedProgram if program and facility ID were passed through the URL', function() {
-            $stateParams.facility = 'facility-two';
-            $stateParams.program = 'program-two';
+            this.$stateParams.facility = 'facility-two';
+            this.$stateParams.program = 'program-two';
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.selectedProgram).toBe(facilities[1].supportedPrograms[1]);
+            expect(this.vm.selectedProgram).toBe(this.facilities[1].supportedPrograms[1]);
         });
 
         it('should not set selectedProgram if facility ID was not passed through the URL', function() {
-            $stateParams.facility = undefined;
+            this.$stateParams.facility = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.selectedProgram).toBeUndefined();
+            expect(this.vm.selectedProgram).toBeUndefined();
         });
 
         it('should not set selected program if program ID was not passed through the URL', function() {
-            $stateParams.facility = 'facility-two';
-            $stateParams.program = undefined;
+            this.$stateParams.facility = 'facility-two';
+            this.$stateParams.program = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.selectedProgram).toBeUndefined();
+            expect(this.vm.selectedProgram).toBeUndefined();
         });
 
         it('should set startDate if initiated date from was passed through the URL', function() {
-            $stateParams.initiatedDateFrom = '2017-01-31';
+            this.$stateParams.initiatedDateFrom = '2017-01-31';
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.startDate).toEqual('2017-01-31');
+            expect(this.vm.startDate).toEqual('2017-01-31');
         });
 
         it('should not set starDate if initiated date from not passed through the URL', function() {
-            $stateParams.initiatedDateFrom = undefined;
+            this.$stateParams.initiatedDateFrom = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.starDate).toBeUndefined();
+            expect(this.vm.starDate).toBeUndefined();
+        });
+
+        it('should set status if it was passed through the URL', function() {
+            this.$stateParams.requisitionStatus = 'SUBMITTED';
+
+            this.vm.$onInit();
+
+            expect(this.vm.selectedStatus).toEqual('SUBMITTED');
+        });
+
+        it('should not set status if not passed through the URL', function() {
+            this.$stateParams.requisitionStatus = undefined;
+
+            this.vm.$onInit();
+
+            expect(this.vm.selectedStatus).toBeUndefined();
         });
 
         it('should set endDate if initiated date to was passed through the URL', function() {
-            $stateParams.initiatedDateTo = '2017-01-31';
+            this.$stateParams.initiatedDateTo = '2017-01-31';
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.endDate).toEqual('2017-01-31');
+            expect(this.vm.endDate).toEqual('2017-01-31');
         });
 
         it('should not set endDate if initiated date to not passed through the URL', function() {
-            $stateParams.initiatedDateTo = undefined;
+            this.$stateParams.initiatedDateTo = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.endDate).toBeUndefined();
+            expect(this.vm.endDate).toBeUndefined();
         });
 
         it('should expose sort options', function() {
-            expect(vm.options).toEqual({
+            expect(this.vm.options).toEqual({
                 'requisitionSearch.dateInitiated': ['createdDate,desc']
             });
         });
@@ -182,22 +205,22 @@ describe('RequisitionSearchController', function() {
     describe('search', function() {
 
         beforeEach(function() {
-            initController();
-            vm.$onInit();
+            initController(this);
+            this.vm.$onInit();
 
-            spyOn($state, 'go').andReturn();
+            spyOn(this.$state, 'go').andReturn();
         });
 
         it('should set program', function() {
-            vm.selectedProgram = {
+            this.vm.selectedProgram = {
                 name: 'programOne',
                 id: 'program-one'
             };
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
-                program: vm.selectedProgram.id,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
+                program: this.vm.selectedProgram.id,
                 facility: null,
                 initiatedDateFrom: null,
                 initiatedDateTo: null,
@@ -208,16 +231,16 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should set facility', function() {
-            vm.selectedFacility = {
+            this.vm.selectedFacility = {
                 name: 'facilityOne',
                 id: 'facility-one'
             };
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
                 program: null,
-                facility: vm.selectedFacility.id,
+                facility: this.vm.selectedFacility.id,
                 initiatedDateFrom: null,
                 initiatedDateTo: null,
                 offline: false
@@ -227,11 +250,11 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should set initiatedDateFrom', function() {
-            vm.startDate = new Date('2017-01-31T23:00:00.000Z');
+            this.vm.startDate = new Date('2017-01-31T23:00:00.000Z');
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
                 program: null,
                 facility: null,
                 initiatedDateFrom: '2017-01-31',
@@ -243,11 +266,11 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should set initiatedDateTo', function() {
-            vm.endDate = new Date('2017-01-31T23:00:00.000Z');
+            this.vm.endDate = new Date('2017-01-31T23:00:00.000Z');
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
                 program: null,
                 facility: null,
                 initiatedDateFrom: null,
@@ -259,17 +282,17 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should set offline', function() {
-            vm.offline = true;
+            this.vm.offline = true;
 
-            vm.search();
+            this.vm.search();
 
-            expect(vm.offline).toBe(true);
+            expect(this.vm.offline).toBe(true);
         });
 
         it('should reload state', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
 
     });
@@ -277,15 +300,15 @@ describe('RequisitionSearchController', function() {
     describe('openRnr', function() {
 
         beforeEach(function() {
-            initController();
+            initController(this);
         });
 
         it('should go to requisitions.requisition.fullSupply state', function() {
-            spyOn($state, 'go').andReturn();
+            spyOn(this.$state, 'go').andReturn();
 
-            vm.openRnr('requisition-id');
+            this.vm.openRnr('requisition-id');
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.requisitions.requisition.fullSupply', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.requisition.fullSupply', {
                 rnr: 'requisition-id'
             });
         });
@@ -302,9 +325,9 @@ describe('RequisitionSearchController', function() {
 
             localStorageFactoryMock.andReturn(offlineRequisitionsMock);
 
-            vm = $controller('RequisitionSearchController', {
-                requisitions: items,
-                facilities: facilities,
+            this.vm = this.$controller('RequisitionSearchController', {
+                requisitions: this.items,
+                facilities: this.facilities,
                 localStorageFactory: localStorageFactoryMock
             });
 
@@ -312,30 +335,30 @@ describe('RequisitionSearchController', function() {
                 id: 'requisition-id'
             };
 
-            confirmDeferred = $q.defer();
+            confirmDeferred = this.$q.defer();
 
-            spyOn(confirmService, 'confirmDestroy').andReturn(confirmDeferred.promise);
+            spyOn(this.confirmService, 'confirmDestroy').andReturn(confirmDeferred.promise);
         });
 
         it('should require confirmation', function() {
-            vm.removeOfflineRequisition(requisition);
+            this.vm.removeOfflineRequisition(requisition);
 
-            expect(confirmService.confirmDestroy).toHaveBeenCalled();
+            expect(this.confirmService.confirmDestroy).toHaveBeenCalled();
         });
 
         it('should remove requisition after confirmation', function() {
-            vm.removeOfflineRequisition(requisition);
+            this.vm.removeOfflineRequisition(requisition);
             confirmDeferred.resolve();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(offlineRequisitionsMock.removeBy).toHaveBeenCalledWith('id', requisition.id);
             expect(requisition.$availableOffline).toBe(false);
         });
 
         it('should not remove requisition without confirmation', function() {
-            vm.removeOfflineRequisition(requisition);
+            this.vm.removeOfflineRequisition(requisition);
             confirmDeferred.reject();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(offlineRequisitionsMock.removeBy).not.toHaveBeenCalled();
             expect(requisition.$availableOffline).not.toBe(false);
@@ -346,56 +369,70 @@ describe('RequisitionSearchController', function() {
     describe('isOfflineDisabled', function() {
 
         beforeEach(function() {
-            initController();
+            initController(this);
         });
 
         it('should return true if application is offline', function() {
-            spyOn(offlineService, 'isOffline').andReturn(true);
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
 
-            var result = vm.isOfflineDisabled();
+            var result = this.vm.isOfflineDisabled();
 
             expect(result).toBe(true);
         });
 
         it('should set searchOffline to true if application goes in the offline mode', function() {
-            spyOn(offlineService, 'isOffline').andReturn(true);
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
 
-            vm.isOfflineDisabled();
+            this.vm.isOfflineDisabled();
 
-            expect(vm.offline).toBe(true);
+            expect(this.vm.offline).toBe(true);
         });
 
         it('should return false if application is online', function() {
-            spyOn(offlineService, 'isOffline').andReturn(false);
+            spyOn(this.offlineService, 'isOffline').andReturn(false);
 
-            var result = vm.isOfflineDisabled();
+            var result = this.vm.isOfflineDisabled();
 
             expect(result).toBe(false);
         });
 
         it('should not change searchOffline if application is online', function() {
-            spyOn(offlineService, 'isOffline').andReturn(false);
-            vm.offline = false;
+            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            this.vm.offline = false;
 
-            vm.isOfflineDisabled();
+            this.vm.isOfflineDisabled();
 
-            expect(vm.offline).toBe(false);
+            expect(this.vm.offline).toBe(false);
 
-            vm.offline = true;
+            this.vm.offline = true;
 
-            vm.isOfflineDisabled();
+            this.vm.isOfflineDisabled();
 
-            expect(vm.offline).toBe(true);
+            expect(this.vm.offline).toBe(true);
         });
 
     });
 
-    function initController() {
-        vm = $controller('RequisitionSearchController', {
-            requisitions: items,
-            facilities: facilities
+    describe('getStatusDisplay', function() {
+
+        beforeEach(function() {
+            initController(this);
         });
-        vm.$onInit();
+
+        it('should translate requisition status', function() {
+            this.vm.getStatusDisplay(this.REQUISITION_STATUS.SUBMITTED);
+
+            expect(this.vm.getStatusDisplay(this.REQUISITION_STATUS.SUBMITTED))
+                .toEqual('requisitionConstants.submitted');
+        });
+    });
+
+    function initController(test) {
+        test.vm = test.$controller('RequisitionSearchController', {
+            requisitions: test.items,
+            facilities: test.facilities
+        });
+        test.vm.$onInit();
     }
 
 });

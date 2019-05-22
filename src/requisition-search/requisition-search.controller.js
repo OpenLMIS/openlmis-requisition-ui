@@ -29,11 +29,11 @@
 
     RequisitionSearchController.$inject = [
         '$state', '$filter', '$stateParams', 'facilities', 'offlineService', 'localStorageFactory', 'confirmService',
-        'requisitions'
+        'requisitions', 'REQUISITION_STATUS'
     ];
 
     function RequisitionSearchController($state, $filter, $stateParams, facilities, offlineService, localStorageFactory,
-                                         confirmService, requisitions) {
+                                         confirmService, requisitions, REQUISITION_STATUS) {
 
         var vm = this,
             offlineRequisitions = localStorageFactory('requisitions');
@@ -43,6 +43,7 @@
         vm.openRnr = openRnr;
         vm.removeOfflineRequisition = removeOfflineRequisition;
         vm.isOfflineDisabled = isOfflineDisabled;
+        vm.getStatusDisplay = getStatusDisplay;
 
         /**
          * @ngdoc property
@@ -58,11 +59,22 @@
         /**
          * @ngdoc property
          * @propertyOf requisition-search.controller:RequisitionViewController
+         * @name statuses
+         * @type {Array}
+         *
+         * @description
+         * Contains all available requisition statuses.
+         */
+        vm.statuses = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-search.controller:RequisitionViewController
          * @name searchOffline
          * @type {Boolean}
          *
          * @description
-         * Flag defining whether online or offline search should be online. If it is set to true
+         * Flag defining whether online or offline search should done. If it is set to true
          * the local storage will be searched for requisitions.
          */
         vm.searchOffline = false;
@@ -88,6 +100,17 @@
          * The program selected by the user.
          */
         vm.selectedProgram = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-search.controller:RequisitionViewController
+         * @name selectedStatus
+         * @type {String}
+         *
+         * @description
+         * The requisition status selected by the user.
+         */
+        vm.selectedStatus = undefined;
 
         /**
          * @ngdoc property
@@ -149,6 +172,8 @@
         function onInit() {
             vm.requisitions = requisitions;
             vm.facilities = facilities;
+            vm.statuses = REQUISITION_STATUS.$toList();
+
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
 
             if ($stateParams.facility) {
@@ -169,6 +194,10 @@
 
             if ($stateParams.initiatedDateTo) {
                 vm.endDate = $stateParams.initiatedDateTo;
+            }
+
+            if ($stateParams.requisitionStatus) {
+                vm.selectedStatus = $stateParams.requisitionStatus;
             }
         }
 
@@ -239,10 +268,26 @@
             stateParams.initiatedDateFrom = vm.startDate ? $filter('isoDate')(vm.startDate) : null;
             stateParams.initiatedDateTo = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
             stateParams.offline = vm.offline;
+            stateParams.requisitionStatus = vm.selectedStatus;
 
             $state.go('openlmis.requisitions.search', stateParams, {
                 reload: true
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-search.controller:RequisitionViewController
+         * @name getStatusDisplay
+         *
+         * @description
+         * Evaluates display name for given status.
+         * 
+         * @param   {String} status given status
+         * @returns {String}        translated status name
+         */
+        function getStatusDisplay(status) {
+            return $filter('requisitionStatus')(status);
         }
     }
 })();

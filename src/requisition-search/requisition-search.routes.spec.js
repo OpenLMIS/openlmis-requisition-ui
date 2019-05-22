@@ -61,6 +61,7 @@ describe('openlmis.requisitions.search', function() {
         this.size = '0';
         this.offline = 'false';
         this.sort = 'createdDate';
+        this.requisitionStatus = 'INITIATED';
 
         spyOn(this.requisitionSearchService, 'getFacilities').andReturn(this.$q.resolve(this.facilities));
         spyOn(this.requisitionService, 'search').andReturn(this.$q.resolve(this.requisitionsPage));
@@ -83,7 +84,8 @@ describe('openlmis.requisitions.search', function() {
             initiatedDateTo: this.initiatedDateTo,
             page: this.page,
             size: this.size,
-            sort: this.sort
+            sort: this.sort,
+            requisitionStatus: this.requisitionStatus
         });
     });
 
@@ -100,7 +102,8 @@ describe('openlmis.requisitions.search', function() {
             initiatedDateTo: this.initiatedDateTo,
             page: this.page,
             size: this.size,
-            sort: this.sort
+            sort: this.sort,
+            requisitionStatus: this.requisitionStatus
         });
     });
 
@@ -116,7 +119,8 @@ describe('openlmis.requisitions.search', function() {
         this.goToUrl(
             '/requisitions/view?program=' + this.program + '&facility=' + this.facility + '&initiatedDateFrom=' +
             this.initiatedDateFrom + '&initiatedDateTo=' + this.initiatedDateTo + '&page=' + this.page +
-            '&size=' + this.size + '&offline=' + this.offline + '&sort=' + this.sort
+            '&size=' + this.size + '&offline=' + this.offline + '&sort=' + this.sort +
+            '&requisitionStatus=' + this.requisitionStatus
         );
     }
 
