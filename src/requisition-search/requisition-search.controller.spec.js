@@ -413,20 +413,6 @@ describe('RequisitionSearchController', function() {
 
     });
 
-    describe('getStatusDisplay', function() {
-
-        beforeEach(function() {
-            initController(this);
-        });
-
-        it('should translate requisition status', function() {
-            this.vm.getStatusDisplay(this.REQUISITION_STATUS.SUBMITTED);
-
-            expect(this.vm.getStatusDisplay(this.REQUISITION_STATUS.SUBMITTED))
-                .toEqual('requisitionConstants.submitted');
-        });
-    });
-
     function initController(test) {
         test.vm = test.$controller('RequisitionSearchController', {
             requisitions: test.items,

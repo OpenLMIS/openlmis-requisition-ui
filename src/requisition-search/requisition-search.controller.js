@@ -43,7 +43,6 @@
         vm.openRnr = openRnr;
         vm.removeOfflineRequisition = removeOfflineRequisition;
         vm.isOfflineDisabled = isOfflineDisabled;
-        vm.getStatusDisplay = getStatusDisplay;
 
         /**
          * @ngdoc property
@@ -273,21 +272,6 @@
             $state.go('openlmis.requisitions.search', stateParams, {
                 reload: true
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name getStatusDisplay
-         *
-         * @description
-         * Evaluates display name for given status.
-         * 
-         * @param   {String} status given status
-         * @returns {String}        translated status name
-         */
-        function getStatusDisplay(status) {
-            return $filter('requisitionStatus')(status);
         }
     }
 })();
