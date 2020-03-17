@@ -39,7 +39,6 @@
     "adminProgramTemplate.template.invalid": "Requisition Template is invalid",
     "adminProgramTemplate.templateColumns": "Template Columns",
     "adminProgramTemplate.templateSettings": "Template Settings",
-    "adminProgramTemplate.calculatedOrderQuantityIsaCannotBeDisplayed": "Calculated Order Quantity cannot be displayed if Populate Stock On Hand From Stock Cards is not checked.",
     "adminProgramTemplate.tag": "Tag",
     "adminProgramTemplate.cannotSelectStockCard": "Cannot select Stock Cards if the 'Enable Stock on Hand to populate from Stock Cards' checkbox is not selected."
 }
