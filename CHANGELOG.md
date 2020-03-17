@@ -1,6 +1,9 @@
 7.0.2-SNAPSHOT / WIP
 ====================
 
+Improvements:
+* [OLMIS-6793](https://openlmis.atlassian.net/browse/OLMIS-6793): Allowed Calculated Order Quantity ISA column to be used in non Stock Based Requisitions.
+
 Bug fixes:
 * [OLMIS-6698](https://openlmis.atlassian.net/browse/OLMIS-6698): Removed unnecessary call for supervisory nodes when there are no partner nodes assigned.
 
