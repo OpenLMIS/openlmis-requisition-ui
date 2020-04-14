@@ -1,5 +1,5 @@
-7.0.2-SNAPSHOT / WIP
-====================
+7.0.2 / 2020-04-14
+==================
 
 Improvements:
 * [OLMIS-6793](https://openlmis.atlassian.net/browse/OLMIS-6793): Allowed Calculated Order Quantity ISA column to be used in non Stock Based Requisitions.
