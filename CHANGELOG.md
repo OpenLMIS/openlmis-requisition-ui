@@ -1,3 +1,10 @@
+7.0.4 / 2020-09-25
+==================
+
+New functionality added in a backwards-compatible manner:
+* [TZUP-21](https://openlmis.atlassian.net/browse/TZUP-21): added Budget upload page.
+
+
 7.0.3 / 2020-05-12
 ==================
 
