@@ -34,7 +34,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-rejection-reason-category
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategory
          * @name RejectionReasonCategory
          *
          * @description

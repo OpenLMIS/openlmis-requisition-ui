@@ -58,7 +58,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReason.rejectionReasonService
+         * @methodOf admin-rejection-reason.RejectionReasonService
          * @name get
          *
          * @description
@@ -80,7 +80,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReason.rejectionReasonService
+         * @methodOf admin-rejection-reason.RejectionReasonService
          * @name getAll
          *
          * @description
@@ -94,7 +94,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReason.rejectionReasonService
+         * @methodOf admin-rejection-reason.RejectionReasonService
          * @name create
          *
          * @description
@@ -109,7 +109,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReason.rejectionReasonService
+         * @methodOf admin-rejection-reason.RejectionReasonService
          * @name update
          *
          * @description
@@ -134,7 +134,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReason.rejectionReasonService
+         * @methodOf admin-rejection-reason.RejectionReasonService
          * @name clearRejectionReasonsCache
          *
          * @description

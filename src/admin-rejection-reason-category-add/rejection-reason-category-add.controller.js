@@ -18,7 +18,7 @@
 
     /**
      * @ngdoc controller
-     * @name admin-rejection-.controller:RejectionReasonCategoryAddController
+     * @name admin-rejection-reason-category-add.controller:RejectionReasonCategoryAddController
      *
      * @description
      * Controller for add Rejection Reason Categories.
@@ -42,7 +42,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf  admin-rejection-reason-category.controller:RejectionReasonCategoryAddController
+         * @methodOf  admin-rejection-reason-category-add.controller:RejectionReasonCategoryAddController
          * @name $onInit
          *
          * @description
@@ -54,7 +54,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-rejection-reason-category.controller:RejectionReasonCategoryAddController
+         * @methodOf admin-rejection-reason-category-add.controller:RejectionReasonCategoryAddController
          * @name save
          *
          * @description

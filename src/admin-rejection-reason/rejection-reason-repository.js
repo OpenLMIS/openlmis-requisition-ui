@@ -18,7 +18,7 @@
 
     /**
      * @ngdoc service
-     * @name admin-rejection-reason.RejectionReasonRepository.
+     * @name admin-rejection-reason.RejectionReasonRepository
      *
      * @description
      * Repository for managing rejection reason  used throughout the system.

@@ -58,7 +58,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReasonCategory.rejectionReasonCategoryService
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
          * @name get
          *
          * @description
@@ -79,7 +79,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReasonCategory.rejectionReasonCategoryService
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
          * @name getAll
          *
          * @description
@@ -93,7 +93,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReasonCategory.rejectionReasonCategoryService
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
          * @name search
          *
          * @description
@@ -109,7 +109,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReasonCategory.rejectionReasonCategoryService
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
          * @name create
          *
          * @description
@@ -124,7 +124,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReasonCategory.rejectionReasonCategoryService
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
          * @name update
          *
          * @description
@@ -150,7 +150,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf rejectionReasonCategory.rejectionReasonCategoryService
+         * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
          * @name clearRejectionReasonCategoriesCache
          *
          * @description

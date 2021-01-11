@@ -17,6 +17,14 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name admin-rejection-reason.RejectionReason
+     *
+     * @description
+     * Represents a single RejectionReasonCategory.
+     */
+
     angular
         .module('admin-rejection-reason')
         .factory('RejectionReason', RejectionReason);
@@ -27,7 +35,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-rejection-reason
+         * @methodOf admin-rejection-reason.RejectionReason
          * @name RejectionReason
          *
          * @description
@@ -43,5 +51,4 @@
             this.rejectionReasonCategory = json.rejectionReasonCategory;
         }
     }
-
 })();
