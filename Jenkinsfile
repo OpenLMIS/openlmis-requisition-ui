@@ -166,7 +166,7 @@ pipeline {
         stage('Push image') {
             when {
                 expression {
-                    return env.GIT_BRANCH =~ /rel-.+/
+                    return env.GIT_BRANCH == 'master' || env.GIT_BRANCH =~ /rel-.+/
                 }
             }
             steps {
