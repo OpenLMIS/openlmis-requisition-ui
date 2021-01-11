@@ -91,7 +91,6 @@
             return resource.getAll().$promise;
         }
 
-
         /**
          * @ngdoc method
          * @methodOf rejectionReasonCategory.rejectionReasonCategoryService

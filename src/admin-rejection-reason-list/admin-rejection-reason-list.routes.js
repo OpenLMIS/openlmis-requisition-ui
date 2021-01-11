@@ -32,14 +32,7 @@
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
                 rejectionReasons: function(paginationService, rejectionReasonService, $stateParams) {
-                    return paginationService.registerUrl($stateParams, function(stateParams) {
-                        var params = angular.copy(stateParams),
-                            page = stateParams.page,
-                            size = stateParams.size;
-
-                        delete params.page;
-                        delete params.size;
-
+                    return paginationService.registerUrl($stateParams, function() {
                         return rejectionReasonService.getAll();
                     });
                 }
