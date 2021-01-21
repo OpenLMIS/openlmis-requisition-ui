@@ -30,6 +30,7 @@
         RejectionReasonCategoryDataBuilder.prototype.withId = withId;
         RejectionReasonCategoryDataBuilder.prototype.withName = withName;
         RejectionReasonCategoryDataBuilder.prototype.withCode = withCode;
+        RejectionReasonCategoryDataBuilder.prototype.withActive = withActive;
 
         return RejectionReasonCategoryDataBuilder;
 
@@ -55,6 +56,11 @@
 
         function withCode(newCode) {
             this.code = newCode;
+            return this;
+        }
+
+        function withActive(active) {
+            this.active = active;
             return this;
         }
 

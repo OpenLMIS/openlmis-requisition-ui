@@ -30,7 +30,7 @@
             controller: 'RejectionReasonAddController',
             templateUrl: 'admin-rejection-reason-add/rejection-reason-add.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.REJECTION_REASONS_MANAGE],
             resolve: {
                 rejectionReasonCategories: function(rejectionReasonCategoryService) {
                     return rejectionReasonCategoryService.getAll();

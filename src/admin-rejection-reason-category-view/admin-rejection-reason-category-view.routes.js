@@ -31,7 +31,7 @@
                     controllerAs: 'vm'
                 }
             },
-            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.REJECTION_REASON_CATEGORIES_MANAGE],
             resolve: {
                 rejectionReasonCategory: function($stateParams, rejectionReasonCategoryService) {
                     if ($stateParams.id) {

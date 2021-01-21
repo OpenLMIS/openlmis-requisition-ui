@@ -29,7 +29,7 @@
             controller: 'RejectionReasonCategoryListController',
             templateUrl: 'admin-rejection-reason-category-list/rejection-reason-category-list.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.REJECTION_REASON_CATEGORIES_MANAGE],
             resolve: {
                 rejectionReasonCategories: function(paginationService, rejectionReasonCategoryService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function() {

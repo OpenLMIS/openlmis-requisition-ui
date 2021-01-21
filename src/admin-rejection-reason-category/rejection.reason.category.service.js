@@ -29,11 +29,11 @@
 
     service.$inject = [
         '$q', '$resource', 'openlmisUrlFactory', 'offlineService',
-        'localStorageFactory', 'permissionService', 'FacilityResource', 'localStorageService'
+        'localStorageFactory', 'permissionService', 'localStorageService'
     ];
 
     function service($q, $resource, openlmisUrlFactory, offlineService,
-                     localStorageFactory, permissionService, FacilityResource, localStorageService) {
+                     localStorageFactory, permissionService, localStorageService) {
 
         var resource = $resource(openlmisUrlFactory('/api/rejectionReasonCategories/:id'), {}, {
                 getAll: {

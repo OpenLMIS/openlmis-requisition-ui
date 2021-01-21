@@ -29,6 +29,7 @@
         RejectionReasonDataBuilder.prototype.buildJson = buildJson;
         RejectionReasonDataBuilder.prototype.withId = withId;
         RejectionReasonDataBuilder.prototype.withName = withName;
+        RejectionReasonDataBuilder.prototype.withActive = withActive;
 
         return RejectionReasonDataBuilder;
 
@@ -49,6 +50,11 @@
 
         function withId(newId) {
             this.id = newId;
+            return this;
+        }
+
+        function withActive(active) {
+            this.active = active;
             return this;
         }
 

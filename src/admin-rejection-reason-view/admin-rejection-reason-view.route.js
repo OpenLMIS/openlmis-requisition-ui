@@ -33,7 +33,7 @@
                     controllerAs: 'vm'
                 }
             },
-            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.REJECTION_REASONS_MANAGE],
             resolve: {
                 rejectionReason: function($stateParams,
                     rejectionReasonService) {

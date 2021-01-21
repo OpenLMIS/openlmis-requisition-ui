@@ -29,7 +29,7 @@
             controller: 'RejectionReasonCategoryAddController',
             templateUrl: 'admin-rejection-reason-category-add/rejection-reason-category-add.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.REJECTION_REASONS_CATEGORIES_MANAGE],
             resolve: {
                 rejectionReasonCategory: rejectionReasonCategoryResolve
             },
