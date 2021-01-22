@@ -14,5 +14,5 @@
     "adminTemplateConfigureSettings.templateSettingsSave.success": "Template Settings saved successfully!",
     "adminTemplateConfigureSettings.templateSettingsSave.title": "Save changes to the requisition template",
     "adminTemplateConfigureSettings.rejectionReasonWindow.title": "Active Rejection Reason",
-    "adminTemplateConfigureSettings.rejectionReasonWindow.info": "This determines whether or not a window to select a rejection reason will be display"
+    "adminTemplateConfigureSettings.rejectionReasonWindow.info": "This determines whether or not a window to select a rejection reason will display"
 }
