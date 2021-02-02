@@ -54,5 +54,15 @@
     "requisitionView.authorizeRequisition": "Authorize Requisition",
     "requisitionView.datePhysicalStockCountCompleted": "Date physical stock count completed",
     "requisitionView.datePhysicalStockCountCompleted.inFuture": "You cannot record date for the future",
-    "requisitionView.cancel": "Cancel"
+    "requisitionView.cancel": "Cancel",
+    "requisitionView.rejection.reason.title" : "Rejection Reason",
+    "requisitionView.rejection.reason.message" : "Add Reason(s) for Rejection",
+    "requisitionView.rejection.reason.category" : "Category",
+    "requisitionView.rejection.reason" : "Reason",
+    "requisitionView.rejection.reason.add" : "Add",
+    "requisitionView.rejection.reason.cancel" : "Cancel",
+    "requisitionView.rejection.reason.update" : "Update",
+    "requisitionView.rejection.reason.warning.message" : "There is no reason",
+    "requisitionView.rejection.reason.action" : "Action",
+    "requisitionView.rejection.reason.action.remove" : "Remove"
 }

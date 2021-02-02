@@ -28,6 +28,7 @@ describe('RequisitionViewController', function() {
         module('referencedata-facility');
         module('referencedata-program');
         module('referencedata-period');
+        module('requisition-rejection-reason');
 
         var RequisitionDataBuilder, RequisitionLineItemDataBuilder, ProgramDataBuilder;
         inject(function($injector) {
@@ -60,6 +61,7 @@ describe('RequisitionViewController', function() {
             this.facilityService = $injector.get('facilityService');
             this.programService = $injector.get('programService');
             this.periodService = $injector.get('periodService');
+            this.rejectionReasonModalService = $injector.get('rejectionReasonModalService');
         });
 
         this.program = new ProgramDataBuilder()

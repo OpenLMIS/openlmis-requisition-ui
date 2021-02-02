@@ -275,12 +275,12 @@
          *
          * @return {Promise} promise that resolves when requisition is rejected
          */
-        function reject() {
+        function reject(rejectionReasons) {
             var requisition = this;
             return handlePromise(resource.reject({
                 id: requisition.id,
                 idempotencyKey: requisition.idempotencyKey
-            }, {}).$promise, function(rejected) {
+            }, rejectionReasons).$promise, function(rejected) {
                 updateRequisition(requisition, rejected);
             }, function(data) {
                 handleFailure(data, requisition);
