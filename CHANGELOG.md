@@ -10,6 +10,10 @@ Improvements:
 * Updated cce-ui version to 1.0.7.
 * Updated fulfillment-ui version to 6.0.7.
 
+TZ Upgrade
+* [TZUP-99](https://openlmis.atlassian.net/browse/TZUP-99): Backend to store reason for R&R been rejected.
+
+
 7.0.2 / 2020-04-14
 ==================
 
