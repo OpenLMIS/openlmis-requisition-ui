@@ -228,6 +228,7 @@
         vm.isFullSupplyTabValid = isFullSupplyTabValid;
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
         vm.close = close;
+        vm.loadRejectionReasonModal = loadRejectionReasonModal;
 
         /**
          * @ngdoc method
