@@ -61,6 +61,7 @@
             this.numberOfPeriodsToAverage = template.numberOfPeriodsToAverage;
             this.program = template.program;
             this.populateStockOnHandFromStockCards = template.populateStockOnHandFromStockCards;
+            this.rejectionReasonWindowVisible = template.rejectionReasonWindowVisible;
             this.columnsMap = {};
             this.facilityTypes = template.facilityTypes;
             this.name = template.name;
