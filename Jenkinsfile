@@ -93,7 +93,7 @@ pipeline {
         stage('Build reference-ui') {
             when {
                 expression {
-                    return "${env.GIT_BRANCH}" == 'master'
+                    return "${env.GIT_BRANCH}" == 'master' && VERSION.endsWith("SNAPSHOT")
                 }
             }
             steps {
@@ -110,6 +110,11 @@ pipeline {
             }
         }
         stage('Sonar analysis') {
+            when {
+                expression {
+                    return VERSION.endsWith("SNAPSHOT")
+                }
+            }
             steps {
                 withSonarQubeEnv('Sonar OpenLMIS') {
                     withCredentials([string(credentialsId: 'SONAR_LOGIN', variable: 'SONAR_LOGIN'), string(credentialsId: 'SONAR_PASSWORD', variable: 'SONAR_PASSWORD')]) {
@@ -161,7 +166,7 @@ pipeline {
         stage('Push image') {
             when {
                 expression {
-                    return env.GIT_BRANCH =~ /rel-.+/
+                    return env.GIT_BRANCH == 'master' || env.GIT_BRANCH =~ /rel-.+/
                 }
             }
             steps {

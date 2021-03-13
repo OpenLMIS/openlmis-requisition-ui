@@ -1,3 +1,15 @@
+7.0.4 / 2020-11-17
+==================
+
+Improvements:
+* Updated ui-components version to 7.2.4.
+* Updated auth-ui version to 6.2.5.
+* Updated ui-layout version to 5.1.8.
+* Updated referencedata-ui version to 5.6.4.
+* Updated stockmanagement-ui version to 2.0.8.
+* Updated cce-ui version to 1.0.8.
+* Updated fulfillment-ui version to 6.0.8.
+
 7.0.3 / 2020-05-12
 ==================
 
