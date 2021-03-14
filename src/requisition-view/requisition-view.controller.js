@@ -33,7 +33,8 @@
         'notificationService', 'confirmService', 'offlineService', '$window', 'requisitionUrlFactory', '$filter',
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
-        'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod'
+        'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
+        'rejectionReasonModalService', '$q'
     ];
 
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
@@ -42,7 +43,7 @@
                                        RequisitionWatcher, accessTokenFactory, messageService, stateTrackerService,
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
                                        canApproveAndReject, canDelete, canSkip, canSync,
-                                       program, facility, processingPeriod) {
+                                       program, facility, processingPeriod, rejectionReasonModalService, $q) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
@@ -226,6 +227,8 @@
         vm.getPrintUrl = getPrintUrl;
         vm.isFullSupplyTabValid = isFullSupplyTabValid;
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
+        vm.close = close;
+        vm.loadRejectionReasonModal = loadRejectionReasonModal;
 
         /**
          * @ngdoc method
@@ -516,21 +519,43 @@
          * Otherwise, a success notification modal will be shown.
          */
         function rejectRnr() {
-            confirmService.confirmDestroy(
-                'requisitionView.reject.confirm',
-                'requisitionView.reject.label'
-            ).then(function() {
-                loadingModalService.open();
-                vm.requisition.$save()
-                    .then(function() {
-                        return vm.requisition.$reject();
-                    })
-                    .then(function() {
-                        watcher.disableWatcher();
-                        notificationService.success('requisitionView.reject.success');
-                        stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
-                    })
-                    .catch(loadingModalService.close);
+            loadRejectionReasonModal().then(function(rejectionReasons) {
+                confirmService.confirmDestroy(
+                    'requisitionView.reject.confirm',
+                    'requisitionView.reject.label'
+                ).then(function() {
+                    loadingModalService.open();
+                    vm.requisition.$save()
+                        .then(function() {
+                            return vm.requisition.$reject(rejectionReasons);
+                        })
+                        .then(function() {
+                            watcher.disableWatcher();
+                            notificationService.success('requisitionView.reject.success');
+                            stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
+                        })
+                        .catch(loadingModalService.close);
+                });
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-view.controller:RequisitionViewController
+         * @name loadRejectionReasonModal
+         *
+         * @description
+         * Display rejection reason dialog if enabled.
+         */
+        function loadRejectionReasonModal() {
+            return $q(function(resolve)  {
+                if (vm.requisition.template.rejectionReasonWindowVisible) {
+                    rejectionReasonModalService.open().then(function(rejectionReasons) {
+                        resolve(rejectionReasons);
+                    });
+                } else {
+                    resolve();
+                }
             });
         }
 
@@ -559,6 +584,7 @@
                 }, failWithMessage('requisitionView.skip.failure'));
             });
         }
+
         /**
          * @ngdoc method
          * @methodOf requisition-view.controller:RequisitionViewController
