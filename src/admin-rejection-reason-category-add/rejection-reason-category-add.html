@@ -1,0 +1,26 @@
+<div class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>{{'adminRejectionReasonCategory.add' | message}}</h1>
+            </div>
+            <div class="modal-body">
+                <form id="add-rejection-reason-category-form" ng-submit="vm.save()">
+                    <label for="rejectionReasonCategoryName">{{'adminRejectionReasonCategory.name' | message}}</label>
+                    <input id="rejectionReasonCategoryName" type="text" ng-model="vm.rejectionReasonCategory.name" ng-disabled="vm.managedExternally" required />
+                    <label for="rejectionReasonCategoryCode">{{'adminRejectionReasonCategory.code' | message}}</label>
+                    <input id="rejectionReasonCategoryCode" type="text" ng-model="vm.rejectionReasonCategory.code" ng-disabled="vm.managedExternally"required />
+
+                    <label for="rejectionReasonCategoryActive" class="checkbox">
+                        <input id="rejectionReasonCategoryActive" type="checkbox" ng-model="vm.rejectionReasonCategory.active" ng-disabled="vm.managedExternally" />
+                        {{'adminRejectionReasonCategory.active' | message}}
+                    </label>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel" ng-click="vm.goToPreviousState()">{{'adminRejectionReasonCategory.cancel' | message}}</button>
+                <button class="primary" form="add-rejection-reason-category-form">{{'adminRejectionReasonCategory.save' | message}}</button>
+            </div>
+        </div>
+    </div>
+</div>

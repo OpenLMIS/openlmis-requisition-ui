@@ -1,0 +1,11 @@
+{
+  "adminRejectionReason.rejectionReason": "Rejection Reason",
+  "adminRejectionReason.add": "Add Rejection Reason",
+  "adminRejectionReason.name": "Name",
+  "adminRejectionReason.code": "Code",
+  "adminRejectionReason.active": "Active",
+  "adminRejectionReason.category": "Category",
+  "adminRejectionReason.cancel": "Cancel",
+  "adminRejectionReason.save": "Save",
+  "adminRejectionReason.saved": "Saved"
+}
