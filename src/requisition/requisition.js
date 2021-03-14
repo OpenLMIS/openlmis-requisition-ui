@@ -280,7 +280,6 @@
             return handlePromise(resource.reject({
                 id: requisition.id,
                 idempotencyKey: requisition.idempotencyKey
-
             }, rejectionReasons).$promise, function(rejected) {
                 updateRequisition(requisition, rejected);
             }, function(data) {
