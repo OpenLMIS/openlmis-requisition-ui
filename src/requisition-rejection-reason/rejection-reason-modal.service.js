@@ -70,6 +70,8 @@
 
                     function addRejectionReason() {
                         this.selectedRejectionReasons.push(this.reason);
+                        this.reason = {};
+                        this.category = {};
                     }
 
                     function removeRejectionReason(reason) {

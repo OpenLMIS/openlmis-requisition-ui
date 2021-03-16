@@ -18,39 +18,40 @@ describe('RejectionReasonRepository', function() {
 
     beforeEach(function() {
         module('admin-rejection-reason', function($provide) {
-            OpenlmisRepositoryMock = jasmine.createSpy('OpenlmisRepository');
-            $provide.factory('OpenlmisRepository', function() {
-                return OpenlmisRepositoryMock;
-            });
-
             rejectionReasonResourceMock = jasmine.createSpy('RejectionReasonResource');
+
             $provide.factory('RejectionReasonResource', function() {
                 return function() {
                     return rejectionReasonResourceMock;
                 };
             });
+
+            OpenlmisRepositoryMock = jasmine.createSpy('OpenlmisRepository');
+            $provide.factory('OpenlmisRepository', function() {
+                return OpenlmisRepositoryMock;
+            });
         });
 
         inject(function($injector) {
-            RejectionReasonRepository = $injector.get('RejectionReasonRepository');
             RejectionReason = $injector.get('RejectionReason');
+            RejectionReasonRepository = $injector.get('RejectionReasonRepository');
         });
     });
 
     describe('construct', function() {
-        it('should extend OpenlmisRepository', function() {
-            new RejectionReasonRepository();
-
-            expect(OpenlmisRepositoryMock).toHaveBeenCalledWith(RejectionReason,
-                rejectionReasonResourceMock);
-        });
-
         it('should pass the given implementation', function() {
             var implMock = jasmine.createSpyObj('impl', ['create']);
             new RejectionReasonRepository(implMock);
 
             expect(OpenlmisRepositoryMock).toHaveBeenCalledWith(RejectionReason,
                 implMock);
+        });
+
+        it('should extend OpenlmisRepository', function() {
+            new RejectionReasonRepository();
+
+            expect(OpenlmisRepositoryMock).toHaveBeenCalledWith(RejectionReason,
+                rejectionReasonResourceMock);
         });
     });
 });

@@ -28,10 +28,10 @@
         .factory('RejectionReasonCategoryRepository', RejectionReasonCategoryRepository);
 
     RejectionReasonCategoryRepository.$inject = ['classExtender', 'OpenlmisRepository',
-        'RejectionReasonCategory', 'RejectionReasonCategoryResource'];
+        'RejectionReasonCategoryResource', 'RejectionReasonCategory'];
 
     function RejectionReasonCategoryRepository(classExtender, OpenlmisRepository,
-                                               RejectionReasonCategory, RejectionReasonCategoryResource) {
+                                               RejectionReasonCategoryResource, RejectionReasonCategory) {
 
         classExtender.extend(RejectionReasonCategoryRepository, OpenlmisRepository);
 

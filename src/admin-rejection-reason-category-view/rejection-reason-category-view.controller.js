@@ -37,7 +37,7 @@
         vm.$onInit = onInit;
         vm.goToPreviousState = stateTrackerService.goToPreviousState;
         vm.rejectionReasonCategory = rejectionReasonCategory;
-        vm.saveRejectionReasonCategoryDetails = saveRejectionReasonCategoryDetails;
+        vm.saveRejectionReasonCategoryDetails = updateRejectionReasonCategory;
 
         function onInit() {
             vm.rejectionReasonCategory = angular.copy(rejectionReasonCategory);
@@ -51,15 +51,15 @@
          * @description
          * Saves the rejection reason category and takes user back to the previous state.
          */
-        function saveRejectionReasonCategoryDetails() {
-            return doSave().then(function(response) {
+        function updateRejectionReasonCategory() {
+            return doUpdateRejectionReasonCategory().then(function(response) {
                 $state.go('admin-rejection-reason-category-list', {
                     rejectionReasonCategory: response
                 });
             });
         }
 
-        function doSave() {
+        function doUpdateRejectionReasonCategory() {
             loadingModalService.open();
             return new RejectionReasonCategoryRepository().create(vm.rejectionReasonCategory)
                 .then(function(rejectionReasonCategory) {

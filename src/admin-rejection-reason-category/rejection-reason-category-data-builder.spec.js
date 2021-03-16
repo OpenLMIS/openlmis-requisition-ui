@@ -40,7 +40,6 @@
             this.id = 'rejection-reason-category-id-' + RejectionReasonCategoryDataBuilder.instanceNumber;
             this.code = 'RRC' + RejectionReasonCategoryDataBuilder.instanceNumber;
             this.name = 'RRC1' + RejectionReasonCategoryDataBuilder.instanceNumber;
-            this.active = true;
         }
 
         function withName(newName) {
@@ -66,8 +65,7 @@
             return new RejectionReasonCategory(
                 this.id,
                 this.code,
-                this.name,
-                this.active
+                this.name
             );
         }
 

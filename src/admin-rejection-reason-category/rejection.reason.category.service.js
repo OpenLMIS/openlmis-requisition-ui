@@ -29,11 +29,11 @@
 
     service.$inject = [
         '$q', '$resource', 'openlmisUrlFactory', 'offlineService',
-        'localStorageFactory', 'permissionService', 'FacilityResource', 'localStorageService'
+        'localStorageFactory', 'localStorageService'
     ];
 
     function service($q, $resource, openlmisUrlFactory, offlineService,
-                     localStorageFactory, permissionService, FacilityResource, localStorageService) {
+                     localStorageFactory, localStorageService) {
 
         var resource = $resource(openlmisUrlFactory('/api/rejectionReasonCategories/:id'), {}, {
                 getAll: {
@@ -48,18 +48,18 @@
             rejectionReasonCategoriesCache = localStorageFactory('rejectionReasonCategories');
 
         return {
-            get: get,
-            getAll: getAll,
+            get: getRejectionReasonCategory,
+            getAll: getRejectionReasonCategories,
             search: search,
-            update: update,
-            create: create,
+            update: updateRejectionReasonCategory,
+            create: createRejectionReasonCategory,
             clearRejectionReasonCategoriesCache: clearRejectionReasonCategoriesCache
         };
 
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
-         * @name get
+         * @name getRejectionReasonCategory
          *
          * @description
          * Gets Rejection Reason Category by id.
@@ -67,7 +67,7 @@
          * @param  {String}  id Rejection Reason Category UUID
          * @return {Promise} Rejection Reason Category info
          */
-        function get(id) {
+        function getRejectionReasonCategory(id) {
             var cachedRejectionReasonCategory = rejectionReasonCategoriesCache.getBy('id', id);
             if (cachedRejectionReasonCategory) {
                 return $q.resolve(cachedRejectionReasonCategory);
@@ -80,14 +80,14 @@
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
-         * @name getAll
+         * @name getRejectionReasonCategories
          *
          * @description
          * Gets all Rejection Reason Categories.
          *
          * @return {Promise} Array of all Rejection Reason Categories
          */
-        function getAll() {
+        function getRejectionReasonCategories() {
             return resource.getAll().$promise;
         }
 
@@ -110,30 +110,30 @@
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
-         * @name create
+         * @name createRejectionReasonCategory
          *
          * @description
          * Creates new rejection reason category.
          *
-         * @param  {Object}  rejectionReason Rejection Reason Category to be created
+         * @param  {Object}  rejectionReasonCategory Rejection Reason Category to be created
          * @return {Promise}         Updated rejection reason category
          */
-        function create(rejectionReasonCategory) {
+        function createRejectionReasonCategory(rejectionReasonCategory) {
             return resource.save(null, rejectionReasonCategory).$promise;
         }
 
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason-category.RejectionReasonCategoryService
-         * @name update
+         * @name updateRejectionReasonCategory
          *
          * @description
          * Updates rejection reason category.
          *
-         * @param  {Object}  rejectionReasons Rejection Reason Category to be updated
+         * @param  {Object}  rejectionReasonCategories Rejection Reason Category to be updated
          * @return {Promise}         Updated rejection reason category
          */
-        function update(rejectionReasonCategories) {
+        function updateRejectionReasonCategory(rejectionReasonCategories) {
 
             return resource.update({
                 id: rejectionReasonCategories.id

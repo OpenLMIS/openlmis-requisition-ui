@@ -36,7 +36,7 @@
                         rejectionReasonCategory) {
         var vm = this;
 
-        vm.save = save;
+        vm.save = saveRejectionReasonCategory;
         vm.goToPreviousState = stateTrackerService.goToPreviousState;
         vm.onInit = onInit;
 
@@ -60,15 +60,15 @@
          * @description
          * Saves the rejection reason category and takes user back to the previous state.
          */
-        function save() {
-            return doSave().then(function(response) {
+        function saveRejectionReasonCategory() {
+            return doSaveRejectionReasonCategory().then(function(response) {
                 $state.go('admin-rejection-reason-category-list', {
                     rejectionReasonCategory: response
                 });
             });
         }
 
-        function doSave() {
+        function doSaveRejectionReasonCategory() {
             loadingModalService.open();
             return new RejectionReasonCategoryRepository().create(vm.rejectionReasonCategory)
                 .then(function(rejectionReasonCategory) {
@@ -82,5 +82,4 @@
                 });
         }
     }
-
 })();

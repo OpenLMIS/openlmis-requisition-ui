@@ -38,7 +38,7 @@
         vm.$onInit = onInit;
         vm.goToPreviousState = stateTrackerService.goToPreviousState;
         vm.rejectionReason = rejectionReason;
-        vm.saveRejectionReasonDetails = saveRejectionReasonDetails;
+        vm.saveRejectionReasonDetails = updateRejectionReason;
         vm.rejectionReasonCategories = rejectionReasonCategories.content;
 
         function onInit() {
@@ -49,20 +49,20 @@
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason.controller:RejectionReasonViewController
-         * @name saveRejectionReasonDetails
+         * @name updateRejectionReasonDetails
          *
          * @description
-         * Saves the rejection reason and takes user back to the previous state.
+         * Update the rejection reason and takes user back to the previous state.
          */
-        function saveRejectionReasonDetails() {
-            return doSave().then(function(response) {
+        function updateRejectionReason() {
+            return doUpdateRejectionReason().then(function(response) {
                 $state.go('admin-rejection-reason-list', {
                     rejectionReason: response
                 });
             });
         }
 
-        function doSave() {
+        function doUpdateRejectionReason() {
             loadingModalService.open();
             return new RejectionReasonRepository().create(vm.rejectionReason)
                 .then(function(rejectionReason) {

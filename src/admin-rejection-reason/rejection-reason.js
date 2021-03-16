@@ -45,9 +45,9 @@
          */
         function RejectionReason(json) {
             this.id = json.id;
-            this.name = json.name;
             this.code = json.code;
             this.active = json.active;
+            this.name = json.name;
             this.rejectionReasonCategory = json.rejectionReasonCategory;
         }
     }

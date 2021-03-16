@@ -9,7 +9,7 @@
                     <label for="rejectionReasonName">{{'adminRejectionReason.name' | message}}</label>
                     <input id="rejectionReasonName" type="text" ng-model="vm.rejectionReason.name" ng-disabled="vm.managedExternally" required />
                     <label for="rejectionReasonCode">{{'adminRejectionReason.code' | message}}</label>
-                    <input id="rejectionReasonCode" type="text" ng-model="vm.rejectionReason.code" ng-disabled="vm.managedExternally"required />
+                    <input id="rejectionReasonCode" type="text" ng-model="vm.rejectionReason.code" ng-disabled="vm.managedExternally" required />
                     <label for="category">{{'adminRejectionReason.category' | message}}</label>
                     <select id="category" ng-model="vm.rejectionReason.rejectionReasonCategory" ng-options="category as category.name for category in vm.rejectionReasonCategories track by category.id" required></select>
                     <label for="rejectionReasonActive" class="checkbox">

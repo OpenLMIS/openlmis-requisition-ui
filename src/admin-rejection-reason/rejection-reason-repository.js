@@ -12,6 +12,7 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
@@ -28,10 +29,10 @@
         .factory('RejectionReasonRepository', RejectionReasonRepository);
 
     RejectionReasonRepository.$inject = ['classExtender',
-        'OpenlmisRepository', 'RejectionReason', 'RejectionReasonResource'];
+        'OpenlmisRepository', 'RejectionReasonResource', 'RejectionReason'];
 
     function RejectionReasonRepository(classExtender, OpenlmisRepository,
-                                       RejectionReason, RejectionReasonResource) {
+                                       RejectionReasonResource, RejectionReason) {
 
         classExtender.extend(RejectionReasonRepository, OpenlmisRepository);
 

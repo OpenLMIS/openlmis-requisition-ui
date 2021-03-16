@@ -38,13 +38,13 @@
             }
         });
 
-        rejectionReasonCategoryResolve.$inject = ['$stateParams'];
-
         function rejectionReasonCategoryResolve($stateParams) {
             if ($stateParams.rejectionReasonCategory) {
                 return $stateParams.rejectionReasonCategory;
             }
             return {};
         }
+
+        rejectionReasonCategoryResolve.$inject = ['$stateParams'];
     }
 })();

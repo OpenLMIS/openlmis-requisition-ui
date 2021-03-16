@@ -30,11 +30,11 @@
 
     service.$inject = [
         '$q', '$resource', 'openlmisUrlFactory', 'offlineService',
-        'localStorageFactory', 'permissionService', 'FacilityResource', 'localStorageService'
+        'localStorageFactory', 'localStorageService'
     ];
 
     function service($q, $resource, openlmisUrlFactory, offlineService,
-                     localStorageFactory, permissionService, FacilityResource, localStorageService) {
+                     localStorageFactory, localStorageService) {
 
         var resource = $resource(openlmisUrlFactory('/api/rejectionReasons/:id'), {}, {
                 getAll: {
@@ -49,17 +49,17 @@
             rejectionReasonsCache = localStorageFactory('rejectionReasons');
 
         return {
-            get: get,
-            getAll: getAll,
-            update: update,
-            create: create,
+            get: getRejectionReason,
+            getAll: getRejectionReasons,
+            update: updateRejectionReason,
+            create: createRejectionReason,
             clearRejectionReasonsCache: clearRejectionReasonsCache
         };
 
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason.RejectionReasonService
-         * @name get
+         * @name getRejectionReason
          *
          * @description
          * Gets Rejection Reason by id.
@@ -67,7 +67,7 @@
          * @param  {String}  id Rejection Reason UUID
          * @return {Promise} Rejection Reason info
          */
-        function get(id) {
+        function getRejectionReason(id) {
             var cachedRejectionReason = rejectionReasonsCache.getBy('id', id);
             if (cachedRejectionReason) {
                 return $q.resolve(cachedRejectionReason);
@@ -81,21 +81,7 @@
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason.RejectionReasonService
-         * @name getAll
-         *
-         * @description
-         * Gets all Rejection Reasons.
-         *
-         * @return {Promise} Array of all Rejection Reasons
-         */
-        function getAll() {
-            return resource.getAll().$promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-rejection-reason.RejectionReasonService
-         * @name create
+         * @name createRejectionReason
          *
          * @description
          * Creates new rejection reason.
@@ -103,22 +89,36 @@
          * @param  {Object}  rejectionReason Rejection Reason to be created
          * @return {Promise}         Updated rejection reason
          */
-        function create(rejectionReason) {
+        function createRejectionReason(rejectionReason) {
             return resource.save(null, rejectionReason).$promise;
         }
 
         /**
          * @ngdoc method
          * @methodOf admin-rejection-reason.RejectionReasonService
-         * @name update
+         * @name getRejectionReasons
+         *
+         * @description
+         * Gets all Rejection Reasons.
+         *
+         * @return {Promise} Array of all Rejection Reasons
+         */
+        function getRejectionReasons() {
+            return resource.getAll().$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-rejection-reason.RejectionReasonService
+         * @name updateRejectionReason
          *
          * @description
          * Updates rejection reason.
          *
-         * @param  {Object}  rejectionReasons Rejection Reason to be updated
+         * @param  {Object}  rejectionReason Rejection Reason to be updated
          * @return {Promise}         Updated rejection reason
          */
-        function update(rejectionReason) {
+        function updateRejectionReason(rejectionReason) {
             return resource.update({
                 id: rejectionReason.id
             }, rejectionReason)

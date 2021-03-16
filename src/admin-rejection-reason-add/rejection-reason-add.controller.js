@@ -28,13 +28,13 @@
         .controller('RejectionReasonAddController', RejectionReasonAddController);
 
     RejectionReasonAddController.$inject = ['$state', 'loadingModalService', 'notificationService',
-        'rejectionReasonCategories', 'RejectionReasonRepository', 'stateTrackerService'];
+        'stateTrackerService', 'rejectionReasonCategories', 'RejectionReasonRepository'];
 
     function RejectionReasonAddController($state, loadingModalService, notificationService,
-                                          rejectionReasonCategories, RejectionReasonRepository, stateTrackerService) {
+                                          stateTrackerService, rejectionReasonCategories, RejectionReasonRepository) {
         var vm = this;
 
-        vm.save = save;
+        vm.save = saveRejectionReason;
         vm.goToPreviousState = stateTrackerService.goToPreviousState;
         vm.rejectionReasonCategories = rejectionReasonCategories.content;
         vm.goToPreviousState = goToPreviousState;
@@ -58,15 +58,15 @@
          * @description
          * Saves the rejection reason and takes user back to the previous state.
          */
-        function save() {
-            return doSave().then(function(response) {
+        function saveRejectionReason() {
+            return doSaveRejectionReason().then(function(response) {
                 $state.go('admin-rejection-reason-list', {
                     rejectionReason: response
                 });
             });
         }
 
-        function doSave() {
+        function doSaveRejectionReason() {
             loadingModalService.open();
             return new RejectionReasonRepository().create(vm.rejectionReason)
                 .then(function(rejectionReason) {

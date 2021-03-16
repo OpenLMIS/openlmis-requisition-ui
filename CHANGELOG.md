@@ -10,6 +10,14 @@ Improvements:
 * Updated cce-ui version to 1.0.8.
 * Updated fulfillment-ui version to 6.0.8.
 
+
+TZ Upgrade:
+* [TZUP-99](https://openlmis.atlassian.net/browse/TZUP-99): Rejection reason window.
+* [TZUP-102](https://openlmis.atlassian.net/browse/TZUP-102): Configure R&R rejection reasons.
+* [TZUP-138](https://openlmis.atlassian.net/browse/TZUP-138): Enable/Disable Reasons for rejection screen.
+
+
+
 7.0.3 / 2020-05-12
 ==================
 
@@ -21,10 +29,6 @@ Improvements:
 * Updated stockmanagement-ui version to 2.0.7.
 * Updated cce-ui version to 1.0.7.
 * Updated fulfillment-ui version to 6.0.7.
-
-TZ Upgrade
-* [TZUP-99](https://openlmis.atlassian.net/browse/TZUP-99): Backend to store reason for R&R been rejected.
-
 
 7.0.2 / 2020-04-14
 ==================
