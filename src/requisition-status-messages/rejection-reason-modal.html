@@ -1,0 +1,30 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" role="button" class="close" aria-label="Close" ng-click="$hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>{{'requisitionStatusMessages.rejectionReason' | message}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="status-message-list">
+                    <article class="status-message">
+                        <header>
+                            <div class="status">{{vm.rejection.status}}</div>
+                            <div class="date">
+                                {{vm.rejection.statusMessageDto.authorFirstName}}
+                                {{vm.rejection.statusMessageDto.authorLastName}}
+                                on
+                                {{vm.rejection.statusMessageDto.createdDate | openlmisDate: 'longDate'}}
+                            </div>
+                        </header>
+                        <div ng-repeat="reason in vm.rejection.rejectionDtos">
+                            <div class="content">{{$index + 1}}. {{reason.rejectionReason.name}}</div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

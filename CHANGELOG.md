@@ -15,6 +15,7 @@ TZ Upgrade:
 * [TZUP-99](https://openlmis.atlassian.net/browse/TZUP-99): Rejection reason window.
 * [TZUP-102](https://openlmis.atlassian.net/browse/TZUP-102): Configure R&R rejection reasons.
 * [TZUP-138](https://openlmis.atlassian.net/browse/TZUP-138): Enable/Disable Reasons for rejection screen.
+* [TZUP-101](https://openlmis.atlassian.net/browse/TZUP-101): View Reasons for rejection on rejected RnR.
 
 
 

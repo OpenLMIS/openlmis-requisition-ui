@@ -19,7 +19,7 @@ describe('StatusMessagesController', function() {
 
     var rootScope, scope;
 
-    var requisition, statusMessagesHistoryModalServiceSpy;
+    var requisition, statusMessagesHistoryModalServiceSpy, rejectionReasonModalServiceSpy;
 
     beforeEach(function() {
 
@@ -27,9 +27,10 @@ describe('StatusMessagesController', function() {
 
         requisition = jasmine.createSpyObj('requisition', ['$statusMessages', '$isEditable']);
 
-        inject(function($rootScope, statusMessagesHistoryModalService) {
+        inject(function($rootScope, statusMessagesHistoryModalService, rejectionReasonModalService) {
             rootScope = $rootScope;
             statusMessagesHistoryModalServiceSpy = statusMessagesHistoryModalService;
+            rejectionReasonModalServiceSpy = rejectionReasonModalService;
         });
 
         scope = rootScope.$new();
@@ -167,6 +168,13 @@ describe('StatusMessagesController', function() {
             vm.displayRequisitionHistory();
 
             expect(statusMessagesHistoryModalServiceSpy.show).toHaveBeenCalled();
+        });
+
+        it('should call rejectionReasonService', function() {
+            spyOn(rejectionReasonModalServiceSpy, 'show');
+            vm.viewRejectionReason();
+
+            expect(rejectionReasonModalServiceSpy.show).toHaveBeenCalled();
         });
     });
 
