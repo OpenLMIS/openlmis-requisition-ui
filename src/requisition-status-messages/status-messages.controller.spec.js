@@ -178,4 +178,54 @@ describe('StatusMessagesController', function() {
         });
     });
 
+    describe('displayReasonForRejection', function() {
+
+        beforeEach(inject(function($controller) {
+            vm = $controller('StatusMessagesController', {
+                $scope: scope
+            });
+
+            vm.requisition.statusHistory = [{
+                status: 'REJECTED',
+                statusMessageDto: null,
+                previousStatusChangeId: null,
+                createdDate: '2018-02-21T10:59:02.758Z',
+                rejectionDtos: [{
+                    code: 'RR1',
+                    name: 'Rejection Reason One'
+                }]
+            }];
+            rootScope.$apply();
+        }));
+
+        it('should show a link to view rejection reasons', function() {
+            vm.requisition.status = 'REJECTED';
+            var result = vm.displayReasonForRejection();
+
+            expect(result).toBe(true);
+
+        });
+
+        it('should not show a link to view rejection reasons if requisition status is not Rejected', function() {
+            vm.requisition.status = 'INITIATED';
+            var result = vm.displayReasonForRejection();
+
+            expect(result).toBe(false);
+
+        });
+
+        it('should not show a link to view rejection reasons if there are no rejection reasons', function() {
+            vm.requisition.status = 'REJECTED';
+            spyOn(vm, 'displayAddComment').andReturn(false);
+            vm.requisition.statusHistory = [{
+                status: 'REJECTED',
+                rejectionDtos: []
+            }];
+            var result = vm.displayReasonForRejection();
+
+            expect(result).toBe(false);
+
+        });
+
+    });
 });
