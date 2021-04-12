@@ -6,5 +6,7 @@
     "requisitionStatusMessages.removeComment": "Remove Comment",
     "requisitionStatusMessages.requisitionHistory": "Requisition History",
     "requisitionStatusMessages.viewHistory": "View History",
-    "requisitionStatusMessages.on": "on"
+    "requisitionStatusMessages.on": "on",
+    "requisitionStatusMessages.viewRejectionReason" : "View Rejection Reason(s)",
+    "requisitionStatusMessages.rejectionReason" : "Rejection Reason(s)"
 }
