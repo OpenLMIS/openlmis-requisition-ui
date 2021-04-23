@@ -28,9 +28,9 @@
         .module('requisition-status-messages')
         .controller('StatusMessagesController', controller);
 
-    controller.$inject = ['$scope', 'statusMessagesHistoryModalService'];
+    controller.$inject = ['$scope', 'statusMessagesHistoryModalService', 'rejectionReasonModalService'];
 
-    function controller($scope, statusMessagesHistoryModalService) {
+    function controller($scope, statusMessagesHistoryModalService, rejectionReasonModalService) {
         var vm = this;
 
         /**
@@ -62,6 +62,8 @@
         vm.addComment = addComment;
         vm.removeComment = removeComment;
         vm.displayEditComment = displayEditComment;
+        vm.viewRejectionReason = viewRejectionReason;
+        vm.displayReasonForRejection = displayReasonForRejection;
 
         /**
          * @ngdoc method
@@ -125,6 +127,35 @@
          */
         function displayEditComment() {
             return !vm.displayAddComment() && vm.requisition.$isEditable;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-status-messages.controller:StatusMessagesController
+         * @name displayRejectionReasons
+         *
+         * @description
+         * Responsible for display a link to view rejections reasons, this option
+         * will be displayed only if status or requisition is rejected ans there are
+         * rejection reasons
+         */
+        function displayReasonForRejection() {
+            return vm.requisition.status === 'REJECTED' &&
+                (vm.requisition.statusHistory.filter(function(obj) {
+                    return obj.status === 'REJECTED';
+                })[0].rejectionDtos).length > 0;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-status-messages.controller:StatusMessagesController
+         * @name viewRejectionReason
+         *
+         * @description
+         * Open modal to view reasons why requisition was rejected
+         */
+        function viewRejectionReason() {
+            rejectionReasonModalService.show(vm.requisition);
         }
     }
 })();

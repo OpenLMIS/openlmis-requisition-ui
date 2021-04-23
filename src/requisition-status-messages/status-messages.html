@@ -1,6 +1,7 @@
 <section>
     <header>
         <h3>{{'requisitionStatusMessages.comments' | message}}</h3>
+        <a ng-show="vm.displayReasonForRejection()" ng-click="vm.viewRejectionReason()">{{'requisitionStatusMessages.viewRejectionReason' | message}}</a>
         <a ng-show="vm.requisition.$statusMessages.length > 0" ng-click="vm.displayRequisitionHistory()">{{'requisitionStatusMessages.viewHistory' | message}}</a>
         <button class="add" ng-click="vm.addComment()" ng-if="vm.displayAddComment()">{{'requisitionStatusMessages.addComment.label' | message}}</button>
     </header>
@@ -9,7 +10,10 @@
     </div>
     <article class="status-message" ng-if="vm.requisition.$statusMessages.length">
         <header>
-            <div class="status">{{vm.requisition.$statusMessages[0].status | requisitionStatus}}</div>
+            <div class="status">
+                {{vm.requisition.$statusMessages[0].status | requisitionStatus}}
+            </div>
+
             <div class="date">
                 {{vm.requisition.$statusMessages[0].authorFirstName}}
                 {{vm.requisition.$statusMessages[0].authorLastName}}
