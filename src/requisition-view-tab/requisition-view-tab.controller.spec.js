@@ -106,6 +106,7 @@ describe('ViewTabController', function() {
         this.canSubmit = false;
         this.canAuthorize = false;
         this.canApproveAndReject = true;
+        this.canUnskipRequisitionItemWhenApproving = false;
 
         spyOn(this.alertService, 'error');
         spyOn(this.selectProductsModalService, 'show');
@@ -152,6 +153,7 @@ describe('ViewTabController', function() {
                 this.canAuthorize = true;
                 this.fullSupply = true;
                 this.requisition.emergency = true;
+                this.canUnskipRequisitionItemWhenApproving = true;
             });
 
             it('should be visible', function() {
@@ -783,7 +785,8 @@ describe('ViewTabController', function() {
             canSubmit: this.canSubmit,
             canAuthorize: this.canAuthorize,
             fullSupply: this.fullSupply,
-            canApproveAndReject: this.canApproveAndReject
+            canApproveAndReject: this.canApproveAndReject,
+            canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
         });
         this.vm.$onInit();
     }
