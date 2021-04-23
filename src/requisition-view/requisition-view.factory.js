@@ -37,7 +37,8 @@
             canAuthorize: canAuthorize,
             canApproveAndReject: canApproveAndReject,
             canDelete: canDelete,
-            canSkip: canSkip
+            canSkip: canSkip,
+            canUnskipRequisitionItemWhenApproving: canUnskipRequisitionItemWhenApproving
         };
         return factory;
 
@@ -186,6 +187,16 @@
                 })
                 .catch(function() {
                     return $q.resolve(false);
+                });
+        }
+
+        function canUnskipRequisitionItemWhenApproving(requisition) {
+            return requisition.unskipRequisitionWhenApproving()
+                .then(function(response) {
+                    return $q.resolve(response.unskipRequisition);
+                })
+                .catch(function(error) {
+                    return $q.resolve(error);
                 });
         }
     }

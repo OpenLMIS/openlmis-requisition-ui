@@ -32,13 +32,14 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
-                               paginationService, $stateParams, requisitionCacheService) {
+                               paginationService, $stateParams, requisitionCacheService,
+                               canUnskipRequisitionItemWhenApproving) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -147,7 +148,7 @@
             vm.items = items;
             vm.requisition = requisition;
             vm.columns = columns;
-            vm.userCanEdit = canAuthorize || canSubmit;
+            vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
             vm.showUnskipFullSupplyProductsButton = showUnskipFullSupplyProductsButton();

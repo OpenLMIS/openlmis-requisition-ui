@@ -72,6 +72,9 @@
                 },
                 canSync: function(canSubmit, canAuthorize, canApproveAndReject) {
                     return canSubmit || canAuthorize || canApproveAndReject;
+                },
+                canUnskipRequisitionItemWhenApproving: function(requisitionViewFactory, requisition) {
+                    return requisitionViewFactory.canUnskipRequisitionItemWhenApproving(requisition);
                 }
             }
         });

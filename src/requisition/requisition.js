@@ -88,6 +88,10 @@
                     },
                     url: requisitionUrlFactory('/api/requisitions/:id'),
                     method: 'DELETE'
+                },
+                unskipRequisitionWhenApproving: {
+                    url: requisitionUrlFactory('/api/requisitions/unSkipRequisition'),
+                    method: 'GET'
                 }
             });
 
@@ -117,6 +121,7 @@
         Requisition.prototype.addLineItems = addLineItems;
         Requisition.prototype.deleteLineItem = deleteLineItem;
         Requisition.prototype.unskipFullSupplyProducts = unskipFullSupplyProducts;
+        Requisition.prototype.unskipRequisitionWhenApproving = unskipRequisitionWhenApproving;
 
         return Requisition;
 
@@ -194,6 +199,24 @@
             }, function(data) {
                 handleFailure(data, requisition);
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition.Requisition
+         * @name unskipRequisitionWhenApproving
+         *
+         * @description
+         * allows user to unskip skipped requisition items when approving.
+         *
+         * @return {Promise} promise
+         */
+        function unskipRequisitionWhenApproving() {
+            return handlePromise(resource.unskipRequisitionWhenApproving({}).$promise,
+                function() {
+                }, function(error) {
+                    handleFailure(error, {});
+                });
         }
 
         /**
