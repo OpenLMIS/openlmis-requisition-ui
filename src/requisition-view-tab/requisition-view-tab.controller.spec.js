@@ -153,7 +153,6 @@ describe('ViewTabController', function() {
                 this.canAuthorize = true;
                 this.fullSupply = true;
                 this.requisition.emergency = true;
-                this.canUnskipRequisitionItemWhenApproving = true;
             });
 
             it('should be visible', function() {
