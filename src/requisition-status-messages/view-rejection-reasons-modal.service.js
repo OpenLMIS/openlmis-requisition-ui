@@ -16,7 +16,7 @@
 (function() {
     angular
         .module('requisition-status-messages')
-        .service('rejectionReasonModalService', service);
+        .service('viewRejectionsReasonsModalService', service);
 
     service.$inject = [
         'openlmisModalService'

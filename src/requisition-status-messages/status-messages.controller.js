@@ -28,9 +28,9 @@
         .module('requisition-status-messages')
         .controller('StatusMessagesController', controller);
 
-    controller.$inject = ['$scope', 'statusMessagesHistoryModalService', 'rejectionReasonModalService'];
+    controller.$inject = ['$scope', 'statusMessagesHistoryModalService', 'viewRejectionsReasonsModalService'];
 
-    function controller($scope, statusMessagesHistoryModalService, rejectionReasonModalService) {
+    function controller($scope, statusMessagesHistoryModalService, viewRejectionsReasonsModalService) {
         var vm = this;
 
         /**
@@ -155,7 +155,7 @@
          * Open modal to view reasons why requisition was rejected
          */
         function viewRejectionReason() {
-            rejectionReasonModalService.show(vm.requisition);
+            viewRejectionsReasonsModalService.show(vm.requisition);
         }
     }
 })();
