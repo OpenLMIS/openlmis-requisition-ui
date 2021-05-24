@@ -78,6 +78,7 @@ describe('openlmis.requisitions.requisition state', function() {
         spyOn(this.requisitionViewFactory, 'canApproveAndReject').andReturn(this.$q.resolve(true));
         spyOn(this.requisitionViewFactory, 'canDelete').andReturn(this.$q.resolve(true));
         spyOn(this.requisitionViewFactory, 'canSkip').andReturn(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canUnskipRequisitionItemWhenApproving').andReturn(this.$q.resolve(true));
 
         this.state = this.$state.get('openlmis.requisitions.requisition');
     });

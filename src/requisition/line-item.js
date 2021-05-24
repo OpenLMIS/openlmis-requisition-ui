@@ -180,8 +180,7 @@
                 lineItem = this,
                 columns = requisition.template.getColumns(!this.$program.fullSupply);
 
-            if (requisition.$isApproved() || requisition.$isAuthorized() || requisition.$isInApproval()
-                || requisition.$isReleased()) {
+            if (requisition.$isApproved() || requisition.$isReleased()) {
                 return false;
             }
 
