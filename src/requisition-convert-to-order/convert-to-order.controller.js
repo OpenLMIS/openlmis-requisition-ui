@@ -31,28 +31,31 @@
 
     ConvertToOrderController.$inject = [
         '$stateParams', 'requisitionService', 'notificationService', 'facilities', 'programs',
-        'confirmService', 'loadingModalService', 'requisitions', '$state', 'UuidGenerator'
+        'confirmService', 'loadingModalService', 'requisitions', '$state', 'UuidGenerator', '$window'
     ];
 
     function ConvertToOrderController($stateParams, requisitionService, notificationService, facilities, programs,
-                                      confirmService, loadingModalService, requisitions, $state, UuidGenerator) {
+                                      confirmService, loadingModalService, requisitions, $state, UuidGenerator,
+                                      $window) {
 
         var vm = this,
             uuidGenerator = new UuidGenerator(),
-            key = uuidGenerator.generate();
+            key = uuidGenerator.generate(),
+            selectedRequisitionsStorageKey = 'requisition-convert-to-order/selectedRequisitions/' + key;
 
         vm.convertToOrder = convertToOrder;
         vm.releaseWithoutOrder = releaseWithoutOrder;
         vm.getSelected = getSelected;
         vm.toggleSelectAll = toggleSelectAll;
         vm.setSelectAll = setSelectAll;
+        vm.onRequisitionSelect = onRequisitionSelect;
         vm.search = search;
 
         /**
          * @ngdoc property
          * @propertyOf requisition-convert-to-order.controller:ConvertToOrderController
          * @name requisitions
-         * @type {String}
+         * @type {Array}
          *
          * @description
          * Holds requisitions that will be displayed on screen.
@@ -148,12 +151,22 @@
          * @return {Array} list of selected requisitions
          */
         function getSelected() {
+            var storageSelected = $window.sessionStorage.getItem(selectedRequisitionsStorageKey);
+
+            storageSelected = storageSelected ? JSON.parse(storageSelected) : {};
+
             var selected = [];
+
+            for (var s in storageSelected) {
+                selected.push(storageSelected[s]);
+            }
+
             angular.forEach(vm.requisitions, function(requisition) {
-                if (requisition.$selected) {
+                if (requisition.$selected && storageSelected[requisition.requisition.id] === undefined) {
                     selected.push(requisition);
                 }
             });
+
             return selected;
         }
 
@@ -188,6 +201,57 @@
                 value = value && requisition.$selected;
             });
             vm.selectAll = value;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-convert-to-order.controller:ConvertToOrderController
+         * @name loadPreviouslySelectedRequisitions
+         *
+         * @description
+         * Selects checkboxes on current page if checked before
+         */
+        function loadPreviouslySelectedRequisitions() {
+            var storageRequisitions = $window.sessionStorage.getItem(selectedRequisitionsStorageKey);
+            storageRequisitions = storageRequisitions ? JSON.parse(storageRequisitions) : {};
+
+            for (var i = 0; i < vm.requisitions.length; i++) {
+                var r = vm.requisitions[i].requisition;
+
+                if (storageRequisitions[r.id] !== undefined) {
+                    vm.requisitions[i].$selected = true;
+                }
+            }
+
+            setSelectAll();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-convert-to-order.controller:ConvertToOrderController
+         * @name onRequisitionSelect
+         *
+         * @description
+         * Syncs requisition selection with storage
+         */
+        function onRequisitionSelect(requisition) {
+            var storageRequisitions = $window.sessionStorage.getItem(selectedRequisitionsStorageKey);
+
+            storageRequisitions = storageRequisitions ? JSON.parse(storageRequisitions) : {};
+
+            var requisitionId = requisition.requisition.id;
+
+            if (requisition.$selected) {
+                storageRequisitions[requisitionId] = requisition;
+            } else {
+                delete storageRequisitions[requisitionId];
+            }
+
+            $window.sessionStorage.setItem(
+                selectedRequisitionsStorageKey, JSON.stringify(storageRequisitions)
+            );
+
+            setSelectAll();
         }
 
         /**
@@ -289,6 +353,8 @@
                 notificationService.error('requisitionConvertToOrder.selectAtLeastOneRnr');
             }
         }
+
+        loadPreviouslySelectedRequisitions();
     }
 
 })();
