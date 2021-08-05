@@ -28,7 +28,7 @@
         $stateProvider.state('openlmis.requisitions.convertToOrder', {
             showInNavigation: true,
             label: 'requisitionConvertToOrder.convertToOrder.label',
-            url: '/convertToOrder?programId&facilityId&sort&page&size',
+            url: '/convertToOrder?programId&facilityId&sort&page&size&storageKey',
             controller: 'ConvertToOrderController',
             controllerAs: 'vm',
             templateUrl: 'requisition-convert-to-order/convert-to-order.html',

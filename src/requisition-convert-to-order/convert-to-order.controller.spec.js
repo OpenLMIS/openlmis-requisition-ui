@@ -75,12 +75,27 @@ describe('ConvertToOrderController', function() {
                 }
             ];
 
+            var window = $injector.get('$window');
+
             this.vm = $injector.get('$controller')('ConvertToOrderController', {
                 requisitions: this.requisitions,
                 $stateParams: this.stateParams,
                 facilities: this.facilities,
-                programs: this.programs
+                programs: this.programs,
+                $window: window
             });
+        });
+    });
+
+    afterEach(function() {
+        inject(function($injector) {
+            var selected = this.vm.getSelected();
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].$selected = false;
+                this.vm.onRequisitionSelect(selected[i]);
+            }
+
+            $injector.get('$window').sessionStorage.clear();
         });
     });
 
@@ -417,8 +432,10 @@ describe('ConvertToOrderController', function() {
     });
 
     it('should set "select all" option when all requisitions are selected by user', function() {
-        this.vm.requisitions[0].$selected = true;
-        this.vm.requisitions[1].$selected = true;
+        for (var i = 0; i < this.vm.requisitions.length; i++) {
+            this.vm.requisitions[i].$selected = true;
+            this.vm.onRequisitionSelect(this.vm.requisitions[i]);
+        }
 
         this.vm.setSelectAll();
 
@@ -427,7 +444,12 @@ describe('ConvertToOrderController', function() {
 
     it('should not set "select all" option when not all requisitions are selected by user', function() {
         this.vm.requisitions[0].$selected = true;
-        this.vm.requisitions[1].$selected = false;
+        this.vm.onRequisitionSelect(this.vm.requisitions[0]);
+
+        for (var i = 1; i < this.vm.requisitions.length; i++) {
+            this.vm.requisitions[i].$selected = false;
+            this.vm.onRequisitionSelect(this.vm.requisitions[i]);
+        }
 
         this.vm.setSelectAll();
 
@@ -468,4 +490,105 @@ describe('ConvertToOrderController', function() {
             });
         });
     });
+
+    describe('load selection from other pages', function() {
+        beforeEach(function() {
+            inject(function($injector) {
+                var requisitions = [
+                    {
+                        requisition: {
+                            id: 'currentPagePreselectedRequisitionId',
+                            facility: new FacilityDataBuilder().build(),
+                            program: new ProgramDataBuilder().build(),
+                            supplyingFacility: this.supplyingDepots[0]
+                        },
+                        $selected: true,
+                        supplyingDepots: this.supplyingDepots
+                    },
+                    {
+                        requisition: {
+                            id: 'otherPagePreselectedRequisitionId',
+                            facility: new FacilityDataBuilder().build(),
+                            program: new ProgramDataBuilder().build(),
+                            supplyingFacility: this.supplyingDepots[0]
+                        },
+                        $selected: true,
+                        supplyingDepots: this.supplyingDepots
+                    }
+                ];
+
+                var window = $injector.get('$window');
+
+                var itemKey = 'requisition-convert-to-order/selected-requisitions/key';
+
+                window.sessionStorage.setItem(itemKey, JSON.stringify({
+                    currentPagePreselectedRequisitionId: requisitions[0],
+                    otherPagePreselectedRequisitionId: requisitions[1]
+                }));
+
+                var state = {
+                    go: function() {
+                        // NOP
+                    },
+                    current: {
+                        name: 'current'
+                    }
+                };
+
+                this.vm = $injector.get('$controller')('ConvertToOrderController', {
+                    requisitions: requisitions.slice(0, 1),
+                    $stateParams: {
+                        programId: 'program-id',
+                        facilityId: 'facility-id',
+                        page: 0,
+                        size: 10
+                    },
+                    facilities: this.vm.facilities,
+                    programs: this.vm.programs,
+                    $window: window,
+                    $state: state
+                });
+
+                this.vm.$onInit();
+            });
+
+        });
+
+        afterEach(function() {
+            inject(function($injector) {
+                $injector.get('$window').sessionStorage.clear();
+            });
+        });
+
+        it('should have preselected requisitions', function() {
+            expect(this.vm.getSelected().length).toBe(2);
+        });
+
+        it('should have preselected requisition from other page', function() {
+            var selected = this.vm.getSelected();
+
+            var numberOfSelectedOnOtherPages = 0;
+
+            for (var i = 0; i < selected.length; i++) {
+                var s = selected[i];
+                var found = false;
+
+                for (var j = 0; j < this.vm.requisitions.length; j++) {
+                    var r = this.vm.requisitions[j];
+
+                    if (r.$selected && r.requisition.id === s.requisition.id) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    numberOfSelectedOnOtherPages++;
+                }
+            }
+
+            expect(numberOfSelectedOnOtherPages).toBeGreaterThan(0);
+        });
+    });
+
 });
