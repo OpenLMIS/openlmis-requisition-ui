@@ -9,6 +9,7 @@ Improvements:
 * Updated stockmanagement-ui version to 2.0.9.
 * Updated referencedata-ui version to 5.6.5.
 * Updated fulfillment-ui version to 6.0.9.
+* [OLMIS-7354](https://openlmis.atlassian.net/browse/OLMIS-7354): Allow requisitions spanning multiple pages to be simultaneously converted to orders.
 
 7.0.4 / 2020-11-17
 ==================
