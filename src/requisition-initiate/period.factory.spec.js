@@ -57,7 +57,7 @@ describe('periodFactory', function() {
             data;
 
         beforeEach(function() {
-            periodServiceMock.getPeriodsForInitiate.andCallFake(function() {
+            periodServiceMock.getPeriodsForInitiate.and.callFake(function() {
                 return $q.when([periodOne, periodTwo]);
             });
 
@@ -101,7 +101,7 @@ describe('periodFactory', function() {
             data;
 
         beforeEach(function() {
-            periodServiceMock.getPeriodsForInitiate.andCallFake(function() {
+            periodServiceMock.getPeriodsForInitiate.and.callFake(function() {
                 return $q.when([periodTwo]);
             });
 

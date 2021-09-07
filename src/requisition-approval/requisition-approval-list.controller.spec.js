@@ -30,8 +30,8 @@ describe('RequisitionApprovalListController', function() {
                 'removeBy']);
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
-            offlineFlag.getAll.andReturn([false]);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function(resourceName) {
+            offlineFlag.getAll.and.returnValue([false]);
+            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').and.callFake(function(resourceName) {
                 if (resourceName === 'offlineFlag') {
                     return offlineFlag;
                 }

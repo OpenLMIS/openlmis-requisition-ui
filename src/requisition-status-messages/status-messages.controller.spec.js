@@ -101,7 +101,7 @@ describe('StatusMessagesController', function() {
 
         it('should show text area and remove button of comment if add comment is not displayed and requisition is' +
             ' editable', function() {
-            spyOn(vm, 'displayAddComment').andReturn(false);
+            spyOn(vm, 'displayAddComment').and.returnValue(false);
             vm.requisition.$isEditable = true;
 
             var result = vm.displayEditComment();
@@ -110,7 +110,7 @@ describe('StatusMessagesController', function() {
         });
 
         it('should not show text area and remove button of comment if add comment is displayed', function() {
-            spyOn(vm, 'displayAddComment').andReturn(true);
+            spyOn(vm, 'displayAddComment').and.returnValue(true);
             vm.requisition.$isEditable = true;
 
             var result = vm.displayEditComment();
@@ -119,7 +119,7 @@ describe('StatusMessagesController', function() {
         });
 
         it('should not show text area and remove button of comment if requisition is not editable', function() {
-            spyOn(vm, 'displayAddComment').andReturn(true);
+            spyOn(vm, 'displayAddComment').and.returnValue(true);
             vm.requisition.$isEditable = false;
 
             var result = vm.displayEditComment();
@@ -216,7 +216,7 @@ describe('StatusMessagesController', function() {
 
         it('should not show a link to view rejection reasons if there are no rejection reasons', function() {
             vm.requisition.status = 'REJECTED';
-            spyOn(vm, 'displayAddComment').andReturn(false);
+            spyOn(vm, 'displayAddComment').and.returnValue(false);
             vm.requisition.statusHistory = [{
                 status: 'REJECTED',
                 rejectionDtos: []

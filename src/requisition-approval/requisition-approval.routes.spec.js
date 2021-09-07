@@ -73,13 +73,13 @@ describe('openlmis.requisitions.approvalList', function() {
             .withContent(this.cachedRequisitions)
             .build();
 
-        spyOn(this.requisitionService, 'forApproval').andReturn(this.$q.resolve(this.requisitionsPage));
-        spyOn(this.requisitionService, 'search').andReturn(this.$q.resolve(this.cachedRequisitionsPage));
-        spyOn(this.authorizationService, 'getUser').andReturn(this.$q.resolve(this.user));
-        spyOn(this.featureFlagService, 'get').andReturn(true);
+        spyOn(this.requisitionService, 'forApproval').and.returnValue(this.$q.resolve(this.requisitionsPage));
+        spyOn(this.requisitionService, 'search').and.returnValue(this.$q.resolve(this.cachedRequisitionsPage));
+        spyOn(this.authorizationService, 'getUser').and.returnValue(this.$q.resolve(this.user));
+        spyOn(this.featureFlagService, 'get').and.returnValue(true);
         spyOn(this.alertService, 'error');
-        spyOn(this.requisitionApprovalService, 'getPrograms').andReturn(this.$q.resolve(this.programs));
-        spyOn(this.permissionService, 'hasRoleWithRightAndFacility').andReturn(this.$q.resolve(true));
+        spyOn(this.requisitionApprovalService, 'getPrograms').and.returnValue(this.$q.resolve(this.programs));
+        spyOn(this.permissionService, 'hasRoleWithRightAndFacility').and.returnValue(this.$q.resolve(true));
     });
 
     it('should resolve isBatchApproveScreenActive', function() {
@@ -117,8 +117,6 @@ describe('openlmis.requisitions.approvalList', function() {
             expect(this.requisitionService.forApproval).toHaveBeenCalledWith({
                 page: 0,
                 size: 10,
-                program: undefined,
-                offline: undefined,
                 sort: this.sort
             });
         });
@@ -151,7 +149,6 @@ describe('openlmis.requisitions.approvalList', function() {
                 page: 0,
                 size: 10,
                 program: this.programs[0].id,
-                offline: undefined,
                 sort: this.sort
             });
         });

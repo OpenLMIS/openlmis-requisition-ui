@@ -68,19 +68,19 @@ describe('requisitionCacheService', function() {
 
         this.duplicatedRequisition = new this.RequisitionDataBuilder().buildJson();
 
-        this.requisitionStorage.search.andReturn([
+        this.requisitionStorage.search.and.returnValue([
             this.requisitionOne,
             this.requisitionTwo
         ]);
 
-        this.batchRequisitionStorage.search.andReturn([
+        this.batchRequisitionStorage.search.and.returnValue([
             this.batchRequisitionOne,
             this.batchRequisitionTwo
         ]);
 
-        this.processingPeriodsStorage.getBy.andReturn(this.requisitionOne.processingPeriod);
-        this.userProgramsStorage.getBy.andReturn(this.requisitionOne.program);
-        this.facilitiesStorage.getBy.andReturn(this.requisitionOne.facility);
+        this.processingPeriodsStorage.getBy.and.returnValue(this.requisitionOne.processingPeriod);
+        this.userProgramsStorage.getBy.and.returnValue(this.requisitionOne.program);
+        this.facilitiesStorage.getBy.and.returnValue(this.requisitionOne.facility);
 
         this.searchParams = {
             program: this.requisitionOne.program.id,
@@ -91,9 +91,10 @@ describe('requisitionCacheService', function() {
 
         this.user = new this.AuthUser('user-id');
 
-        spyOn(this.authorizationService, 'getUser').andReturn(this.user);
-        spyOn(this.permissionService, 'hasPermission').andReturn(this.$q.resolve(true));
-        spyOn(this.permissionService, 'hasRoleWithRightForProgramAndSupervisoryNode').andReturn(this.$q.resolve(true));
+        spyOn(this.authorizationService, 'getUser').and.returnValue(this.user);
+        spyOn(this.permissionService, 'hasPermission').and.returnValue(this.$q.resolve(true));
+        spyOn(this.permissionService, 'hasRoleWithRightForProgramAndSupervisoryNode')
+            .and.returnValue(this.$q.resolve(true));
     });
 
     describe('cacheRequisition', function() {
@@ -140,7 +141,7 @@ describe('requisitionCacheService', function() {
                     ])
                     .build();
 
-                this.batchRequisitionStorage.search.andReturn([]);
+                this.batchRequisitionStorage.search.and.returnValue([]);
 
                 var result;
                 this.requisitionCacheService.search(this.searchParams)
@@ -149,7 +150,7 @@ describe('requisitionCacheService', function() {
                     });
                 this.$rootScope.$apply();
 
-                expect(result).toEqual(expectedPage);
+                expect(angular.toJson(result)).toEqual(angular.toJson(expectedPage));
                 expect(this.requisitionStorage.search).toHaveBeenCalledWith(this.searchParams, 'requisitionSearch');
                 expect(this.batchRequisitionStorage.search)
                     .toHaveBeenCalledWith(this.searchParams.program, 'requisitionSearch');
@@ -167,7 +168,7 @@ describe('requisitionCacheService', function() {
                     ])
                     .build();
 
-                this.requisitionStorage.search.andReturn([]);
+                this.requisitionStorage.search.and.returnValue([]);
 
                 var result;
                 this.requisitionCacheService.search(this.searchParams)
@@ -176,7 +177,7 @@ describe('requisitionCacheService', function() {
                     });
                 this.$rootScope.$apply();
 
-                expect(result).toEqual(expectedPage);
+                expect(angular.toJson(result)).toEqual(angular.toJson(expectedPage));
                 expect(this.requisitionStorage.search).toHaveBeenCalledWith(this.searchParams, 'requisitionSearch');
                 expect(this.batchRequisitionStorage.search)
                     .toHaveBeenCalledWith(this.searchParams.program, 'requisitionSearch');
@@ -190,7 +191,7 @@ describe('requisitionCacheService', function() {
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual(
+            expect(angular.toJson(result)).toEqual(angular.toJson(
                 new this.PageDataBuilder()
                     .withTotalElements(4)
                     .withNumberOfElements(4)
@@ -202,7 +203,7 @@ describe('requisitionCacheService', function() {
                         this.batchRequisitionTwo
                     ])
                     .build()
-            );
+            ));
 
             expect(this.requisitionStorage.search).toHaveBeenCalledWith(this.searchParams, 'requisitionSearch');
             expect(this.batchRequisitionStorage.search)
@@ -223,12 +224,12 @@ describe('requisitionCacheService', function() {
                 ])
                 .build();
 
-            this.requisitionStorage.search.andReturn([
+            this.requisitionStorage.search.and.returnValue([
                 this.requisitionOne,
                 this.requisitionTwo,
                 this.duplicatedRequisition
             ]);
-            this.batchRequisitionStorage.search.andReturn([
+            this.batchRequisitionStorage.search.and.returnValue([
                 this.batchRequisitionOne,
                 this.batchRequisitionTwo,
                 this.duplicatedRequisition
@@ -241,7 +242,7 @@ describe('requisitionCacheService', function() {
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual(expectedPage);
+            expect(angular.toJson(result)).toEqual(angular.toJson(expectedPage));
             expect(this.requisitionStorage.search).toHaveBeenCalledWith(this.searchParams, 'requisitionSearch');
             expect(this.batchRequisitionStorage.search)
                 .toHaveBeenCalledWith(this.searchParams.program, 'requisitionSearch');
@@ -257,7 +258,7 @@ describe('requisitionCacheService', function() {
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual(
+            expect(angular.toJson(result)).toEqual(angular.toJson(
                 new this.PageDataBuilder()
                     .withTotalElements(2)
                     .withNumberOfElements(2)
@@ -267,7 +268,7 @@ describe('requisitionCacheService', function() {
                         this.requisitionTwo
                     ])
                     .build()
-            );
+            ));
 
             expect(this.requisitionStorage.search).toHaveBeenCalledWith(this.searchParams, 'requisitionSearch');
             expect(this.batchRequisitionStorage.search).not.toHaveBeenCalled();
@@ -275,7 +276,7 @@ describe('requisitionCacheService', function() {
 
         it('should not return requisition if user has no related permissions string and right', function() {
             var context = this;
-            this.permissionService.hasPermission.andCallFake(function(userId, permission) {
+            this.permissionService.hasPermission.and.callFake(function(userId, permission) {
                 if (context.user.user_id === userId &&
                     permission.right === context.REQUISITION_RIGHTS.REQUISITION_VIEW &&
                     permission.programId === context.batchRequisitionOne.program.id &&
@@ -286,7 +287,7 @@ describe('requisitionCacheService', function() {
             });
 
             this.permissionService.hasRoleWithRightForProgramAndSupervisoryNode
-                .andCallFake(function(right, program, supervisoryNode) {
+                .and.callFake(function(right, program, supervisoryNode) {
                     return context.$q.resolve(!(right === context.REQUISITION_RIGHTS.REQUISITION_VIEW
                         && program === context.batchRequisitionOne.program.id
                         && supervisoryNode === context.batchRequisitionOne.supervisoryNode));
@@ -299,7 +300,7 @@ describe('requisitionCacheService', function() {
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual(
+            expect(angular.toJson(result)).toEqual(angular.toJson(
                 new this.PageDataBuilder()
                     .withTotalElements(3)
                     .withNumberOfElements(3)
@@ -310,12 +311,12 @@ describe('requisitionCacheService', function() {
                         this.batchRequisitionTwo
                     ])
                     .build()
-            );
+            ));
         });
 
         it('should return requisition if user has not related permission string but has right', function() {
             var context = this;
-            this.permissionService.hasPermission.andCallFake(function(userId, permission) {
+            this.permissionService.hasPermission.and.callFake(function(userId, permission) {
                 if (context.user.user_id === userId &&
                     permission.right === context.REQUISITION_RIGHTS.REQUISITION_VIEW &&
                     permission.programId === context.batchRequisitionOne.program.id &&
@@ -332,7 +333,7 @@ describe('requisitionCacheService', function() {
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual(
+            expect(angular.toJson(result)).toEqual(angular.toJson(
                 new this.PageDataBuilder()
                     .withTotalElements(4)
                     .withNumberOfElements(4)
@@ -344,13 +345,13 @@ describe('requisitionCacheService', function() {
                         this.batchRequisitionTwo
                     ])
                     .build()
-            );
+            ));
         });
 
         it('should return requisition if user has not related right but has permission string', function() {
             var context = this;
             this.permissionService.hasRoleWithRightForProgramAndSupervisoryNode
-                .andCallFake(function(right, program, supervisoryNode) {
+                .and.callFake(function(right, program, supervisoryNode) {
                     return !(right === context.REQUISITION_RIGHTS.REQUISITION_VIEW &&
                         program === context.batchRequisitionOne.program.id &&
                         supervisoryNode === context.batchRequisitionOne.supervisoryNode);
@@ -363,7 +364,7 @@ describe('requisitionCacheService', function() {
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual(
+            expect(angular.toJson(result)).toEqual(angular.toJson(
                 new this.PageDataBuilder()
                     .withTotalElements(4)
                     .withNumberOfElements(4)
@@ -375,7 +376,7 @@ describe('requisitionCacheService', function() {
                         this.batchRequisitionTwo
                     ])
                     .build()
-            );
+            ));
         });
 
         it('should mark page as first if first page is returned', function() {

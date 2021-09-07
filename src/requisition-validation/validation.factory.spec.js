@@ -47,7 +47,7 @@ describe('validationFactory', function() {
     describe('stockOnHand', function() {
 
         beforeEach(function() {
-            messageServiceMock.get.andReturn('negative');
+            messageServiceMock.get.and.returnValue('negative');
         });
 
         it('should return undefined if stock on hand is non negative', function() {
@@ -67,7 +67,7 @@ describe('validationFactory', function() {
     describe('totalConsumedQuantity', function() {
 
         beforeEach(function() {
-            messageServiceMock.get.andReturn('negative');
+            messageServiceMock.get.and.returnValue('negative');
         });
 
         it('should return undefined if stock on hand is non negative', function() {
@@ -104,8 +104,8 @@ describe('validationFactory', function() {
                 $display: true
             };
 
-            messageServiceMock.get.andReturn('required');
-            requisitionMock.template.getColumn.andCallFake(function(name) {
+            messageServiceMock.get.and.returnValue('required');
+            requisitionMock.template.getColumn.and.callFake(function(name) {
                 if (name === TEMPLATE_COLUMNS.REQUESTED_QUANTITY) {
                     return jColumn;
                 }
@@ -119,7 +119,7 @@ describe('validationFactory', function() {
         });
 
         it('should return undefined if requestedQuantity column is not present', function() {
-            requisitionMock.template.getColumn.andReturn(undefined);
+            requisitionMock.template.getColumn.and.returnValue(undefined);
 
             expect(validationFactory.requestedQuantityExplanation(lineItem, requisitionMock))
                 .toBeUndefined();
@@ -186,7 +186,7 @@ describe('validationFactory', function() {
         it('should return undefined if requestedQuantity has value, explanation is missing and line item is non full' +
             ' supply', function() {
             lineItem.requestedQuantity = 10;
-            lineItem.isNonFullSupply.andReturn(true);
+            lineItem.isNonFullSupply.and.returnValue(true);
 
             expect(validationFactory.requestedQuantityExplanation(lineItem, requisitionMock))
                 .toBeUndefined();
@@ -219,8 +219,8 @@ describe('validationFactory', function() {
                 $display: true
             };
 
-            messageServiceMock.get.andReturn('required');
-            requisitionMock.template.getColumn.andCallFake(function(name) {
+            messageServiceMock.get.and.returnValue('required');
+            requisitionMock.template.getColumn.and.callFake(function(name) {
                 if (name === TEMPLATE_COLUMNS.CALCULATED_ORDER_QUANTITY) {
                     return calculatedOrderQuantityColumn;
                 }
@@ -279,7 +279,7 @@ describe('validationFactory', function() {
 
         it('should return required if calculatedOrderQuantity and calculatedOrderQuantityIsa columns are not' +
             ' present and requestedQuantity is null', function() {
-            requisitionMock.template.getColumn.andReturn(undefined);
+            requisitionMock.template.getColumn.and.returnValue(undefined);
 
             expect(validationFactory.requestedQuantity(lineItem, requisitionMock))
                 .toEqual('required');
@@ -288,20 +288,20 @@ describe('validationFactory', function() {
         it('should return required if calculatedOrderQuantity and calculatedOrderQuantityIsa columns are not present' +
             ' and requestedQuantity is undefined', function() {
             lineItem.requestedQuantity = undefined;
-            requisitionMock.template.getColumn.andReturn(undefined);
+            requisitionMock.template.getColumn.and.returnValue(undefined);
 
             expect(validationFactory.requestedQuantity(lineItem, requisitionMock)).toEqual('required');
         });
 
         it('should return true if line item is non full supply and requestedQuantity is null', function() {
-            lineItem.isNonFullSupply.andReturn(true);
+            lineItem.isNonFullSupply.and.returnValue(true);
             lineItem.requestedQuantity = null;
 
             expect(validationFactory.requestedQuantity(lineItem, requisitionMock)).toEqual('required');
         });
 
         it('should return true if line item is non full supply and requestedQuantity is undefined', function() {
-            lineItem.isNonFullSupply.andReturn(true);
+            lineItem.isNonFullSupply.and.returnValue(true);
             lineItem.requestedQuantity = undefined;
 
             expect(validationFactory.requestedQuantity(lineItem, requisitionMock)).toEqual('required');
@@ -318,7 +318,7 @@ describe('validationFactory', function() {
     describe('totalStockoutDays', function() {
 
         beforeEach(function() {
-            messageServiceMock.get.andReturn('valueExceedPeriodDuration');
+            messageServiceMock.get.and.returnValue('valueExceedPeriodDuration');
         });
 
         var period = {

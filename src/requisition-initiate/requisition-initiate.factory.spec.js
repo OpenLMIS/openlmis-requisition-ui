@@ -39,14 +39,14 @@ describe('requisitionInitiateFactory', function() {
 
     describe('canInitiate', function() {
         beforeEach(function() {
-            spyOn(authorizationService, 'getUser').andReturn({
+            spyOn(authorizationService, 'getUser').and.returnValue({
                 //eslint-disable-next-line camelcase
                 user_id: 'user-id'
             });
         });
 
         it('should return true if permission was found', function() {
-            spyOn(permissionService, 'hasPermission').andReturn($q.resolve(true));
+            spyOn(permissionService, 'hasPermission').and.returnValue($q.resolve(true));
             var result;
 
             requisitionInitiateFactory.canInitiate(program.id, facility.id)
@@ -59,7 +59,7 @@ describe('requisitionInitiateFactory', function() {
         });
 
         it('should call permissionService with proper values', function() {
-            spyOn(permissionService, 'hasPermission').andReturn($q.resolve(true));
+            spyOn(permissionService, 'hasPermission').and.returnValue($q.resolve(true));
 
             requisitionInitiateFactory.canInitiate(program.id, facility.id);
             $rootScope.$apply();
@@ -72,7 +72,7 @@ describe('requisitionInitiateFactory', function() {
         });
 
         it('should return false if permission was not found', function() {
-            spyOn(permissionService, 'hasPermission').andReturn($q.reject(false));
+            spyOn(permissionService, 'hasPermission').and.returnValue($q.reject(false));
             var result;
 
             requisitionInitiateFactory.canInitiate(program.id, facility.id)

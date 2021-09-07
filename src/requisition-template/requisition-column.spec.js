@@ -179,14 +179,14 @@ describe('RequisitionColumn', function() {
         });
 
         it('should show if requisition is in approval stage and showPackToShipInApprovalPage is selected', function() {
-            spyOn(requisition, '$isAfterAuthorize').andReturn(true);
+            spyOn(requisition, '$isAfterAuthorize').and.returnValue(true);
             var packToShipColumn =  new RequisitionColumn(columnDef, requisition);
 
             expect(packToShipColumn.$display).toBe(true);
         });
 
         it('should show if requisition is not in approval stage and showPackToShipInAllPages is selected', function() {
-            spyOn(requisition, '$isAfterAuthorize').andReturn(false);
+            spyOn(requisition, '$isAfterAuthorize').and.returnValue(false);
             columnDef.option = {
                 optionLabel: 'requisitionConstants.showPackToShipInAllPages',
                 optionName: 'showPackToShipInAllPages'
@@ -198,7 +198,7 @@ describe('RequisitionColumn', function() {
         });
 
         it('should show if requisition is in approval stage and showPackToShipInAllPages is selected', function() {
-            spyOn(requisition, '$isAfterAuthorize').andReturn(false);
+            spyOn(requisition, '$isAfterAuthorize').and.returnValue(false);
             columnDef.option = {
                 optionLabel: 'requisitionConstants.showPackToShipInAllPages',
                 optionName: 'showPackToShipInAllPages'

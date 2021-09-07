@@ -47,8 +47,8 @@ describe('RequisitionBatchApproveFactory', function() {
         });
 
         deferred = $q.defer();
-        spyOn(requisitionBatchApprovalService, 'approveAll').andReturn(deferred.promise);
-        spyOn(requisitionBatchSaveFactory, 'saveRequisitions').andReturn($q.when(requisitions));
+        spyOn(requisitionBatchApprovalService, 'approveAll').and.returnValue(deferred.promise);
+        spyOn(requisitionBatchSaveFactory, 'saveRequisitions').and.returnValue($q.when(requisitions));
     });
 
     it('returns an empty array if input is invalid', function() {

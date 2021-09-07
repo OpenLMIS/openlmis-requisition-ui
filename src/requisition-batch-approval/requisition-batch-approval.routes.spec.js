@@ -74,6 +74,6 @@ describe('openlmis.requisitions.batchApproval state', function() {
     }
 
     function prepareSpies() {
-        spyOn(requisitionBatchApprovalService, 'get').andReturn($q.when(requisitions));
+        spyOn(requisitionBatchApprovalService, 'get').and.returnValue($q.when(requisitions));
     }
 });

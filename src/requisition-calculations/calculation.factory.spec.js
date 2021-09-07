@@ -73,7 +73,7 @@ describe('calculationFactory', function() {
             .withId(this.programOrderable.id)
             .build();
 
-        templateMock.getColumn.andCallFake(function(name) {
+        templateMock.getColumn.and.callFake(function(name) {
             if (name === TEMPLATE_COLUMNS.CALCULATED_ORDER_QUANTITY) {
                 return calculatedOrderQuantityColumn;
             }
@@ -110,7 +110,7 @@ describe('calculationFactory', function() {
         });
 
         it('should return zero if approved quantity is zero', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(true);
+            requisitionMock.$isAfterAuthorize.and.returnValue(true);
 
             lineItem.approvedQuantity = 0;
 
@@ -118,7 +118,7 @@ describe('calculationFactory', function() {
         });
 
         it('should return zero if requested quantity is zero', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.requestedQuantity = 0;
 
@@ -126,7 +126,7 @@ describe('calculationFactory', function() {
         });
 
         it('should not round packs to ship if threshold is not exceeded', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.requestedQuantity = 15;
             lineItem.orderable.netContent = 10;
@@ -136,7 +136,7 @@ describe('calculationFactory', function() {
         });
 
         it('should round packs to ship if threshold is exceeded', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.requestedQuantity = 15;
             lineItem.orderable.netContent = 10;
@@ -146,7 +146,7 @@ describe('calculationFactory', function() {
         });
 
         it('should return zero if round to zero is set', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.requestedQuantity = 1;
             lineItem.orderable.netContent = 10;
@@ -157,7 +157,7 @@ describe('calculationFactory', function() {
         });
 
         it('should return one if round to zero is not set', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.requestedQuantity = 1;
             lineItem.orderable.netContent = 10;
@@ -180,7 +180,7 @@ describe('calculationFactory', function() {
         });
 
         it('should calculate total cost', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.$program.pricePerPack = 30.20;
             lineItem.requestedQuantity = 15;
@@ -191,7 +191,7 @@ describe('calculationFactory', function() {
         });
 
         it('should calculate zero total cost if price per pack value missing', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.$program.pricePerPack = undefined;
             lineItem.requestedQuantity = 15;
@@ -202,7 +202,7 @@ describe('calculationFactory', function() {
         });
 
         it('should calculate total cost based on line item pricePerPack if $program value missing', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
             requisitionMock.requisitionLineItems = [lineItem];
 
             lineItem.$program = undefined;
@@ -215,7 +215,7 @@ describe('calculationFactory', function() {
         });
 
         it('should use ordered quantity when requested quantity is no present', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             requestedQuantityColumn.$display = false;
             lineItem.stockOnHand = 10;
@@ -230,7 +230,7 @@ describe('calculationFactory', function() {
         });
 
         it('should use ordered quantity when requested quantity is empty', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.requestedQuantity = null;
             lineItem.stockOnHand = 10;
@@ -244,8 +244,8 @@ describe('calculationFactory', function() {
         });
 
         it('should use requested quantity even if it is empty for non full supply products', function() {
-            requisitionMock.$isAfterAuthorize.andReturn(false);
-            lineItem.isNonFullSupply.andReturn(true);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
+            lineItem.isNonFullSupply.and.returnValue(true);
 
             lineItem.requestedQuantity = null;
             lineItem.stockOnHand = 10;
@@ -371,7 +371,7 @@ describe('calculationFactory', function() {
         it('should not add additionalQtyRequired to adjusted consumption if the column does not exist', function() {
             lineItem.totalStockoutDays = 15;
             lineItem.additionalQuantityRequired = 15;
-            templateMock.getColumn.andCallFake(function(name) {
+            templateMock.getColumn.and.callFake(function(name) {
                 if (name === TEMPLATE_COLUMNS.TOTAL_CONSUMED_QUANTITY) {
                     return totalConsumedQuantityColumn;
                 }
@@ -384,7 +384,7 @@ describe('calculationFactory', function() {
     describe('Calculate Maximum Stock Quantity', function() {
 
         it('should return zero if requisition template does not contain maximumStockQuantity column', function() {
-            templateMock.getColumn.andReturn(undefined);
+            templateMock.getColumn.and.returnValue(undefined);
 
             expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(0);
         });
@@ -413,7 +413,7 @@ describe('calculationFactory', function() {
         });
 
         it('should return null if stock on hand column is not present', function() {
-            templateMock.getColumn.andCallFake(function(name) {
+            templateMock.getColumn.and.callFake(function(name) {
                 if (name === TEMPLATE_COLUMNS.MAXIMUM_STOCK_QUANTITY) {
                     return maximumStockQuantityColumn;
                 }
@@ -423,7 +423,7 @@ describe('calculationFactory', function() {
         });
 
         it('should return null if maximum stock quantity column is not present', function() {
-            templateMock.getColumn.andCallFake(function(name) {
+            templateMock.getColumn.and.callFake(function(name) {
                 if (name === TEMPLATE_COLUMNS.STOCK_ON_HAND) {
                     return stockOnHandColumn;
                 }
@@ -472,8 +472,8 @@ describe('calculationFactory', function() {
         it('should calculate properly if both fields are calculate', function() {
             stockOnHandColumn.source = COLUMN_SOURCES.CALCULATED;
             maximumStockQuantityColumn.source = COLUMN_SOURCES.CALCULATED;
-            calculationFactory.stockOnHand.andReturn(6);
-            calculationFactory.maximumStockQuantity.andReturn(14);
+            calculationFactory.stockOnHand.and.returnValue(6);
+            calculationFactory.maximumStockQuantity.and.returnValue(14);
 
             var result = calculationFactory.calculatedOrderQuantity(lineItem, requisitionMock);
 
@@ -483,7 +483,7 @@ describe('calculationFactory', function() {
         it('should calculate properly if on field is calculated', function() {
             maximumStockQuantityColumn.source = COLUMN_SOURCES.CALCULATED;
             lineItem.stockOnHand = 9;
-            calculationFactory.maximumStockQuantity.andReturn(145);
+            calculationFactory.maximumStockQuantity.and.returnValue(145);
 
             var result = calculationFactory.calculatedOrderQuantity(lineItem, requisitionMock);
 
@@ -527,7 +527,7 @@ describe('calculationFactory', function() {
 
         it('should calculate properly if both fields are calculated', function() {
             stockOnHandColumn.source = COLUMN_SOURCES.CALCULATED;
-            calculationFactory.stockOnHand.andReturn(6);
+            calculationFactory.stockOnHand.and.returnValue(6);
             lineItem.idealStockAmount = 14;
 
             var result = calculationFactory.calculatedOrderQuantityIsa(lineItem, requisitionMock);
@@ -550,7 +550,7 @@ describe('calculationFactory', function() {
         beforeEach(function() {
             spyOn(calculationFactory, TEMPLATE_COLUMNS.STOCK_ON_HAND);
 
-            templateMock.getColumn.andCallFake(function(name) {
+            templateMock.getColumn.and.callFake(function(name) {
                 if (name === TEMPLATE_COLUMNS.STOCK_ON_HAND) {
                     return stockOnHandColumn;
                 }
@@ -568,7 +568,7 @@ describe('calculationFactory', function() {
                 }
             });
 
-            requisitionMock.$isAfterAuthorize.andReturn(false);
+            requisitionMock.$isAfterAuthorize.and.returnValue(false);
 
             lineItem.stockOnHand = 5;
             lineItem.idealStockAmount = 12;

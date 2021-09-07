@@ -54,7 +54,7 @@ describe('TemplateAddService', function() {
         templateMock = jasmine.createSpyObj('Template', ['create']);
         originalCreate = templateMock.create;
 
-        TemplateMock.andReturn(templateMock);
+        TemplateMock.and.returnValue(templateMock);
 
         templateAddService = new TemplateAddService();
 
@@ -80,7 +80,7 @@ describe('TemplateAddService', function() {
     describe('decorated create', function() {
 
         it('should open loading modal', function() {
-            originalCreate.andReturn($q.resolve());
+            originalCreate.and.returnValue($q.resolve());
 
             template.create();
 
@@ -88,7 +88,7 @@ describe('TemplateAddService', function() {
         });
 
         it('should leave closing loading modal to the state change', function() {
-            originalCreate.andReturn($q.resolve({
+            originalCreate.and.returnValue($q.resolve({
                 id: 'template-id'
             }));
 
@@ -99,7 +99,7 @@ describe('TemplateAddService', function() {
         });
 
         it('should close loading modal on error', function() {
-            originalCreate.andReturn($q.reject());
+            originalCreate.and.returnValue($q.reject());
 
             template.create();
 
@@ -111,7 +111,7 @@ describe('TemplateAddService', function() {
         });
 
         it('should show notification if save was successful', function() {
-            originalCreate.andReturn($q.resolve());
+            originalCreate.and.returnValue($q.resolve());
 
             template.create();
 
@@ -123,7 +123,7 @@ describe('TemplateAddService', function() {
         });
 
         it('should redirect user to the columns configuration after save was successful', function() {
-            originalCreate.andReturn($q.resolve({
+            originalCreate.and.returnValue($q.resolve({
                 id: 'template-id'
             }));
 
@@ -145,7 +145,7 @@ describe('TemplateAddService', function() {
         });
 
         it('should not redirect use to parent state after save failed', function() {
-            originalCreate.andReturn($q.reject());
+            originalCreate.and.returnValue($q.reject());
 
             template.create();
             $rootScope.$apply();
@@ -158,7 +158,7 @@ describe('TemplateAddService', function() {
                 id: 'template-id'
             };
 
-            originalCreate.andReturn($q.resolve(createResult));
+            originalCreate.and.returnValue($q.resolve(createResult));
 
             var result;
             template.create()
@@ -173,7 +173,7 @@ describe('TemplateAddService', function() {
         it('should reject to the original error', function() {
             var error = 'Original Error';
 
-            originalCreate.andReturn($q.reject(error));
+            originalCreate.and.returnValue($q.reject(error));
 
             var result;
             template.create()

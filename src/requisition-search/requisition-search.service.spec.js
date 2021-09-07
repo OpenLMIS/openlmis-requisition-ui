@@ -58,20 +58,20 @@ describe('RequisitionSearchService', function() {
         this.prepareRoles();
         this.prepareUser();
 
-        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
-        spyOn(this.RoleResource.prototype, 'query').andReturn(this.$q.resolve(this.roles));
-        spyOn(this.RequisitionGroupResource.prototype, 'query').andReturn(this.$q.resolve([
+        spyOn(this.currentUserService, 'getUserInfo').and.returnValue(this.$q.resolve(this.user));
+        spyOn(this.RoleResource.prototype, 'query').and.returnValue(this.$q.resolve(this.roles));
+        spyOn(this.RequisitionGroupResource.prototype, 'query').and.returnValue(this.$q.resolve([
             this.requisitionGroupA,
             this.requisitionGroupB,
             this.requisitionGroupC
         ]));
-        spyOn(this.facilityFactory, 'getAllUserFacilities').andReturn(this.$q.resolve([]));
+        spyOn(this.facilityFactory, 'getAllUserFacilities').and.returnValue(this.$q.resolve([]));
         spyOn(this.localStorageService, 'get');
         spyOn(this.localStorageService, 'add');
         spyOn(this.localStorageService, 'remove');
 
         var context = this;
-        spyOn(this.SupervisoryNodeResource.prototype, 'query').andCallFake(function(params) {
+        spyOn(this.SupervisoryNodeResource.prototype, 'query').and.callFake(function(params) {
             var nodes = params.id.map(function(id) {
                 return context.nodesMap[id];
             });
@@ -104,7 +104,7 @@ describe('RequisitionSearchService', function() {
 
         it('should not return duplicated facilities', function() {
             //this facility comes from both permission strings and role assignments
-            this.facilityFactory.getAllUserFacilities.andReturn([
+            this.facilityFactory.getAllUserFacilities.and.returnValue([
                 this.facilityF
             ]);
 
@@ -137,7 +137,7 @@ describe('RequisitionSearchService', function() {
         });
 
         it('should reject if preparing partner facilities fails', function() {
-            this.facilityFactory.getAllUserFacilities.andReturn(this.$q.reject());
+            this.facilityFactory.getAllUserFacilities.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionSearchService
@@ -151,7 +151,7 @@ describe('RequisitionSearchService', function() {
         });
 
         it('should reject if fetching requisition groups fails', function() {
-            this.RequisitionGroupResource.prototype.query.andReturn(this.$q.reject());
+            this.RequisitionGroupResource.prototype.query.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionSearchService
@@ -165,7 +165,7 @@ describe('RequisitionSearchService', function() {
         });
 
         it('should reject if fetching supervisory nodes fails', function() {
-            this.SupervisoryNodeResource.prototype.query.andReturn(this.$q.reject());
+            this.SupervisoryNodeResource.prototype.query.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionSearchService
@@ -179,7 +179,7 @@ describe('RequisitionSearchService', function() {
         });
 
         it('should reject if retrieving user fails', function() {
-            this.currentUserService.getUserInfo.andReturn(this.$q.reject());
+            this.currentUserService.getUserInfo.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionSearchService
@@ -198,15 +198,15 @@ describe('RequisitionSearchService', function() {
 
             this.$rootScope.$apply();
 
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(1);
-            expect(this.facilityFactory.getAllUserFacilities.callCount).toEqual(1);
-            expect(this.RequisitionGroupResource.prototype.query.callCount).toEqual(1);
-            expect(this.RoleResource.prototype.query.callCount).toEqual(1);
-            expect(this.SupervisoryNodeResource.prototype.query.callCount).toEqual(2);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(1);
+            expect(this.facilityFactory.getAllUserFacilities.calls.count()).toEqual(1);
+            expect(this.RequisitionGroupResource.prototype.query.calls.count()).toEqual(1);
+            expect(this.RoleResource.prototype.query.calls.count()).toEqual(1);
+            expect(this.SupervisoryNodeResource.prototype.query.calls.count()).toEqual(2);
         });
 
         it('should fetch data from the local storage after refreshing the page', function() {
-            this.localStorageService.get.andReturn(angular.toJson([
+            this.localStorageService.get.and.returnValue(angular.toJson([
                 this.facilityA,
                 this.facilityF
             ]));
@@ -226,7 +226,7 @@ describe('RequisitionSearchService', function() {
         });
 
         it('should not call backend if there is data in the local storage', function() {
-            this.localStorageService.get.andReturn(angular.toJson([
+            this.localStorageService.get.and.returnValue(angular.toJson([
                 this.facilityA,
                 this.facilityF
             ]));
@@ -243,7 +243,7 @@ describe('RequisitionSearchService', function() {
 
         it('should not call for supervisory nodes if user has no role with any', function() {
             this.prepareUserWithoutHomeFacility();
-            this.currentUserService.getUserInfo.andReturn(this.$q.resolve(this.user));
+            this.currentUserService.getUserInfo.and.returnValue(this.$q.resolve(this.user));
 
             this.requisitionSearchService.getFacilities();
             this.$rootScope.$apply();
@@ -253,12 +253,12 @@ describe('RequisitionSearchService', function() {
 
         it('should not call for partner supervisory nodes if there is none for the facilities', function() {
             this.prepareUserWithoutPartnerNodes();
-            this.currentUserService.getUserInfo.andReturn(this.$q.resolve(this.user));
+            this.currentUserService.getUserInfo.and.returnValue(this.$q.resolve(this.user));
 
             this.requisitionSearchService.getFacilities();
             this.$rootScope.$apply();
 
-            expect(this.SupervisoryNodeResource.prototype.query.callCount).toEqual(1);
+            expect(this.SupervisoryNodeResource.prototype.query.calls.count()).toEqual(1);
             expect(this.SupervisoryNodeResource.prototype.query).toHaveBeenCalledWith({
                 id: [ this.supervisoryNodeA.id, this.supervisoryNodeC.id ]
             });
@@ -284,11 +284,11 @@ describe('RequisitionSearchService', function() {
             this.requisitionSearchService.getFacilities();
             this.$rootScope.$apply();
 
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(1);
-            expect(this.facilityFactory.getAllUserFacilities.callCount).toEqual(1);
-            expect(this.RequisitionGroupResource.prototype.query.callCount).toEqual(1);
-            expect(this.RoleResource.prototype.query.callCount).toEqual(1);
-            expect(this.SupervisoryNodeResource.prototype.query.callCount).toEqual(2);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(1);
+            expect(this.facilityFactory.getAllUserFacilities.calls.count()).toEqual(1);
+            expect(this.RequisitionGroupResource.prototype.query.calls.count()).toEqual(1);
+            expect(this.RoleResource.prototype.query.calls.count()).toEqual(1);
+            expect(this.SupervisoryNodeResource.prototype.query.calls.count()).toEqual(2);
 
             this.requisitionSearchService.clearCachedFacilities();
 
@@ -297,11 +297,11 @@ describe('RequisitionSearchService', function() {
             this.requisitionSearchService.getFacilities();
             this.$rootScope.$apply();
 
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(2);
-            expect(this.facilityFactory.getAllUserFacilities.callCount).toEqual(2);
-            expect(this.RequisitionGroupResource.prototype.query.callCount).toEqual(2);
-            expect(this.RoleResource.prototype.query.callCount).toEqual(2);
-            expect(this.SupervisoryNodeResource.prototype.query.callCount).toEqual(4);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(2);
+            expect(this.facilityFactory.getAllUserFacilities.calls.count()).toEqual(2);
+            expect(this.RequisitionGroupResource.prototype.query.calls.count()).toEqual(2);
+            expect(this.RoleResource.prototype.query.calls.count()).toEqual(2);
+            expect(this.SupervisoryNodeResource.prototype.query.calls.count()).toEqual(4);
         });
 
     });

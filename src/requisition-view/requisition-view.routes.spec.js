@@ -68,17 +68,18 @@ describe('openlmis.requisitions.requisition state', function() {
             ])
             .buildJson();
 
-        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
-        spyOn(this.requisitionService, 'get').andReturn(this.$q.resolve(this.requisition));
-        spyOn(this.programService, 'get').andReturn(this.$q.when(this.program));
-        spyOn(this.facilityService, 'get').andReturn(this.$q.resolve(this.facility));
-        spyOn(this.periodService, 'get').andReturn(this.$q.resolve(this.period));
-        spyOn(this.requisitionViewFactory, 'canSubmit').andReturn(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canAuthorize').andReturn(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canApproveAndReject').andReturn(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canDelete').andReturn(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canSkip').andReturn(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canUnskipRequisitionItemWhenApproving').andReturn(this.$q.resolve(true));
+        spyOn(this.currentUserService, 'getUserInfo').and.returnValue(this.$q.resolve(this.user));
+        spyOn(this.requisitionService, 'get').and.returnValue(this.$q.resolve(this.requisition));
+        spyOn(this.programService, 'get').and.returnValue(this.$q.when(this.program));
+        spyOn(this.facilityService, 'get').and.returnValue(this.$q.resolve(this.facility));
+        spyOn(this.periodService, 'get').and.returnValue(this.$q.resolve(this.period));
+        spyOn(this.requisitionViewFactory, 'canSubmit').and.returnValue(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canAuthorize').and.returnValue(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canApproveAndReject').and.returnValue(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canDelete').and.returnValue(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canSkip').and.returnValue(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canUnskipRequisitionItemWhenApproving')
+            .and.returnValue(this.$q.resolve(true));
 
         this.state = this.$state.get('openlmis.requisitions.requisition');
     });
@@ -146,9 +147,9 @@ describe('openlmis.requisitions.requisition state', function() {
     describe('canSync', function() {
 
         it('should resolve to false if user can not submit, authorize,reject and approve requisitions', function() {
-            this.requisitionViewFactory.canSubmit.andReturn(this.$q.resolve(false));
-            this.requisitionViewFactory.canAuthorize.andReturn(this.$q.resolve(false));
-            this.requisitionViewFactory.canApproveAndReject.andReturn(this.$q.resolve(false));
+            this.requisitionViewFactory.canSubmit.and.returnValue(this.$q.resolve(false));
+            this.requisitionViewFactory.canAuthorize.and.returnValue(this.$q.resolve(false));
+            this.requisitionViewFactory.canApproveAndReject.and.returnValue(this.$q.resolve(false));
 
             this.goToUrl('/requisition/requisition-id');
 
@@ -156,9 +157,9 @@ describe('openlmis.requisitions.requisition state', function() {
         });
 
         it('should resolve to true if user can submit', function() {
-            this.requisitionViewFactory.canSubmit.andReturn(this.$q.resolve(true));
-            this.requisitionViewFactory.canAuthorize.andReturn(this.$q.resolve(false));
-            this.requisitionViewFactory.canApproveAndReject.andReturn(this.$q.resolve(false));
+            this.requisitionViewFactory.canSubmit.and.returnValue(this.$q.resolve(true));
+            this.requisitionViewFactory.canAuthorize.and.returnValue(this.$q.resolve(false));
+            this.requisitionViewFactory.canApproveAndReject.and.returnValue(this.$q.resolve(false));
 
             this.goToUrl('/requisition/requisition-id');
 
@@ -166,9 +167,9 @@ describe('openlmis.requisitions.requisition state', function() {
         });
 
         it('should resolve to true if user can authorize requisitions', function() {
-            this.requisitionViewFactory.canSubmit.andReturn(this.$q.resolve(false));
-            this.requisitionViewFactory.canAuthorize.andReturn(this.$q.resolve(true));
-            this.requisitionViewFactory.canApproveAndReject.andReturn(this.$q.resolve(false));
+            this.requisitionViewFactory.canSubmit.and.returnValue(this.$q.resolve(false));
+            this.requisitionViewFactory.canAuthorize.and.returnValue(this.$q.resolve(true));
+            this.requisitionViewFactory.canApproveAndReject.and.returnValue(this.$q.resolve(false));
 
             this.goToUrl('/requisition/requisition-id');
 
@@ -176,9 +177,9 @@ describe('openlmis.requisitions.requisition state', function() {
         });
 
         it('should resolve to false if user can reject and approve requisitions', function() {
-            this.requisitionViewFactory.canSubmit.andReturn(this.$q.resolve(false));
-            this.requisitionViewFactory.canAuthorize.andReturn(this.$q.resolve(false));
-            this.requisitionViewFactory.canApproveAndReject.andReturn(this.$q.resolve(true));
+            this.requisitionViewFactory.canSubmit.and.returnValue(this.$q.resolve(false));
+            this.requisitionViewFactory.canAuthorize.and.returnValue(this.$q.resolve(false));
+            this.requisitionViewFactory.canApproveAndReject.and.returnValue(this.$q.resolve(true));
 
             this.goToUrl('/requisition/requisition-id');
 

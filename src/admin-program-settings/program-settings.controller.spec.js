@@ -74,9 +74,9 @@ describe('ProgramSettingsController', function() {
     describe('saveProgram', function() {
 
         beforeEach(function() {
-            confirmService.confirm.andReturn($q.when(true));
-            programService.update.andReturn($q.when(true));
-            spyOn($state, 'go').andReturn(true);
+            confirmService.confirm.and.returnValue($q.when(true));
+            programService.update.and.returnValue($q.when(true));
+            spyOn($state, 'go').and.returnValue(true);
         });
 
         it('should call confirmService', function() {
@@ -101,7 +101,7 @@ describe('ProgramSettingsController', function() {
         });
 
         it('should not call programService save method if not confirmed', function() {
-            confirmService.confirm.andCallFake(function() {
+            confirmService.confirm.and.callFake(function() {
                 var deferred = $q.defer();
                 deferred.reject();
                 return deferred.promise;
@@ -131,7 +131,7 @@ describe('ProgramSettingsController', function() {
         });
 
         it('should show error notification if saved failed', function() {
-            programService.update.andCallFake(function() {
+            programService.update.and.callFake(function() {
                 var deferred = $q.defer();
                 deferred.reject();
                 return deferred.promise;

@@ -77,7 +77,7 @@ describe('LossesAndAdjustmentsController', function() {
         };
         vm.isDisabled = false;
 
-        spyOn($scope, '$watchCollection').andCallThrough();
+        spyOn($scope, '$watchCollection').and.callThrough();
         spyOn(calculationFactory, 'totalLossesAndAdjustments');
     });
 
@@ -130,7 +130,7 @@ describe('LossesAndAdjustmentsController', function() {
 
     describe('showModal', function() {
         beforeEach(function() {
-            spyOn(adjustmentsModalService, 'open').andReturn($q.when());
+            spyOn(adjustmentsModalService, 'open').and.returnValue($q.when());
             $scope.lineItem = lineItem2;
             vm.$onInit();
         });

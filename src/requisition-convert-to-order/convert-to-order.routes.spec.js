@@ -66,12 +66,12 @@ describe('openlmis.requisitions.convertToOrder', function() {
         ];
 
         spyOn(this.requisitionService, 'forConvert')
-            .andReturn(this.$q.resolve(new PageDataBuilder()
+            .and.returnValue(this.$q.resolve(new PageDataBuilder()
                 .withContent(this.requisitions)
                 .build()));
-        spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
-        spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.facilities));
-        spyOn(this.$templateCache, 'get').andCallThrough();
+        spyOn(this.programService, 'getAll').and.returnValue(this.$q.resolve(this.programs));
+        spyOn(this.facilityService, 'getAllMinimal').and.returnValue(this.$q.resolve(this.facilities));
+        spyOn(this.$templateCache, 'get').and.callThrough();
 
         this.goToUrl = goToUrl;
         this.getResolvedValue = getResolvedValue;

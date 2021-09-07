@@ -59,19 +59,19 @@ describe('RejectionReasonAddController', function() {
             $stateParams: stateParams
         });
 
-        spyOn($state, 'go').andReturn();
+        spyOn($state, 'go').and.returnValue();
     });
 
     describe('save', function() {
         beforeEach(function() {
 
-            spyOn(confirmService, 'confirm').andReturn($q.resolve());
-            spyOn(loadingModalService, 'open').andReturn($q.resolve());
-            spyOn(loadingModalService, 'close').andReturn($q.resolve());
-            spyOn(RejectionReasonRepository.prototype, 'create').andReturn(saveDeferred.promise);
-            spyOn(notificationService, 'success').andReturn($q.resolve());
-            spyOn(notificationService, 'error').andReturn($q.resolve());
-            spyOn(messageService, 'get').andCallFake(function(messageKey) {
+            spyOn(confirmService, 'confirm').and.returnValue($q.resolve());
+            spyOn(loadingModalService, 'open').and.returnValue($q.resolve());
+            spyOn(loadingModalService, 'close').and.returnValue($q.resolve());
+            spyOn(RejectionReasonRepository.prototype, 'create').and.returnValue(saveDeferred.promise);
+            spyOn(notificationService, 'success').and.returnValue($q.resolve());
+            spyOn(notificationService, 'error').and.returnValue($q.resolve());
+            spyOn(messageService, 'get').and.callFake(function(messageKey) {
                 return messageKey;
             });
         });

@@ -55,7 +55,7 @@ describe('RequisitionSearchController', function() {
         var $controllerMock;
 
         beforeEach(function() {
-            $controllerMock = jasmine.createSpy('$controller').andCallFake(function() {
+            $controllerMock = jasmine.createSpy('$controller').and.callFake(function() {
                 this.vm.stateParams = {};
             });
 
@@ -88,7 +88,7 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should set searchOffline to true if application is in offline mode', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            spyOn(this.offlineService, 'isOffline').and.returnValue(true);
 
             this.vm.$onInit();
 
@@ -98,7 +98,7 @@ describe('RequisitionSearchController', function() {
         it('should set searchOffline to false if false was passed the URL and application is not in offline mode',
             function() {
                 this.$stateParams.offline = 'false';
-                spyOn(this.offlineService, 'isOffline').andReturn(false);
+                spyOn(this.offlineService, 'isOffline').and.returnValue(false);
 
                 this.vm.$onInit();
 
@@ -208,7 +208,7 @@ describe('RequisitionSearchController', function() {
             initController(this);
             this.vm.$onInit();
 
-            spyOn(this.$state, 'go').andReturn();
+            spyOn(this.$state, 'go').and.returnValue();
         });
 
         it('should set program', function() {
@@ -224,7 +224,8 @@ describe('RequisitionSearchController', function() {
                 facility: null,
                 initiatedDateFrom: null,
                 initiatedDateTo: null,
-                offline: false
+                offline: false,
+                requisitionStatus: undefined
             }, {
                 reload: true
             });
@@ -243,7 +244,8 @@ describe('RequisitionSearchController', function() {
                 facility: this.vm.selectedFacility.id,
                 initiatedDateFrom: null,
                 initiatedDateTo: null,
-                offline: false
+                offline: false,
+                requisitionStatus: undefined
             }, {
                 reload: true
             });
@@ -259,7 +261,8 @@ describe('RequisitionSearchController', function() {
                 facility: null,
                 initiatedDateFrom: '2017-01-31',
                 initiatedDateTo: null,
-                offline: false
+                offline: false,
+                requisitionStatus: undefined
             }, {
                 reload: true
             });
@@ -275,7 +278,8 @@ describe('RequisitionSearchController', function() {
                 facility: null,
                 initiatedDateFrom: null,
                 initiatedDateTo: '2017-01-31',
-                offline: false
+                offline: false,
+                requisitionStatus: undefined
             }, {
                 reload: true
             });
@@ -304,7 +308,7 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should go to requisitions.requisition.fullSupply state', function() {
-            spyOn(this.$state, 'go').andReturn();
+            spyOn(this.$state, 'go').and.returnValue();
 
             this.vm.openRnr('requisition-id');
 
@@ -323,7 +327,7 @@ describe('RequisitionSearchController', function() {
             offlineRequisitionsMock = jasmine.createSpyObj('offlineRequisitions', ['removeBy']);
             localStorageFactoryMock = jasmine.createSpy('localStorageFactory');
 
-            localStorageFactoryMock.andReturn(offlineRequisitionsMock);
+            localStorageFactoryMock.and.returnValue(offlineRequisitionsMock);
 
             this.vm = this.$controller('RequisitionSearchController', {
                 requisitions: this.items,
@@ -337,7 +341,7 @@ describe('RequisitionSearchController', function() {
 
             confirmDeferred = this.$q.defer();
 
-            spyOn(this.confirmService, 'confirmDestroy').andReturn(confirmDeferred.promise);
+            spyOn(this.confirmService, 'confirmDestroy').and.returnValue(confirmDeferred.promise);
         });
 
         it('should require confirmation', function() {
@@ -373,7 +377,7 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should return true if application is offline', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            spyOn(this.offlineService, 'isOffline').and.returnValue(true);
 
             var result = this.vm.isOfflineDisabled();
 
@@ -381,7 +385,7 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should set searchOffline to true if application goes in the offline mode', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            spyOn(this.offlineService, 'isOffline').and.returnValue(true);
 
             this.vm.isOfflineDisabled();
 
@@ -389,7 +393,7 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should return false if application is online', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            spyOn(this.offlineService, 'isOffline').and.returnValue(false);
 
             var result = this.vm.isOfflineDisabled();
 
@@ -397,7 +401,7 @@ describe('RequisitionSearchController', function() {
         });
 
         it('should not change searchOffline if application is online', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            spyOn(this.offlineService, 'isOffline').and.returnValue(false);
             this.vm.offline = false;
 
             this.vm.isOfflineDisabled();

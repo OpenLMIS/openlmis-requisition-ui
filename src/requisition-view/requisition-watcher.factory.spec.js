@@ -21,8 +21,8 @@ describe('RequisitionWatcher', function() {
         module('requisition-view', function($provide) {
             requisitionsStorage = jasmine.createSpyObj('requisitionsStorage', ['put']);
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll', 'clearAll', 'put']);
-            offlineFlag.getAll.andReturn([false]);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function(name) {
+            offlineFlag.getAll.and.returnValue([false]);
+            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').and.callFake(function(name) {
                 if (name === 'offlineFlag') {
                     return offlineFlag;
                 }
@@ -41,7 +41,7 @@ describe('RequisitionWatcher', function() {
             this.requisitionCacheService = $injector.get('requisitionCacheService');
         });
 
-        spyOn(this.requisitionCacheService, 'cacheRequisitionToStorage').andCallThrough();
+        spyOn(this.requisitionCacheService, 'cacheRequisitionToStorage').and.callThrough();
         this.scope = this.$rootScope.$new();
         this.requisition = new this.RequisitionDataBuilder().buildJson();
 

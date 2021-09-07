@@ -120,7 +120,7 @@ describe('requisitionBatchApprovalService', function() {
 
         requisitions = [requisition, requisition2];
 
-        var requisitionFactoryMock = jasmine.createSpy('Requisition').andCallFake(function(requisition) {
+        var requisitionFactoryMock = jasmine.createSpy('Requisition').and.callFake(function(requisition) {
             return requisition;
         });
 
@@ -134,8 +134,8 @@ describe('requisitionBatchApprovalService', function() {
                 'removeBy']);
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
-            offlineFlag.getAll.andReturn([false]);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function(resourceName) {
+            offlineFlag.getAll.and.returnValue([false]);
+            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').and.callFake(function(resourceName) {
                 if (resourceName === 'offlineFlag') {
                     return offlineFlag;
                 }
@@ -160,11 +160,11 @@ describe('requisitionBatchApprovalService', function() {
             offlineService = $injector.get('offlineService');
         });
 
-        spyOn(dateUtils, 'toStringDate').andCallFake(function(parameter) {
+        spyOn(dateUtils, 'toStringDate').and.callFake(function(parameter) {
             return parameter;
         });
 
-        spyOn(offlineService, 'checkConnection').andCallFake(checkConnection);
+        spyOn(offlineService, 'checkConnection').and.callFake(checkConnection);
     });
 
     it('should get requisition by id', function() {
@@ -225,8 +225,8 @@ describe('requisitionBatchApprovalService', function() {
     });
 
     it('should get requisition by id from storage while offline', function() {
-        spyOn(offlineService, 'isOffline').andReturn(true);
-        batchRequisitionsStorage.getBy.andReturn(requisitions[0]);
+        spyOn(offlineService, 'isOffline').and.returnValue(true);
+        batchRequisitionsStorage.getBy.and.returnValue(requisitions[0]);
 
         var data = {};
         requisitionBatchApprovalService.get(['1']).then(function(response) {

@@ -35,7 +35,7 @@ describe('ProgramAdministrationListController', function() {
             programList: programList
         });
 
-        spyOn($state, 'go').andReturn();
+        spyOn($state, 'go').and.returnValue();
     });
 
     describe('goToAddProgram', function() {

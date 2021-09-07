@@ -34,8 +34,8 @@ describe('RequisitionBatchApprovalController', function() {
                 'removeBy']);
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
-            offlineFlag.getAll.andReturn([false]);
-            var localStorageFactory = jasmine.createSpy('localStorageFactory').andCallFake(function(resourceName) {
+            offlineFlag.getAll.and.returnValue([false]);
+            var localStorageFactory = jasmine.createSpy('localStorageFactory').and.callFake(function(resourceName) {
                 if (resourceName === 'offlineFlag') {
                     return offlineFlag;
                 }
@@ -120,7 +120,7 @@ describe('RequisitionBatchApprovalController', function() {
             .orderable.id] = this.requisition.requisitionLineItems[1];
 
         this.$stateParams.errors = {};
-        spyOn(this.requisitionService, 'get').andReturn(this.$q.when(this.requisition));
+        spyOn(this.requisitionService, 'get').and.returnValue(this.$q.when(this.requisition));
 
         this.initController = initController;
     });
@@ -137,7 +137,7 @@ describe('RequisitionBatchApprovalController', function() {
             });
 
             var context = this;
-            spyOn(this.calculationFactory, 'totalCost').andCallFake(function(lineItem) {
+            spyOn(this.calculationFactory, 'totalCost').and.callFake(function(lineItem) {
                 if (lineItem.id === 1) {
                     return context.requisitions[0].requisitionLineItems[0].totalCost;
                 }
@@ -199,7 +199,7 @@ describe('RequisitionBatchApprovalController', function() {
             this.initController();
             requisitionId = this.requisition.id;
             orderableId = this.requisition.requisitionLineItems[0].orderable.id;
-            spyOn(this.calculationFactory, 'totalCost').andReturn(100);
+            spyOn(this.calculationFactory, 'totalCost').and.returnValue(100);
         });
 
         it('should call calculation factory method', function() {
@@ -221,7 +221,7 @@ describe('RequisitionBatchApprovalController', function() {
             this.initController();
 
             confirmDeferred = this.$q.defer();
-            spyOn(this.confirmService, 'confirm').andReturn(confirmDeferred.promise);
+            spyOn(this.confirmService, 'confirm').and.returnValue(confirmDeferred.promise);
         });
 
         it('should ask user for confirmation', function() {
@@ -267,12 +267,12 @@ describe('RequisitionBatchApprovalController', function() {
             spyOn(this.$state, 'reload');
             spyOn(this.alertService, 'error');
 
-            spyOn(this.vm, 'isOffline').andCallFake(function() {
+            spyOn(this.vm, 'isOffline').and.callFake(function() {
                 return isOffline;
             });
 
             confirmDeferred = this.$q.defer();
-            spyOn(this.confirmService, 'confirm').andReturn(confirmDeferred.promise);
+            spyOn(this.confirmService, 'confirm').and.returnValue(confirmDeferred.promise);
         });
 
         it('should display alert if offline', function() {
@@ -358,12 +358,12 @@ describe('RequisitionBatchApprovalController', function() {
             confirmDeferred = this.$q.defer();
             notificationServiceSpy = jasmine.createSpy();
 
-            spyOn(this.$state, 'go').andReturn();
-            spyOn(this.requisitionBatchSaveFactory, 'saveRequisitions').andReturn(confirmDeferred.promise);
+            spyOn(this.$state, 'go').and.returnValue();
+            spyOn(this.requisitionBatchSaveFactory, 'saveRequisitions').and.returnValue(confirmDeferred.promise);
         });
 
         it('should show success notification if successfully save', function() {
-            spyOn(this.notificationService, 'success').andCallFake(notificationServiceSpy);
+            spyOn(this.notificationService, 'success').and.callFake(notificationServiceSpy);
 
             this.vm.sync();
             confirmDeferred.resolve(this.requisitions);
@@ -373,7 +373,7 @@ describe('RequisitionBatchApprovalController', function() {
         });
 
         it('should show error notification if unsuccessfully save', function() {
-            spyOn(this.notificationService, 'error').andCallFake(notificationServiceSpy);
+            spyOn(this.notificationService, 'error').and.callFake(notificationServiceSpy);
 
             this.vm.sync();
             confirmDeferred.reject(this.requisitions);
@@ -399,10 +399,10 @@ describe('RequisitionBatchApprovalController', function() {
             confirmDeferred = this.$q.defer();
             batchDeferred = this.$q.defer();
 
-            spyOn(this.$state, 'go').andReturn();
-            spyOn(this.confirmService, 'confirm').andReturn(confirmDeferred.promise);
-            spyOn(this.requisitionBatchApproveFactory, 'batchApprove').andReturn(batchDeferred.promise);
-            spyOn(this.loadingModalService, 'close').andReturn();
+            spyOn(this.$state, 'go').and.returnValue();
+            spyOn(this.confirmService, 'confirm').and.returnValue(confirmDeferred.promise);
+            spyOn(this.requisitionBatchApproveFactory, 'batchApprove').and.returnValue(batchDeferred.promise);
+            spyOn(this.loadingModalService, 'close').and.returnValue();
         });
 
         it('should ask user for confirmation to approve', function() {

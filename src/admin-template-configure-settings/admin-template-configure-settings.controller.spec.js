@@ -71,21 +71,21 @@ describe('AdminTemplateConfigureSettingsController', function() {
         beforeEach(function() {
             initController();
 
-            spyOn(notificationService, 'success').andCallFake(successNotificationServiceSpy);
-            spyOn(notificationService, 'error').andCallFake(errorNotificationServiceSpy);
+            spyOn(notificationService, 'success').and.callFake(successNotificationServiceSpy);
+            spyOn(notificationService, 'error').and.callFake(errorNotificationServiceSpy);
 
-            spyOn($state, 'go').andCallFake(stateGoSpy);
+            spyOn($state, 'go').and.callFake(stateGoSpy);
 
             spyOn(loadingModalService, 'close');
             spyOn(loadingModalService, 'open');
 
-            spyOn(confirmService, 'confirm').andReturn($q.resolve());
+            spyOn(confirmService, 'confirm').and.returnValue($q.resolve());
 
-            spyOn(requisitionTemplateService, 'save').andReturn($q.resolve());
+            spyOn(requisitionTemplateService, 'save').and.returnValue($q.resolve());
         });
 
         it('should not save template if confirm failed', function() {
-            confirmService.confirm.andReturn($q.reject());
+            confirmService.confirm.and.returnValue($q.reject());
 
             vm.saveTemplate();
 
@@ -122,7 +122,7 @@ describe('AdminTemplateConfigureSettingsController', function() {
         });
 
         it('should close loading modal if template save was unsuccessful', function() {
-            requisitionTemplateService.save.andReturn($q.reject());
+            requisitionTemplateService.save.and.returnValue($q.reject());
 
             vm.saveTemplate();
             rootScope.$apply();

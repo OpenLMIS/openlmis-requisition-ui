@@ -38,7 +38,7 @@ describe('RejectionReasonCategoryListController', function() {
             rejectionReasonCategories: rejectionReasonCategories
         });
 
-        spyOn($state, 'go').andReturn();
+        spyOn($state, 'go').and.returnValue();
     });
 
     describe('goToAddRejectionReasonCategoryPage', function() {

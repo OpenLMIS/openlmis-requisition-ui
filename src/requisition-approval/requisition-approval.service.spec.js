@@ -73,11 +73,11 @@ describe('requisitionApprovalService', function() {
             .withSupervisionRoleAssignment(this.roles[2].id, 'supervisoryNodeId', this.accessiblePrograms[1].id)
             .buildReferenceDataUserJson();
 
-        spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
-        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
-        spyOn(this.currentUserRolesService, 'getUserRoles').andReturn(this.$q.resolve(this.roles));
-        spyOn(this.LocalDatabase.prototype, 'getAll').andReturn(this.$q.resolve([]));
-        spyOn(this.LocalDatabase.prototype, 'putAll').andReturn(this.$q.resolve());
+        spyOn(this.programService, 'getAll').and.returnValue(this.$q.resolve(this.programs));
+        spyOn(this.currentUserService, 'getUserInfo').and.returnValue(this.$q.resolve(this.user));
+        spyOn(this.currentUserRolesService, 'getUserRoles').and.returnValue(this.$q.resolve(this.roles));
+        spyOn(this.LocalDatabase.prototype, 'getAll').and.returnValue(this.$q.resolve([]));
+        spyOn(this.LocalDatabase.prototype, 'putAll').and.returnValue(this.$q.resolve());
         spyOn(this.LocalDatabase.prototype, 'removeAll');
     });
 
@@ -95,7 +95,7 @@ describe('requisitionApprovalService', function() {
         });
 
         it('should reject if fetching current user fails', function() {
-            this.currentUserService.getUserInfo.andReturn(this.$q.reject());
+            this.currentUserService.getUserInfo.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionApprovalService.getPrograms()
@@ -108,7 +108,7 @@ describe('requisitionApprovalService', function() {
         });
 
         it('should reject if fetching current user roles fails', function() {
-            this.currentUserRolesService.getUserRoles.andReturn(this.$q.reject());
+            this.currentUserRolesService.getUserRoles.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionApprovalService.getPrograms()
@@ -121,7 +121,7 @@ describe('requisitionApprovalService', function() {
         });
 
         it('should reject if fetching programs fails', function() {
-            this.programService.getAll.andReturn(this.$q.reject());
+            this.programService.getAll.and.returnValue(this.$q.reject());
 
             var rejected;
             this.requisitionApprovalService.getPrograms()
@@ -134,7 +134,7 @@ describe('requisitionApprovalService', function() {
         });
 
         it('should return programs from local storage if any are cached', function() {
-            this.LocalDatabase.prototype.getAll.andReturn(this.$q.resolve(this.accessiblePrograms));
+            this.LocalDatabase.prototype.getAll.and.returnValue(this.$q.resolve(this.accessiblePrograms));
 
             var result;
             this.requisitionApprovalService.getPrograms()
@@ -158,16 +158,16 @@ describe('requisitionApprovalService', function() {
             this.requisitionApprovalService.getPrograms();
             this.$rootScope.$apply();
 
-            expect(this.programService.getAll.callCount).toEqual(1);
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(1);
-            expect(this.currentUserRolesService.getUserRoles.callCount).toEqual(1);
+            expect(this.programService.getAll.calls.count()).toEqual(1);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(1);
+            expect(this.currentUserRolesService.getUserRoles.calls.count()).toEqual(1);
 
             this.requisitionApprovalService.getPrograms();
             this.$rootScope.$apply();
 
-            expect(this.programService.getAll.callCount).toEqual(1);
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(1);
-            expect(this.currentUserRolesService.getUserRoles.callCount).toEqual(1);
+            expect(this.programService.getAll.calls.count()).toEqual(1);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(1);
+            expect(this.currentUserRolesService.getUserRoles.calls.count()).toEqual(1);
         });
 
     });
@@ -178,17 +178,17 @@ describe('requisitionApprovalService', function() {
             this.requisitionApprovalService.getPrograms();
             this.$rootScope.$apply();
 
-            expect(this.programService.getAll.callCount).toEqual(1);
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(1);
-            expect(this.currentUserRolesService.getUserRoles.callCount).toEqual(1);
+            expect(this.programService.getAll.calls.count()).toEqual(1);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(1);
+            expect(this.currentUserRolesService.getUserRoles.calls.count()).toEqual(1);
 
             this.requisitionApprovalService.clearCache();
             this.requisitionApprovalService.getPrograms();
             this.$rootScope.$apply();
 
-            expect(this.programService.getAll.callCount).toEqual(2);
-            expect(this.currentUserService.getUserInfo.callCount).toEqual(2);
-            expect(this.currentUserRolesService.getUserRoles.callCount).toEqual(2);
+            expect(this.programService.getAll.calls.count()).toEqual(2);
+            expect(this.currentUserService.getUserInfo.calls.count()).toEqual(2);
+            expect(this.currentUserRolesService.getUserRoles.calls.count()).toEqual(2);
             expect(this.LocalDatabase.prototype.removeAll).toHaveBeenCalled();
         });
 
