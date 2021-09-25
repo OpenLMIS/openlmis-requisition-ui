@@ -52,7 +52,7 @@ describe('RejectionReasonCategoryViewController', function() {
         confirmDeferred = $q.defer();
         saveDeferred = $q.defer();
 
-        spyOn($state, 'go').and.returnValue();
+        spyOn($state, 'go').andReturn();
     });
 
     describe('onInit', function() {
@@ -64,12 +64,12 @@ describe('RejectionReasonCategoryViewController', function() {
     describe('saveRejectionReasonCategoryDetails', function() {
 
         beforeEach(function() {
-            spyOn(loadingModalService, 'open').and.returnValue($q.resolve());
-            spyOn(loadingModalService, 'close').and.returnValue($q.resolve());
-            spyOn(RejectionReasonCategoryRepository.prototype, 'create').and.returnValue(saveDeferred.promise);
-            spyOn(notificationService, 'success').and.returnValue($q.resolve());
-            spyOn(notificationService, 'error').and.returnValue($q.resolve());
-            spyOn(messageService, 'get').and.callFake(function(messageKey) {
+            spyOn(loadingModalService, 'open').andReturn($q.resolve());
+            spyOn(loadingModalService, 'close').andReturn($q.resolve());
+            spyOn(RejectionReasonCategoryRepository.prototype, 'create').andReturn(saveDeferred.promise);
+            spyOn(notificationService, 'success').andReturn($q.resolve());
+            spyOn(notificationService, 'error').andReturn($q.resolve());
+            spyOn(messageService, 'get').andCallFake(function(messageKey) {
                 return messageKey;
             });
         });

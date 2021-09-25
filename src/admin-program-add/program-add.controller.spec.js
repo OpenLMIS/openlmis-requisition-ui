@@ -45,7 +45,7 @@ describe('ProgramAddController', function() {
         });
         vm.$onInit();
 
-        spyOn($state, 'go').and.returnValue();
+        spyOn($state, 'go').andReturn();
     });
 
     describe('onInit', function() {
@@ -60,13 +60,13 @@ describe('ProgramAddController', function() {
     describe('saveProgram', function() {
 
         beforeEach(function() {
-            spyOn(confirmService, 'confirm').and.returnValue($q.resolve());
-            spyOn(loadingModalService, 'open').and.returnValue($q.resolve());
-            spyOn(loadingModalService, 'close').and.returnValue($q.resolve());
-            spyOn(programService, 'create').and.returnValue($q.resolve());
-            spyOn(notificationService, 'success').and.returnValue($q.resolve());
-            spyOn(notificationService, 'error').and.returnValue($q.resolve());
-            spyOn(messageService, 'get').and.callFake(function(messageKey) {
+            spyOn(confirmService, 'confirm').andReturn($q.resolve());
+            spyOn(loadingModalService, 'open').andReturn($q.resolve());
+            spyOn(loadingModalService, 'close').andReturn($q.resolve());
+            spyOn(programService, 'create').andReturn($q.resolve());
+            spyOn(notificationService, 'success').andReturn($q.resolve());
+            spyOn(notificationService, 'error').andReturn($q.resolve());
+            spyOn(messageService, 'get').andCallFake(function(messageKey) {
                 return messageKey;
             });
         });
@@ -88,7 +88,7 @@ describe('ProgramAddController', function() {
         });
 
         it('should not call any service when confirmation fails', function() {
-            confirmService.confirm.and.returnValue($q.reject());
+            confirmService.confirm.andReturn($q.reject());
 
             vm.program = program;
             vm.saveProgram();
@@ -105,7 +105,7 @@ describe('ProgramAddController', function() {
         });
 
         it('should display error notification when program creation fails', function() {
-            programService.create.and.returnValue($q.reject());
+            programService.create.andReturn($q.reject());
 
             vm.program = program;
             vm.saveProgram();

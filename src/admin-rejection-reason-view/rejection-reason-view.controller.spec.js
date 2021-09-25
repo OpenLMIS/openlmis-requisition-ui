@@ -61,7 +61,7 @@ describe('RejectionReasonViewController', function() {
         });
         vm.$onInit();
 
-        spyOn($state, 'go').and.returnValue();
+        spyOn($state, 'go').andReturn();
     });
 
     describe('onInit', function() {
@@ -73,12 +73,12 @@ describe('RejectionReasonViewController', function() {
     describe('saveRejectionReasonDetails', function() {
 
         beforeEach(function() {
-            spyOn(loadingModalService, 'open').and.returnValue($q.resolve());
-            spyOn(loadingModalService, 'close').and.returnValue($q.resolve());
-            spyOn(RejectionReasonRepository.prototype, 'create').and.returnValue(saveDeferred.promise);
-            spyOn(notificationService, 'success').and.returnValue($q.resolve());
-            spyOn(notificationService, 'error').and.returnValue($q.resolve());
-            spyOn(messageService, 'get').and.callFake(function(messageKey) {
+            spyOn(loadingModalService, 'open').andReturn($q.resolve());
+            spyOn(loadingModalService, 'close').andReturn($q.resolve());
+            spyOn(RejectionReasonRepository.prototype, 'create').andReturn(saveDeferred.promise);
+            spyOn(notificationService, 'success').andReturn($q.resolve());
+            spyOn(notificationService, 'error').andReturn($q.resolve());
+            spyOn(messageService, 'get').andCallFake(function(messageKey) {
                 return messageKey;
             });
         });

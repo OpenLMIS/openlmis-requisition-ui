@@ -67,18 +67,18 @@ describe('TemplateColumn', function() {
             templateColumn = new TemplateColumn(templateColumnJson);
 
             columnsSpy = jasmine.createSpyObj('columns', ['includes']);
-            spyOn(TEMPLATE_COLUMNS, 'getStockBasedColumns').and.returnValue(columnsSpy);
+            spyOn(TEMPLATE_COLUMNS, 'getStockBasedColumns').andReturn(columnsSpy);
         });
 
         it('should return true if column is stock based', function() {
-            columnsSpy.includes.and.returnValue(true);
+            columnsSpy.includes.andReturn(true);
 
             expect(templateColumn.isStockBasedColumn()).toBe(true);
             expect(columnsSpy.includes).toHaveBeenCalledWith(templateColumn.name);
         });
 
         it('should return false if column is not stock based', function() {
-            columnsSpy.includes.and.returnValue(false);
+            columnsSpy.includes.andReturn(false);
 
             expect(templateColumn.isStockBasedColumn()).toBe(false);
             expect(columnsSpy.includes).toHaveBeenCalledWith(templateColumn.name);

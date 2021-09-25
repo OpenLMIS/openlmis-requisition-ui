@@ -24,7 +24,7 @@ describe('periodService', function() {
             $provide.factory('requisitionUrlFactory', function() {
                 return requisitionUrlFactoryMock;
             });
-            requisitionUrlFactoryMock.and.callFake(function(parameter) {
+            requisitionUrlFactoryMock.andCallFake(function(parameter) {
                 return parameter;
             });
 
@@ -32,7 +32,7 @@ describe('periodService', function() {
             $provide.factory('dateUtils', function() {
                 return dateUtilsMock;
             });
-            dateUtilsMock.toDate.and.callFake(function(parameter) {
+            dateUtilsMock.toDate.andCallFake(function(parameter) {
                 return parameter;
             });
 

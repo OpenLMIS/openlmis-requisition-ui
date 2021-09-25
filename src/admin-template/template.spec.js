@@ -371,7 +371,7 @@ describe('Template', function() {
 
         beforeEach(function() {
             repository = jasmine.createSpyObj('TemplateRepository', ['create']);
-            repository.create.and.returnValue(true);
+            repository.create.andReturn(true);
 
             this.template = new this.Template(this.templateJson, repository);
         });

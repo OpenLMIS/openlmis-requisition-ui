@@ -91,18 +91,18 @@ describe('openlmis.requisitions.requisition.nonFullSupply state', function() {
             new this.RequisitionColumnDataBuilder().buildProductCodeColumn()
         ];
 
-        spyOn(this.currentUserService, 'getUserInfo').and.returnValue(this.$q.resolve(this.user));
-        spyOn(this.requisitionService, 'get').and.returnValue(this.$q.resolve(this.requisition));
-        spyOn(this.requisitionViewFactory, 'canSubmit').and.returnValue(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canAuthorize').and.returnValue(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canApproveAndReject').and.returnValue(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canDelete').and.returnValue(this.$q.resolve(true));
-        spyOn(this.requisitionViewFactory, 'canSkip').and.returnValue(this.$q.resolve(true));
-        spyOn(this.programService, 'get').and.returnValue(this.$q.when(this.program));
-        spyOn(this.facilityService, 'get').and.returnValue(this.$q.resolve(this.facility));
-        spyOn(this.periodService, 'get').and.returnValue(this.$q.resolve(this.period));
+        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
+        spyOn(this.requisitionService, 'get').andReturn(this.$q.resolve(this.requisition));
+        spyOn(this.requisitionViewFactory, 'canSubmit').andReturn(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canAuthorize').andReturn(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canApproveAndReject').andReturn(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canDelete').andReturn(this.$q.resolve(true));
+        spyOn(this.requisitionViewFactory, 'canSkip').andReturn(this.$q.resolve(true));
+        spyOn(this.programService, 'get').andReturn(this.$q.when(this.program));
+        spyOn(this.facilityService, 'get').andReturn(this.$q.resolve(this.facility));
+        spyOn(this.periodService, 'get').andReturn(this.$q.resolve(this.period));
 
-        this.requisition.template.getColumns.and.returnValue(this.columns);
+        this.requisition.template.getColumns.andReturn(this.columns);
     });
 
     it('should prepare non full supply line items', function() {

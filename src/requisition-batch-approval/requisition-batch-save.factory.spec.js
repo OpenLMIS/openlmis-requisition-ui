@@ -124,7 +124,7 @@ describe('RequisitionBatchSaveFactory', function() {
 
         requisitions = [requisition, requisition2];
 
-        var requisitionFactoryMock = jasmine.createSpy('Requisition').and.callFake(function(requisition) {
+        var requisitionFactoryMock = jasmine.createSpy('Requisition').andCallFake(function(requisition) {
             return requisition;
         });
 
@@ -138,8 +138,8 @@ describe('RequisitionBatchSaveFactory', function() {
                 'removeBy']);
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
-            offlineFlag.getAll.and.returnValue([false]);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').and.callFake(function(resourceName) {
+            offlineFlag.getAll.andReturn([false]);
+            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function(resourceName) {
                 if (resourceName === 'offlineFlag') {
                     return offlineFlag;
                 }
@@ -163,9 +163,9 @@ describe('RequisitionBatchSaveFactory', function() {
         });
 
         deferred = $q.defer();
-        spyOn(requisitionBatchApprovalService, 'saveAll').and.returnValue(deferred.promise);
+        spyOn(requisitionBatchApprovalService, 'saveAll').andReturn(deferred.promise);
 
-        spyOn(dateUtils, 'toStringDate').and.callFake(function(parameter) {
+        spyOn(dateUtils, 'toStringDate').andCallFake(function(parameter) {
             return parameter;
         });
     });
@@ -280,7 +280,7 @@ describe('RequisitionBatchSaveFactory', function() {
         });
         $rootScope.$apply();
 
-        expect(batchRequisitionsStorage.removeBy.calls.count()).toEqual(1);
+        expect(batchRequisitionsStorage.removeBy.calls.length).toEqual(1);
         expect(batchRequisitionsStorage.removeBy).toHaveBeenCalledWith('id', requisitions[1].id);
     });
 
@@ -301,7 +301,7 @@ describe('RequisitionBatchSaveFactory', function() {
 
             requisitions[0].$availableOffline = true;
 
-            expect(batchRequisitionsStorage.put.calls.count()).toEqual(1);
+            expect(batchRequisitionsStorage.put.calls.length).toEqual(1);
             expect(batchRequisitionsStorage.put).toHaveBeenCalledWith(requisitions[0]);
         });
 });

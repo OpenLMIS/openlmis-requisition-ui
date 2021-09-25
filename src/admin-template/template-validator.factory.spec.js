@@ -42,7 +42,7 @@ describe('templateValidator', function() {
 
             template.columnsMap = columns;
 
-            spyOn(templateValidator, 'getColumnError').and.callFake(function(column) {
+            spyOn(templateValidator, 'getColumnError').andCallFake(function(column) {
                 return !column.valid;
             });
         });
@@ -315,7 +315,7 @@ describe('templateValidator', function() {
             });
 
             it('should validate for circular dependencies', function() {
-                template.findCircularCalculatedDependencies.and.returnValue(['stockOnHand']);
+                template.findCircularCalculatedDependencies.andReturn(['stockOnHand']);
 
                 var result = templateValidator.getColumnError(column, template);
 
@@ -323,7 +323,7 @@ describe('templateValidator', function() {
             });
 
             it('should validate for circular dependencies and return error for multiple columns', function() {
-                template.findCircularCalculatedDependencies.and.returnValue(['stockOnHand', 'total']);
+                template.findCircularCalculatedDependencies.andReturn(['stockOnHand', 'total']);
 
                 var result = templateValidator.getColumnError(column, template);
 
@@ -392,9 +392,9 @@ describe('templateValidator', function() {
 
                 template.columnsMap.averageConsumption = pColumn;
 
-                spyOn(messageService, 'get').and.callThrough();
+                spyOn(messageService, 'get').andCallThrough();
 
-                messageService.get.and.callFake(function(message, params) {
+                messageService.get.andCallFake(function(message, params) {
                     if (message === 'adminProgramTemplate.shouldBeDisplayedIfOtherIsCalculated' && params &&
                         params.column === pColumn.label) {
 
@@ -487,9 +487,9 @@ describe('templateValidator', function() {
 
                 template.columnsMap.additionalQuantityRequired = additionalQuantityRequiredColumn;
 
-                spyOn(messageService, 'get').and.callThrough();
+                spyOn(messageService, 'get').andCallThrough();
 
-                messageService.get.and.callFake(function(message) {
+                messageService.get.andCallFake(function(message) {
                     return message;
                 });
             });

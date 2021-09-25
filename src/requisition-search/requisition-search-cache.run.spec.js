@@ -58,7 +58,7 @@ describe('requisition-search run', function() {
     describe('post login action', function() {
 
         it('should cache facilities', function() {
-            requisitionSearchServiceSpy.getFacilities.and.returnValue($q.resolve());
+            requisitionSearchServiceSpy.getFacilities.andReturn($q.resolve());
 
             postLoginAction();
 
@@ -70,7 +70,7 @@ describe('requisition-search run', function() {
     describe('post logout action', function() {
 
         it('should clear current user cache', function() {
-            requisitionSearchServiceSpy.clearCachedFacilities.and.returnValue($q.resolve());
+            requisitionSearchServiceSpy.clearCachedFacilities.andReturn($q.resolve());
 
             var success;
             postLogoutAction()
@@ -86,7 +86,7 @@ describe('requisition-search run', function() {
     });
 
     function getLastCall(method) {
-        return method.calls.mostRecent();
+        return method.calls[method.calls.length - 1];
     }
 
 });

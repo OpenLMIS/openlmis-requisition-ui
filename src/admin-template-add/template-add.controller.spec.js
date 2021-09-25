@@ -87,7 +87,7 @@ describe('TemplateAddController', function() {
         });
         vm.$onInit();
 
-        spyOn($state, 'go').and.returnValue();
+        spyOn($state, 'go').andReturn();
     });
 
     describe('onInit', function() {
@@ -143,8 +143,8 @@ describe('TemplateAddController', function() {
     describe('create', function() {
 
         beforeEach(function() {
-            spyOn(confirmService, 'confirm').and.returnValue($q.resolve());
-            spyOn(messageService, 'get').and.callFake(function(messageKey) {
+            spyOn(confirmService, 'confirm').andReturn($q.resolve());
+            spyOn(messageService, 'get').andCallFake(function(messageKey) {
                 return messageKey;
             });
 
@@ -157,10 +157,10 @@ describe('TemplateAddController', function() {
             vm.create();
             $rootScope.$apply();
 
-            expect(vm.template.addColumn.calls.count()).toBe(3);
-            expect(vm.template.addColumn.calls.first().args).toEqual([skippedColumn.columnDefinition, true]);
-            expect(vm.template.addColumn.calls.all()[1].args).toEqual([productCodeColumn.columnDefinition, true]);
-            expect(vm.template.addColumn.calls.all()[2].args)
+            expect(vm.template.addColumn.callCount).toBe(3);
+            expect(vm.template.addColumn.calls[0].args).toEqual([skippedColumn.columnDefinition, true]);
+            expect(vm.template.addColumn.calls[1].args).toEqual([productCodeColumn.columnDefinition, true]);
+            expect(vm.template.addColumn.calls[2].args)
                 .toEqual([calculatedOrderQuantityIsaColumn.columnDefinition, false]);
 
             expect(vm.template.columnsMap).not.toBeUndefined();
@@ -178,7 +178,7 @@ describe('TemplateAddController', function() {
         });
 
         it('should not call any service when confirmation fails', function() {
-            confirmService.confirm.and.returnValue($q.reject());
+            confirmService.confirm.andReturn($q.reject());
 
             vm.create();
             $rootScope.$apply();

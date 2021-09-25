@@ -60,18 +60,18 @@ describe('ProductGridCell', function() {
         this.scope.column = this.fullSupplyColumns[0];
         this.scope.lineItem = this.scope.requisition.requisitionLineItems[0];
 
-        spyOn(this.scope.lineItem, 'getFieldValue').and.returnValue('readOnlyFieldValue');
+        spyOn(this.scope.lineItem, 'getFieldValue').andReturn('readOnlyFieldValue');
         spyOn(this.requisitionValidator, 'validateLineItem');
-        spyOn(this.authorizationService, 'isAuthenticated').and.returnValue(true);
-        spyOn(this.authorizationService, 'hasRight').and.returnValue(true);
+        spyOn(this.authorizationService, 'isAuthenticated').andReturn(true);
+        spyOn(this.authorizationService, 'hasRight').andReturn(true);
         spyOn(this.scope.lineItem, 'canBeSkipped');
         spyOn(this.scope.lineItem, 'updateDependentFields');
     });
 
     it('should produce losesAndAdjustment cell', function() {
-        this.scope.requisition.$isApproved.and.returnValue(false);
-        this.scope.requisition.$isReleased.and.returnValue(false);
-        this.scope.requisition.$isAuthorized.and.returnValue(false);
+        this.scope.requisition.$isApproved.andReturn(false);
+        this.scope.requisition.$isReleased.andReturn(false);
+        this.scope.requisition.$isAuthorized.andReturn(false);
         this.scope.column.name = 'totalLossesAndAdjustments';
 
         this.directiveElem = this.getCompiledElement();
@@ -81,9 +81,9 @@ describe('ProductGridCell', function() {
     });
 
     it('should produce read only for losesAndAdjustment and stock based requisition', function() {
-        this.scope.requisition.$isApproved.and.returnValue(false);
-        this.scope.requisition.$isReleased.and.returnValue(false);
-        this.scope.requisition.$isAuthorized.and.returnValue(false);
+        this.scope.requisition.$isApproved.andReturn(false);
+        this.scope.requisition.$isReleased.andReturn(false);
+        this.scope.requisition.$isAuthorized.andReturn(false);
         this.scope.column.name = 'totalLossesAndAdjustments';
         this.scope.requisition.template.populateStockOnHandFromStockCards = true;
 
@@ -95,7 +95,7 @@ describe('ProductGridCell', function() {
 
     it('should produce currency cell if column is of currency type', function() {
         this.scope.column = new this.RequisitionColumnDataBuilder().buildTotalCostColumn();
-        this.scope.lineItem.getFieldValue.and.returnValue(123);
+        this.scope.lineItem.getFieldValue.andReturn(123);
 
         this.directiveElem = this.getCompiledElement();
 
@@ -113,9 +113,9 @@ describe('ProductGridCell', function() {
     });
 
     it('should validate full supply line item columns after updating fields', function() {
-        this.scope.requisition.template.getColumns.and.returnValue(this.fullSupplyColumns);
+        this.scope.requisition.template.getColumns.andReturn(this.fullSupplyColumns);
         this.scope.userCanEdit = true;
-        this.scope.requisition.$isInitiated.and.returnValue(true);
+        this.scope.requisition.$isInitiated.andReturn(true);
         var element = this.getCompiledElement(),
             input = element.find('input');
 
@@ -157,8 +157,8 @@ describe('ProductGridCell', function() {
 
     it('should validate non full supply line item columns after updating fields', function() {
         this.scope.userCanEdit = true;
-        this.scope.requisition.template.getColumns.and.returnValue(this.nonFullSupplyColumns);
-        this.scope.requisition.$isInitiated.and.returnValue(true);
+        this.scope.requisition.template.getColumns.andReturn(this.nonFullSupplyColumns);
+        this.scope.requisition.$isInitiated.andReturn(true);
         var element = this.getCompiledElement(),
             input = element.find('input');
 
@@ -177,7 +177,7 @@ describe('ProductGridCell', function() {
     });
 
     it('should produce read only cell for approved requisition', function() {
-        this.scope.requisition.$isApproved.and.returnValue(true);
+        this.scope.requisition.$isApproved.andReturn(true);
 
         var cell = angular.element(this.getCompiledElement().children()[0]);
 
@@ -185,7 +185,7 @@ describe('ProductGridCell', function() {
     });
 
     it('should produce read only cell for released requisition', function() {
-        this.scope.requisition.$isReleased.and.returnValue(true);
+        this.scope.requisition.$isReleased.andReturn(true);
 
         var cell = angular.element(this.getCompiledElement().children()[0]);
 
@@ -245,18 +245,18 @@ describe('ProductGridCell', function() {
 
         it('should be always disabled if user can not edit', function() {
             this.scope.userCanEdit = false;
-            this.scope.lineItem.canBeSkipped.and.returnValue(true);
+            this.scope.lineItem.canBeSkipped.andReturn(true);
 
             element = this.getCompiledElement();
 
             expect(getSkipInput().attr('disabled')).toBe('disabled');
 
-            this.scope.lineItem.canBeSkipped.and.returnValue(false);
+            this.scope.lineItem.canBeSkipped.andReturn(false);
             this.scope.$digest();
 
             expect(getSkipInput().attr('disabled')).toBe('disabled');
 
-            this.scope.lineItem.canBeSkipped.and.returnValue(true);
+            this.scope.lineItem.canBeSkipped.andReturn(true);
             this.scope.$digest();
 
             expect(getSkipInput().attr('disabled')).toBe('disabled');
@@ -264,18 +264,18 @@ describe('ProductGridCell', function() {
 
         it('should change disabled state if lineItem changes its skipability and user has right to edit', function() {
             this.scope.userCanEdit = true;
-            this.scope.lineItem.canBeSkipped.and.returnValue(true);
+            this.scope.lineItem.canBeSkipped.andReturn(true);
 
             element = this.getCompiledElement();
 
             expect(getSkipInput().attr('disabled')).toBe(undefined);
 
-            this.scope.lineItem.canBeSkipped.and.returnValue(false);
+            this.scope.lineItem.canBeSkipped.andReturn(false);
             this.scope.$digest();
 
             expect(getSkipInput().attr('disabled')).toBe('disabled');
 
-            this.scope.lineItem.canBeSkipped.and.returnValue(true);
+            this.scope.lineItem.canBeSkipped.andReturn(true);
             this.scope.$digest();
 
             expect(getSkipInput().attr('disabled')).toBe(undefined);

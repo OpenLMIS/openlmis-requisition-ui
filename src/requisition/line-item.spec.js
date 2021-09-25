@@ -23,7 +23,7 @@ describe('LineItem', function() {
         module('requisition');
 
         calculationFactory = jasmine.createSpyObj('calculationFactory', ['totalCost', 'adjustedConsumption']);
-        calculationFactory.totalCost.and.returnValue(20);
+        calculationFactory.totalCost.andReturn(20);
 
         module(function($provide) {
             $provide.factory('calculationFactory', function() {
@@ -39,7 +39,7 @@ describe('LineItem', function() {
             });
 
             userAlwaysHasRight = true;
-            authorizationServiceSpy.hasRight.and.callFake(function(right) {
+            authorizationServiceSpy.hasRight.andCallFake(function(right) {
                 if (userAlwaysHasRight) {
                     return true;
                 }
@@ -55,7 +55,7 @@ describe('LineItem', function() {
                 return false;
             });
 
-            authorizationServiceSpy.isAuthenticated.and.returnValue(true);
+            authorizationServiceSpy.isAuthenticated.andReturn(true);
         });
 
         inject(function(_LineItem_, _TEMPLATE_COLUMNS_, _REQUISITION_RIGHTS_) {
@@ -103,7 +103,7 @@ describe('LineItem', function() {
             }
 
         ];
-        template.getColumns.and.callFake(function() {
+        template.getColumns.andCallFake(function() {
             return template.columnsMap;
         });
 
@@ -135,12 +135,12 @@ describe('LineItem', function() {
         };
         this.requisition = jasmine.createSpyObj('requisition', ['$isApproved', '$isAuthorized', '$isInApproval',
             '$isReleased', '$isInitiated', '$isSubmitted', '$isRejected']);
-        this.requisition.$isApproved.and.returnValue(false);
-        this.requisition.$isAuthorized.and.returnValue(false);
-        this.requisition.$isInitiated.and.returnValue(false);
-        this.requisition.$isReleased.and.returnValue(false);
-        this.requisition.$isSubmitted.and.returnValue(false);
-        this.requisition.$isRejected.and.returnValue(false);
+        this.requisition.$isApproved.andReturn(false);
+        this.requisition.$isAuthorized.andReturn(false);
+        this.requisition.$isInitiated.andReturn(false);
+        this.requisition.$isReleased.andReturn(false);
+        this.requisition.$isSubmitted.andReturn(false);
+        this.requisition.$isRejected.andReturn(false);
         this.requisition.requisitionLineItems = [requisitionLineItem];
         this.requisition.program = program;
         this.requisition.facility = facility;
@@ -206,10 +206,10 @@ describe('LineItem', function() {
             lineItem.updateFieldValue(this.requisition.template.columnsMap[2], this.requisition);
             lineItem.updateFieldValue(this.requisition.template.columnsMap[5], this.requisition);
 
-            expect(lineItem.requestedQuantity).toEqual(undefined);
+            expect(lineItem.requestedQuantity).toEqual(null);
             expect(lineItem.requestedQuantityExplanation).toEqual('');
             expect(lineItem.totalCost).toEqual(20);
-            expect(lineItem.pricePerPack).toEqual(undefined);
+            expect(lineItem.pricePerPack).toEqual(null);
         });
 
         it('should call proper calculation method when column name is Adjusted Consumption', function() {
@@ -257,7 +257,7 @@ describe('LineItem', function() {
         it('should return true if requisition status is authorized', function() {
             lineItem.requestedQuantity = 0;
             lineItem.requestedQuantityExplanation = '';
-            this.requisition.$isAuthorized.and.returnValue(true);
+            this.requisition.$isAuthorized.andReturn(true);
 
             var result = lineItem.canBeSkipped(this.requisition);
 
@@ -267,7 +267,7 @@ describe('LineItem', function() {
         it('should return true if requisition status is in approval', function() {
             lineItem.requestedQuantity = 0;
             lineItem.requestedQuantityExplanation = '';
-            this.requisition.$isInApproval.and.returnValue(true);
+            this.requisition.$isInApproval.andReturn(true);
 
             var result = lineItem.canBeSkipped(this.requisition);
 
@@ -277,7 +277,7 @@ describe('LineItem', function() {
         it('should return false if requisition status is approved', function() {
             lineItem.requestedQuantity = 0;
             lineItem.requestedQuantityExplanation = '';
-            this.requisition.$isApproved.and.returnValue(true);
+            this.requisition.$isApproved.andReturn(true);
 
             var result = lineItem.canBeSkipped(this.requisition);
 
@@ -287,7 +287,7 @@ describe('LineItem', function() {
         it('should return false if requisition status is released', function() {
             lineItem.requestedQuantity = 0;
             lineItem.requestedQuantityExplanation = '';
-            this.requisition.$isReleased.and.returnValue(true);
+            this.requisition.$isReleased.andReturn(true);
 
             var result = lineItem.canBeSkipped(this.requisition);
 

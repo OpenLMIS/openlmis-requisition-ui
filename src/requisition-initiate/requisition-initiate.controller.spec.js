@@ -60,14 +60,14 @@ describe('RequisitionInitiateController', function() {
             this.canInitiateRnr = true;
 
             this.permissionService = $injector.get('permissionService');
-            spyOn(this.permissionService, 'hasPermission').and.returnValue(this.$q.resolve());
+            spyOn(this.permissionService, 'hasPermission').andReturn(this.$q.resolve());
 
-            spyOn(this.authorizationService, 'getUser').and.returnValue(this.user);
+            spyOn(this.authorizationService, 'getUser').andReturn(this.user);
 
             this.key = 'key';
 
             var context = this;
-            spyOn(context.UuidGenerator.prototype, 'generate').and.callFake(function() {
+            spyOn(context.UuidGenerator.prototype, 'generate').andCallFake(function() {
                 return context.key;
             });
 
@@ -93,7 +93,7 @@ describe('RequisitionInitiateController', function() {
         function() {
             this.vm.$onInit();
             spyOn(this.$state, 'go');
-            spyOn(this.requisitionService, 'initiate').and.returnValue(this.$q.when(this.requisition));
+            spyOn(this.requisitionService, 'initiate').andReturn(this.$q.when(this.requisition));
             this.vm.program = this.programs[0];
             this.vm.facility = this.facility;
 
@@ -115,7 +115,7 @@ describe('RequisitionInitiateController', function() {
     it('should initiate requisition with idempotency key', function() {
         this.vm.$onInit();
         spyOn(this.$state, 'go');
-        spyOn(this.requisitionService, 'initiate').and.returnValue(this.$q.when(this.requisition));
+        spyOn(this.requisitionService, 'initiate').andReturn(this.$q.when(this.requisition));
 
         this.vm.program = this.programs[0];
         this.vm.facility = this.facility;
@@ -129,7 +129,7 @@ describe('RequisitionInitiateController', function() {
     });
 
     it('should display error when user has no right to init requisition', function() {
-        this.permissionService.hasPermission.and.returnValue(this.$q.reject());
+        this.permissionService.hasPermission.andReturn(this.$q.reject());
 
         this.vm.$onInit();
         spyOn(this.$state, 'go');
@@ -148,7 +148,7 @@ describe('RequisitionInitiateController', function() {
     it('should not change page to requisitions.requisition with selected period without rnrId and when invalid' +
         ' response from service', function() {
         var selectedPeriod = {};
-        spyOn(this.requisitionService, 'initiate').and.returnValue(this.$q.reject(this.requisition));
+        spyOn(this.requisitionService, 'initiate').andReturn(this.$q.reject(this.requisition));
         spyOn(this.$state, 'go');
         this.vm.program = this.programs[0];
         this.vm.facility = this.facility;
@@ -157,7 +157,7 @@ describe('RequisitionInitiateController', function() {
         this.$rootScope.$apply();
 
         expect(this.$state.go).not.toHaveBeenCalled();
-        expect(this.UuidGenerator.prototype.generate.calls.count()).toEqual(2);
+        expect(this.UuidGenerator.prototype.generate.calls.length).toEqual(2);
     });
 
     it('should open loading modal', function() {

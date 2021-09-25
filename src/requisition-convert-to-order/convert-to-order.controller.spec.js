@@ -34,7 +34,7 @@ describe('ConvertToOrderController', function() {
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
 
             this.key = 'key';
-            spyOn(UuidGenerator.prototype, 'generate').and.callFake(function() {
+            spyOn(UuidGenerator.prototype, 'generate').andCallFake(function() {
                 return 'key';
             });
 
@@ -129,12 +129,12 @@ describe('ConvertToOrderController', function() {
             convertDeferred = this.$q.defer();
             loadingDeferred = this.$q.defer();
 
-            spyOn(this.loadingModalService, 'open').and.returnValue(loadingDeferred.promise);
-            spyOn(this.loadingModalService, 'close').and.returnValue();
-            spyOn(this.confirmService, 'confirm').and.returnValue(confirmDeferred.promise);
-            spyOn(this.requisitionService, 'convertToOrder').and.returnValue(convertDeferred.promise);
-            spyOn(this.notificationService, 'error').and.returnValue();
-            spyOn(this.notificationService, 'success').and.returnValue();
+            spyOn(this.loadingModalService, 'open').andReturn(loadingDeferred.promise);
+            spyOn(this.loadingModalService, 'close').andReturn();
+            spyOn(this.confirmService, 'confirm').andReturn(confirmDeferred.promise);
+            spyOn(this.requisitionService, 'convertToOrder').andReturn(convertDeferred.promise);
+            spyOn(this.notificationService, 'error').andReturn();
+            spyOn(this.notificationService, 'success').andReturn();
         });
 
         it('should show error if no requisition is selected', function() {
@@ -265,12 +265,12 @@ describe('ConvertToOrderController', function() {
             convertDeferred = this.$q.defer();
             loadingDeferred = this.$q.defer();
 
-            spyOn(this.loadingModalService, 'open').and.returnValue(loadingDeferred.promise);
-            spyOn(this.loadingModalService, 'close').and.returnValue();
-            spyOn(this.confirmService, 'confirm').and.returnValue(confirmDeferred.promise);
-            spyOn(this.requisitionService, 'releaseWithoutOrder').and.returnValue(convertDeferred.promise);
-            spyOn(this.notificationService, 'error').and.returnValue();
-            spyOn(this.notificationService, 'success').and.returnValue();
+            spyOn(this.loadingModalService, 'open').andReturn(loadingDeferred.promise);
+            spyOn(this.loadingModalService, 'close').andReturn();
+            spyOn(this.confirmService, 'confirm').andReturn(confirmDeferred.promise);
+            spyOn(this.requisitionService, 'releaseWithoutOrder').andReturn(convertDeferred.promise);
+            spyOn(this.notificationService, 'error').andReturn();
+            spyOn(this.notificationService, 'success').andReturn();
         });
 
         it('should show error if no requisition is selected', function() {
@@ -396,8 +396,8 @@ describe('ConvertToOrderController', function() {
     it('should show error when trying to convert to order with no supplying depot selected', function() {
         this.vm.requisitions[0].$selected = true;
 
-        spyOn(this.requisitionService, 'convertToOrder').and.returnValue(this.$q.when());
-        spyOn(this.notificationService, 'error').and.callThrough();
+        spyOn(this.requisitionService, 'convertToOrder').andReturn(this.$q.when());
+        spyOn(this.notificationService, 'error').andCallThrough();
 
         this.vm.convertToOrder();
 
@@ -407,8 +407,8 @@ describe('ConvertToOrderController', function() {
     });
 
     it('should show error when trying to convert to order with no requisition selected', function() {
-        spyOn(this.requisitionService, 'convertToOrder').and.returnValue(this.$q.when());
-        spyOn(this.notificationService, 'error').and.callThrough();
+        spyOn(this.requisitionService, 'convertToOrder').andReturn(this.$q.when());
+        spyOn(this.notificationService, 'error').andCallThrough();
 
         this.vm.convertToOrder();
 
@@ -459,7 +459,7 @@ describe('ConvertToOrderController', function() {
     describe('search', function() {
 
         beforeEach(function() {
-            spyOn(this.$state, 'go').and.returnValue();
+            spyOn(this.$state, 'go').andReturn();
         });
 
         it('should expose search method', function() {

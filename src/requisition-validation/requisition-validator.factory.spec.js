@@ -44,7 +44,7 @@ describe('requisitionValidator', function() {
         lineItem = lineItemSpy('One');
 
         var template = jasmine.createSpyObj('template', ['getColumns']);
-        template.getColumns.and.callFake(function(nonFullSupply) {
+        template.getColumns.andCallFake(function(nonFullSupply) {
             return nonFullSupply ? nonFullSupplyColumns() : fullSupplyColumns();
         });
 
@@ -75,7 +75,7 @@ describe('requisitionValidator', function() {
     describe('validateRequisition', function() {
 
         it('should return true if requisition is valid', function() {
-            spyOn(validator, 'validateLineItem').and.returnValue(true);
+            spyOn(validator, 'validateLineItem').andReturn(true);
 
             var result = validator.validateRequisition(requisition);
 
@@ -99,7 +99,7 @@ describe('requisitionValidator', function() {
         });
 
         it('should return false if any of the line items is invalid', function() {
-            spyOn(validator, 'validateLineItem').and.callFake(function(lineItem) {
+            spyOn(validator, 'validateLineItem').andCallFake(function(lineItem) {
                 return lineItem !== lineItems[0];
             });
 
@@ -125,7 +125,7 @@ describe('requisitionValidator', function() {
         });
 
         it('should return true if requisition comment is longer than 255 chars', function() {
-            spyOn(validator, 'validateLineItem').and.returnValue(true);
+            spyOn(validator, 'validateLineItem').andReturn(true);
 
             for (var i = 0; i < 10; i++) {
                 requisition.draftStatusMessage += 'abcdefghijklmnopqrstuvwxyz';
@@ -146,7 +146,7 @@ describe('requisitionValidator', function() {
         });
 
         it('should return true if all fields are valid', function() {
-            spyOn(validator, 'validateLineItemField').and.returnValue(true);
+            spyOn(validator, 'validateLineItemField').andReturn(true);
 
             var result = validator.validateLineItem(lineItem, columns, requisition);
 
@@ -158,7 +158,7 @@ describe('requisitionValidator', function() {
         });
 
         it('should return false if any field is invalid', function() {
-            spyOn(validator, 'validateLineItemField').and.callFake(function(lineItem, column) {
+            spyOn(validator, 'validateLineItemField').andCallFake(function(lineItem, column) {
                 return column !== columns[1];
             });
 
@@ -222,9 +222,9 @@ describe('requisitionValidator', function() {
 
         it('should not validate stock based columns', function() {
             var columnsSpy = jasmine.createSpyObj('columns', ['includes']);
-            spyOn(TEMPLATE_COLUMNS, 'getStockBasedColumns').and.returnValue(columnsSpy);
+            spyOn(TEMPLATE_COLUMNS, 'getStockBasedColumns').andReturn(columnsSpy);
 
-            columnsSpy.includes.and.returnValue(true);
+            columnsSpy.includes.andReturn(true);
             requisition.template.populateStockOnHandFromStockCards = true;
 
             var result = validator.validateLineItemField(lineItem, column, requisition);
@@ -237,7 +237,7 @@ describe('requisitionValidator', function() {
             column.name = TEMPLATE_COLUMNS.STOCK_ON_HAND;
             column.$required = true;
             column.source = COLUMN_SOURCES.CALCULATED;
-            validationFactory.stockOnHand.and.returnValue('negative');
+            validationFactory.stockOnHand.andReturn('negative');
 
             var result = validator.validateLineItemField(lineItem, column, requisition);
 
@@ -336,7 +336,7 @@ describe('requisitionValidator', function() {
                 lineItemSpy('two')
             ];
 
-            spyOn(validator, 'isLineItemValid').and.returnValue(true);
+            spyOn(validator, 'isLineItemValid').andReturn(true);
         });
 
         it('should return true if all line items are valid', function() {
@@ -344,7 +344,7 @@ describe('requisitionValidator', function() {
         });
 
         it('should return false if any of the line items is invalid', function() {
-            validator.isLineItemValid.and.callFake(function(lineItem) {
+            validator.isLineItemValid.andCallFake(function(lineItem) {
                 return lineItem !== lineItems[1];
             });
 
@@ -375,7 +375,7 @@ describe('requisitionValidator', function() {
 
     function lineItemSpy(suffix) {
         var lineItemSpy = jasmine.createSpyObj('lineItem' + suffix, ['areColumnsValid']);
-        lineItemSpy.areColumnsValid.and.returnValue(true);
+        lineItemSpy.areColumnsValid.andReturn(true);
         lineItemSpy.$errors = {};
         return lineItemSpy;
     }

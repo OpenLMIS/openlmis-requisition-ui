@@ -30,7 +30,7 @@ describe('RequisitionSummaryController', function() {
 
         inject(function(_$filter_, _calculationFactory_, $controller) {
             calculationFactory = _calculationFactory_;
-            spyOn(calculationFactory, 'totalCost').and.callFake(function(lineItem) {
+            spyOn(calculationFactory, 'totalCost').andCallFake(function(lineItem) {
                 if (lineItem === lineItems[0]) {
                     return 30.5;
                 }
@@ -47,12 +47,12 @@ describe('RequisitionSummaryController', function() {
 
             var requisitionMock = jasmine.createSpyObj('requisition', ['$isAfterAuthorize']);
             var templateMock = jasmine.createSpyObj('template', ['getColumn']);
-            templateMock.getColumn.and.returnValue({
+            templateMock.getColumn.andReturn({
                 name: 'orderQuantity',
                 $display: true
             });
             requisitionMock.template = templateMock;
-            requisitionMock.$isAfterAuthorize.and.returnValue(false);
+            requisitionMock.$isAfterAuthorize.andReturn(false);
             requisitionMock.requisitionLineItems = lineItems;
             requisitionMock.program = {
                 showNonFullSupplyTab: true

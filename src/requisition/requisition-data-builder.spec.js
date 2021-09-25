@@ -250,33 +250,33 @@
         }
 
         function spyOnMethods(requisition) {
-            spyOn(requisition, '$isInitiated').and.callThrough();
-            spyOn(requisition, '$isRejected').and.callThrough();
-            spyOn(requisition, '$isApproved').and.callThrough();
-            spyOn(requisition, '$isSubmitted').and.callThrough();
-            spyOn(requisition, '$isAuthorized').and.callThrough();
-            spyOn(requisition, '$isInApproval').and.callThrough();
-            spyOn(requisition, '$isReleased').and.callThrough();
-            spyOn(requisition, '$isAfterAuthorize').and.callThrough();
-            spyOn(requisition, '$isSkipped').and.callThrough();
-            spyOn(requisition, 'addLineItem').and.callThrough();
-            spyOn(requisition, 'addLineItems').and.callThrough();
-            spyOn(requisition, 'deleteLineItem').and.callThrough();
-            spyOn(requisition, 'getAvailableFullSupplyProducts').and.callThrough();
-            spyOn(requisition, 'getAvailableNonFullSupplyProducts').and.callThrough();
-            spyOn(requisition, 'unskipFullSupplyProducts').and.callThrough();
-            spyOn(requisition, 'getSkippedFullSupplyProducts').and.callThrough();
-            spyOn(requisition, '$skip').and.callThrough();
-            spyOn(requisition, '$save').and.callThrough();
-            spyOn(requisition, '$approve').and.callThrough();
-            spyOn(requisition, '$reject').and.callThrough();
-            spyOn(requisition, '$remove').and.callThrough();
-            spyOn(requisition, '$submit').and.callThrough();
-            spyOn(requisition, '$authorize').and.callThrough();
+            spyOn(requisition, '$isInitiated').andCallThrough();
+            spyOn(requisition, '$isRejected').andCallThrough();
+            spyOn(requisition, '$isApproved').andCallThrough();
+            spyOn(requisition, '$isSubmitted').andCallThrough();
+            spyOn(requisition, '$isAuthorized').andCallThrough();
+            spyOn(requisition, '$isInApproval').andCallThrough();
+            spyOn(requisition, '$isReleased').andCallThrough();
+            spyOn(requisition, '$isAfterAuthorize').andCallThrough();
+            spyOn(requisition, '$isSkipped').andCallThrough();
+            spyOn(requisition, 'addLineItem').andCallThrough();
+            spyOn(requisition, 'addLineItems').andCallThrough();
+            spyOn(requisition, 'deleteLineItem').andCallThrough();
+            spyOn(requisition, 'getAvailableFullSupplyProducts').andCallThrough();
+            spyOn(requisition, 'getAvailableNonFullSupplyProducts').andCallThrough();
+            spyOn(requisition, 'unskipFullSupplyProducts').andCallThrough();
+            spyOn(requisition, 'getSkippedFullSupplyProducts').andCallThrough();
+            spyOn(requisition, '$skip').andCallThrough();
+            spyOn(requisition, '$save').andCallThrough();
+            spyOn(requisition, '$approve').andCallThrough();
+            spyOn(requisition, '$reject').andCallThrough();
+            spyOn(requisition, '$remove').andCallThrough();
+            spyOn(requisition, '$submit').andCallThrough();
+            spyOn(requisition, '$authorize').andCallThrough();
 
-            spyOn(requisition.template, 'getColumns').and.callThrough();
-            spyOn(requisition.template, 'hasSkipColumn').and.callThrough();
-            spyOn(requisition.template, 'hideSkippedLineItems').and.callThrough();
+            spyOn(requisition.template, 'getColumns').andCallThrough();
+            spyOn(requisition.template, 'hasSkipColumn').andCallThrough();
+            spyOn(requisition.template, 'hideSkippedLineItems').andCallThrough();
 
             return requisition;
         }

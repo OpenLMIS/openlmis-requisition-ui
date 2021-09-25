@@ -32,11 +32,11 @@ describe('requisitionService', function() {
                 .createSpyObj('statusMessagesStorage', ['search', 'put', 'getBy', 'removeBy']);
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
-            offlineFlag.getAll.and.returnValue([false]);
+            offlineFlag.getAll.andReturn([false]);
             context.onlineOnlyRequisitions = jasmine.createSpyObj('onlineOnly', ['contains']);
 
             $provide.service('localStorageFactory', function() {
-                return jasmine.createSpy('localStorageFactory').and.callFake(function(resourceName) {
+                return jasmine.createSpy('localStorageFactory').andCallFake(function(resourceName) {
                     if (resourceName === 'offlineFlag') {
                         return offlineFlag;
                     }
@@ -228,19 +228,19 @@ describe('requisitionService', function() {
             .withProgram(this.program)
             .buildJson();
 
-        spyOn(this.offlineService, 'isOffline').and.returnValue(false);
-        spyOn(this.requisitionCacheService, 'cacheRequisition').and.returnValue();
-        spyOn(this.requisitionCacheService, 'cacheBatchRequisition').and.returnValue();
-        spyOn(this.requisitionCacheService, 'getRequisition').and.returnValue();
-        spyOn(this.requisitionCacheService, 'getBatchRequisition').and.returnValue();
-        spyOn(this.requisitionCacheService, 'removeById').and.returnValue();
-        spyOn(this.requisitionCacheService, 'search').and.returnValue();
+        spyOn(this.offlineService, 'isOffline').andReturn(false);
+        spyOn(this.requisitionCacheService, 'cacheRequisition').andReturn();
+        spyOn(this.requisitionCacheService, 'cacheBatchRequisition').andReturn();
+        spyOn(this.requisitionCacheService, 'getRequisition').andReturn();
+        spyOn(this.requisitionCacheService, 'getBatchRequisition').andReturn();
+        spyOn(this.requisitionCacheService, 'removeById').andReturn();
+        spyOn(this.requisitionCacheService, 'search').andReturn();
         spyOn(this.OrderableResource.prototype, 'getByVersionIdentities');
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'getByVersionIdentities')
-            .and.returnValue(this.$q.when(this.approvedProducts));
-        spyOn(this.periodService, 'get').and.returnValue(this.requisition.processingPeriod);
+            .andReturn(this.$q.when(this.approvedProducts));
+        spyOn(this.periodService, 'get').andReturn(this.requisition.processingPeriod);
 
-        this.OrderableResource.prototype.getByVersionIdentities.and.callFake(function(identities) {
+        this.OrderableResource.prototype.getByVersionIdentities.andCallFake(function(identities) {
             if (JSON.stringify(identities) === JSON.stringify(context.availableProductsIdentities)) {
                 return context.$q.when(context.orderables);
             } else if (JSON.stringify(identities) === JSON.stringify(
@@ -333,8 +333,8 @@ describe('requisitionService', function() {
         });
 
         it('should get requisition by id from offline resources', function() {
-            this.offlineService.isOffline.and.returnValue(true);
-            this.requisitionCacheService.getRequisition.and.returnValue(this.requisition);
+            this.offlineService.isOffline.andReturn(true);
+            this.requisitionCacheService.getRequisition.andReturn(this.requisition);
 
             var data = {};
             this.requisitionService.get(this.requisition.id).then(function(response) {
@@ -370,8 +370,8 @@ describe('requisitionService', function() {
         });
 
         it('should try to fetch requisition from the backend if it is not stored in the local storage', function() {
-            this.offlineService.isOffline.and.returnValue(true);
-            this.requisitionCacheService.getRequisition.and.returnValue(undefined);
+            this.offlineService.isOffline.andReturn(true);
+            this.requisitionCacheService.getRequisition.andReturn(undefined);
             this.$httpBackend
                 .expectGET(this.requisitionUrlFactory(getRequisitionUrl))
                 .respond(418, this.requisition);
@@ -389,8 +389,8 @@ describe('requisitionService', function() {
                 .respond(200, this.requisition, headers);
 
             this.requisition.$modified = true;
-            this.requisitionCacheService.getRequisition.and.returnValue(this.requisition);
-            this.statusMessagesStorage.search.and.returnValue([this.statusMessage]);
+            this.requisitionCacheService.getRequisition.andReturn(this.requisition);
+            this.statusMessagesStorage.search.andReturn([this.statusMessage]);
 
             var result;
             this.requisitionService.get(this.requisition.id)
@@ -413,7 +413,7 @@ describe('requisitionService', function() {
                 .respond(200, [this.statusMessage]);
 
             this.requisition.$modified = false;
-            this.requisitionCacheService.getRequisition.and.returnValue(this.requisition);
+            this.requisitionCacheService.getRequisition.andReturn(this.requisition);
 
             this.requisitionService.get(this.requisition.id);
             this.$httpBackend.flush();
@@ -428,7 +428,7 @@ describe('requisitionService', function() {
             var offlineRequisition = angular.copy(this.requisition);
             offlineRequisition.modifiedDate = [2016, 4, 30, 15, 20, 33];
             offlineRequisition.$modified = true;
-            this.requisitionCacheService.getRequisition.and.returnValue(offlineRequisition);
+            this.requisitionCacheService.getRequisition.andReturn(offlineRequisition);
 
             this.requisition.modifiedDate = [2016, 4, 30, 16, 21, 33];
 
@@ -450,7 +450,7 @@ describe('requisitionService', function() {
 
             var offlineRequisition = angular.copy(this.requisition);
             offlineRequisition.$modified = true;
-            this.requisitionCacheService.getRequisition.and.returnValue(offlineRequisition);
+            this.requisitionCacheService.getRequisition.andReturn(offlineRequisition);
 
             this.requisition.modifiedDate = [2016, 4, 30, 16, 21, 33];
 
@@ -601,7 +601,7 @@ describe('requisitionService', function() {
                 content: [this.requisitionDto]
             });
 
-        this.requisitionCacheService.getRequisition.and.returnValue(false);
+        this.requisitionCacheService.getRequisition.andReturn(false);
 
         this.requisitionService.search(false, params).then(function(response) {
             data = response;
@@ -631,7 +631,7 @@ describe('requisitionService', function() {
                 content: [this.requisitionDto2]
             });
 
-        this.requisitionCacheService.getRequisition.and.returnValue(false);
+        this.requisitionCacheService.getRequisition.andReturn(false);
 
         this.requisitionService.search(false, params).then(function(response) {
             data = response;
@@ -664,7 +664,7 @@ describe('requisitionService', function() {
             .withSort('createdDate,desc')
             .build();
 
-        this.requisitionCacheService.search.and.returnValue(this.$q.resolve(expected));
+        this.requisitionCacheService.search.andReturn(this.$q.resolve(expected));
 
         this.requisitionService.search(true, params).then(function(response) {
             data = response;
@@ -735,7 +735,7 @@ describe('requisitionService', function() {
                 id: '1',
                 modifiedDate: [2016, 4, 30, 16, 21, 33]
             };
-            this.requisitionCacheService.getRequisition.and.returnValue(offlineRequisition);
+            this.requisitionCacheService.getRequisition.andReturn(offlineRequisition);
 
             this.requisition.modifiedDate = [2016, 4, 30, 16, 21, 33];
 
@@ -762,13 +762,13 @@ describe('requisitionService', function() {
             expect(offlineRequisition.$outdated).toBe(true);
 
             // The offline requisition should have been updated twice (once as $outdated, and once not)
-            expect(this.requisitionCacheService.cacheRequisition.calls.count()).toBe(2);
+            expect(this.requisitionCacheService.cacheRequisition.calls.length).toBe(2);
         });
 
         it('will put requisition to the batch requisitions storage if modifiedDates do not match', function() {
             this.requisition.modifiedDate = [2016, 4, 30, 16, 21, 33];
 
-            this.requisitionCacheService.getBatchRequisition.and.returnValue(this.requisition);
+            this.requisitionCacheService.getBatchRequisition.andReturn(this.requisition);
 
             this.$httpBackend.whenGET(this.requisitionUrlFactory('/api/requisitions/search'))
                 .respond(200, {
@@ -788,7 +788,7 @@ describe('requisitionService', function() {
         it('will put requisition to the requisitions storage if modifiedDates do not match', function() {
             this.requisition.modifiedDate = [2016, 4, 30, 16, 21, 33];
 
-            this.requisitionCacheService.getRequisition.and.returnValue(this.requisition);
+            this.requisitionCacheService.getRequisition.andReturn(this.requisition);
 
             this.$httpBackend.whenGET(this.requisitionUrlFactory('/api/requisitions/search'))
                 .respond(200, {
@@ -806,7 +806,7 @@ describe('requisitionService', function() {
         });
 
         it('will set requisition as available offline if was found the batch requisitions storage', function() {
-            this.requisitionCacheService.getBatchRequisition.and.returnValue(this.requisition);
+            this.requisitionCacheService.getBatchRequisition.andReturn(this.requisition);
 
             var data = {};
 
@@ -828,7 +828,7 @@ describe('requisitionService', function() {
         });
 
         it('will set requisition as available offline if was found the requisitions storage', function() {
-            this.requisitionCacheService.getRequisition.and.returnValue(this.requisition);
+            this.requisitionCacheService.getRequisition.andReturn(this.requisition);
 
             var data = {};
 

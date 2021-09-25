@@ -58,7 +58,7 @@ describe('requisition-approval run', function() {
     describe('post login action', function() {
 
         it('should cache facilities', function() {
-            requisitionApprovalServiceSpy.getPrograms.and.returnValue($q.resolve());
+            requisitionApprovalServiceSpy.getPrograms.andReturn($q.resolve());
 
             postLoginAction();
 
@@ -70,7 +70,7 @@ describe('requisition-approval run', function() {
     describe('post logout action', function() {
 
         it('should clear current user cache', function() {
-            requisitionApprovalServiceSpy.clearCache.and.returnValue($q.resolve());
+            requisitionApprovalServiceSpy.clearCache.andReturn($q.resolve());
 
             var success;
             postLogoutAction()
@@ -86,7 +86,7 @@ describe('requisition-approval run', function() {
     });
 
     function getLastCall(method) {
-        return method.calls.mostRecent();
+        return method.calls[method.calls.length - 1];
     }
 
 });

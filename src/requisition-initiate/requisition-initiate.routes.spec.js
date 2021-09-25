@@ -44,8 +44,8 @@ describe('openlmis.requisitions.initRnr state', function() {
             new PeriodDataBuilder().build()
         ];
 
-        spyOn(requisitionInitiateFactory, 'canInitiate').and.returnValue($q.resolve(true));
-        spyOn(periodFactory, 'get').and.returnValue($q.resolve(periods));
+        spyOn(requisitionInitiateFactory, 'canInitiate').andReturn($q.resolve(true));
+        spyOn(periodFactory, 'get').andReturn($q.resolve(periods));
     });
 
     describe('periods resolve', function() {
@@ -69,7 +69,7 @@ describe('openlmis.requisitions.initRnr state', function() {
         });
 
         it('should prevent state change if periods download fails', function() {
-            periodFactory.get.and.returnValue($q.reject());
+            periodFactory.get.andReturn($q.reject());
 
             goToState();
 
@@ -135,7 +135,7 @@ describe('openlmis.requisitions.initRnr state', function() {
         });
 
         it('should return false if user can not initiate requisitions', function() {
-            requisitionInitiateFactory.canInitiate.and.returnValue($q.resolve(false));
+            requisitionInitiateFactory.canInitiate.andReturn($q.resolve(false));
 
             goToState();
 

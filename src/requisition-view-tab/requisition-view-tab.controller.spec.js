@@ -110,7 +110,7 @@ describe('ViewTabController', function() {
 
         spyOn(this.alertService, 'error');
         spyOn(this.selectProductsModalService, 'show');
-        spyOn(this.messageService, 'get').and.callFake(function(param) {
+        spyOn(this.messageService, 'get').andCallFake(function(param) {
             return param;
         });
     });
@@ -118,7 +118,7 @@ describe('ViewTabController', function() {
     describe('$onInit', function() {
 
         beforeEach(function() {
-            this.requisition.template.hideSkippedLineItems.and.returnValue(true);
+            this.requisition.template.hideSkippedLineItems.andReturn(true);
             this.fullSupply = true;
         });
 
@@ -260,7 +260,7 @@ describe('ViewTabController', function() {
                 this.canAuthorize = true;
                 this.fullSupply = true;
                 this.requisition.emergency = false;
-                this.requisition.template.hideSkippedLineItems.and.returnValue(true);
+                this.requisition.template.hideSkippedLineItems.andReturn(true);
             });
 
             it('should be visible', function() {
@@ -311,7 +311,7 @@ describe('ViewTabController', function() {
             });
 
             it('should be hidden if skipped line items are disabled', function() {
-                this.requisition.template.hideSkippedLineItems.and.returnValue(false);
+                this.requisition.template.hideSkippedLineItems.andReturn(false);
 
                 this.initController();
 
@@ -375,7 +375,7 @@ describe('ViewTabController', function() {
             });
 
             it('should be shown if the requisition status is INITIATED', function() {
-                this.requisition.template.hasSkipColumn.and.returnValue(true);
+                this.requisition.template.hasSkipColumn.andReturn(true);
                 this.canSubmit = true;
 
                 this.initController();
@@ -385,7 +385,7 @@ describe('ViewTabController', function() {
 
             it('should be hidden if requisition status is INITIATED but user does not have right to submit',
                 function() {
-                    this.requisition.template.hasSkipColumn.and.returnValue(true);
+                    this.requisition.template.hasSkipColumn.andReturn(true);
 
                     this.initController();
 
@@ -394,7 +394,7 @@ describe('ViewTabController', function() {
 
             it('should be shown if the requisition status is SUBMITTED and user has authorize right', function() {
                 this.canAuthorize = true;
-                this.requisition.template.hasSkipColumn.and.returnValue(true);
+                this.requisition.template.hasSkipColumn.andReturn(true);
 
                 this.initController();
 
@@ -402,7 +402,7 @@ describe('ViewTabController', function() {
             });
 
             it('should be shown if the requisition status is REJECTED', function() {
-                this.requisition.template.hasSkipColumn.and.returnValue(true);
+                this.requisition.template.hasSkipColumn.andReturn(true);
                 this.canSubmit = true;
 
                 this.initController();
@@ -411,7 +411,7 @@ describe('ViewTabController', function() {
             });
 
             it('should be hidden if the requisition status is REJECTED and user can not submit', function() {
-                this.requisition.template.hasSkipColumn.and.returnValue(true);
+                this.requisition.template.hasSkipColumn.andReturn(true);
 
                 this.initController();
 
@@ -419,7 +419,7 @@ describe('ViewTabController', function() {
             });
 
             it('should be shown if the requisition template has a skip column', function() {
-                this.requisition.template.hasSkipColumn.and.returnValue(true);
+                this.requisition.template.hasSkipColumn.andReturn(true);
                 this.canSubmit = true;
                 this.columns[0].name = 'skipped';
 
@@ -429,7 +429,7 @@ describe('ViewTabController', function() {
             });
 
             it('should be hidden if the requisition template does not have a skip column', function() {
-                this.requisition.template.hasSkipColumn.and.returnValue(false);
+                this.requisition.template.hasSkipColumn.andReturn(false);
                 this.columns[0].name = 'foo';
                 this.canSubmit = true;
 
@@ -440,7 +440,7 @@ describe('ViewTabController', function() {
 
             it('should be hidden if user does not authorize right and requisition is submitted', function() {
                 this.canAuthorize = false;
-                this.requisition.template.hasSkipColumn.and.returnValue(true);
+                this.requisition.template.hasSkipColumn.andReturn(true);
 
                 this.initController();
 
@@ -455,8 +455,8 @@ describe('ViewTabController', function() {
 
         beforeEach(function() {
             this.initController();
-            this.requisition.deleteLineItem.and.returnValue();
-            spyOn(this.$state, 'go').and.returnValue();
+            this.requisition.deleteLineItem.andReturn();
+            spyOn(this.$state, 'go').andReturn();
         });
 
         it('should delete line item if it exist', function() {
@@ -487,16 +487,15 @@ describe('ViewTabController', function() {
     describe('addFullSupplyProducts', function() {
 
         beforeEach(function() {
-            this.requisition.getAvailableFullSupplyProducts
-                .and.returnValue(angular.copy(this.availableFullSupplyProducts));
-            this.selectProductsModalService.show.and.returnValue(this.$q.resolve([
+            this.requisition.getAvailableFullSupplyProducts.andReturn(angular.copy(this.availableFullSupplyProducts));
+            this.selectProductsModalService.show.andReturn(this.$q.resolve([
                 this.availableFullSupplyProducts[0],
                 this.availableFullSupplyProducts[2]
             ]));
         });
 
         it('should show alert if there are no skipped full supply products', function() {
-            this.requisition.getAvailableFullSupplyProducts.and.returnValue([]);
+            this.requisition.getAvailableFullSupplyProducts.andReturn([]);
 
             this.initController();
             this.vm.addFullSupplyProducts();
@@ -508,7 +507,7 @@ describe('ViewTabController', function() {
         });
 
         it('should not open modal if there no skipped full supply products to add', function() {
-            this.requisition.getAvailableFullSupplyProducts.and.returnValue([]);
+            this.requisition.getAvailableFullSupplyProducts.andReturn([]);
 
             this.initController();
             this.vm.addFullSupplyProducts();
@@ -517,7 +516,7 @@ describe('ViewTabController', function() {
         });
 
         it('should do nothing if modal was dismissed', function() {
-            this.selectProductsModalService.show.and.returnValue(this.$q.reject());
+            this.selectProductsModalService.show.andReturn(this.$q.reject());
 
             this.initController();
             this.vm.addFullSupplyProducts();
@@ -541,7 +540,7 @@ describe('ViewTabController', function() {
             this.initController();
             this.vm.addFullSupplyProducts();
 
-            var actualProducts = this.selectProductsModalService.show.calls.first().args[0];
+            var actualProducts = this.selectProductsModalService.show.calls[0].args[0];
 
             expect(actualProducts.products.length).toEqual(3);
             expect(actualProducts.products[0]).toEqual(this.availableFullSupplyProducts[1]);
@@ -555,15 +554,15 @@ describe('ViewTabController', function() {
 
         beforeEach(function() {
             this.requisition.getAvailableNonFullSupplyProducts
-                .and.returnValue(angular.copy(this.availableNonFullSupplyProducts));
-            this.selectProductsModalService.show.and.returnValue(this.$q.resolve([
+                .andReturn(angular.copy(this.availableNonFullSupplyProducts));
+            this.selectProductsModalService.show.andReturn(this.$q.resolve([
                 this.availableNonFullSupplyProducts[0],
                 this.availableNonFullSupplyProducts[2]
             ]));
         });
 
         it('should show alert if there are no available non-full supply products', function() {
-            this.requisition.getAvailableNonFullSupplyProducts.and.returnValue([]);
+            this.requisition.getAvailableNonFullSupplyProducts.andReturn([]);
 
             this.initController();
             this.vm.addNonFullSupplyProducts();
@@ -575,7 +574,7 @@ describe('ViewTabController', function() {
         });
 
         it('should not open modal if there no available non-full supply products', function() {
-            this.requisition.getAvailableNonFullSupplyProducts.and.returnValue([]);
+            this.requisition.getAvailableNonFullSupplyProducts.andReturn([]);
 
             this.initController();
             this.vm.addNonFullSupplyProducts();
@@ -584,7 +583,7 @@ describe('ViewTabController', function() {
         });
 
         it('should do nothing if modal was dismissed', function() {
-            this.selectProductsModalService.show.and.returnValue(this.$q.reject());
+            this.selectProductsModalService.show.andReturn(this.$q.reject());
 
             this.initController();
             this.vm.addNonFullSupplyProducts();
@@ -608,7 +607,7 @@ describe('ViewTabController', function() {
             this.initController();
             this.vm.addNonFullSupplyProducts();
 
-            var actualProducts = this.selectProductsModalService.show.calls.first().args[0];
+            var actualProducts = this.selectProductsModalService.show.calls[0].args[0];
 
             expect(actualProducts.products.length).toEqual(3);
             expect(actualProducts.products[0]).toEqual(this.availableNonFullSupplyProducts[2]);
@@ -621,8 +620,8 @@ describe('ViewTabController', function() {
     describe('unskipFullSupplyProducts', function() {
 
         beforeEach(function() {
-            this.requisition.getSkippedFullSupplyProducts.and.returnValue(angular.copy(this.skippedFullSupplyProducts));
-            this.selectProductsModalService.show.and.returnValue(this.$q.resolve([
+            this.requisition.getSkippedFullSupplyProducts.andReturn(angular.copy(this.skippedFullSupplyProducts));
+            this.selectProductsModalService.show.andReturn(this.$q.resolve([
                 this.skippedFullSupplyProducts[0],
                 this.skippedFullSupplyProducts[2]
             ]));
@@ -630,7 +629,7 @@ describe('ViewTabController', function() {
         });
 
         it('should show alert if there are no skipped full supply products', function() {
-            this.requisition.getSkippedFullSupplyProducts.and.returnValue([]);
+            this.requisition.getSkippedFullSupplyProducts.andReturn([]);
 
             this.initController();
             this.vm.unskipFullSupplyProducts();
@@ -642,7 +641,7 @@ describe('ViewTabController', function() {
         });
 
         it('should not open modal if there no skipped full supply products to add', function() {
-            this.requisition.getSkippedFullSupplyProducts.and.returnValue([]);
+            this.requisition.getSkippedFullSupplyProducts.andReturn([]);
 
             this.initController();
             this.vm.unskipFullSupplyProducts();
@@ -651,7 +650,7 @@ describe('ViewTabController', function() {
         });
 
         it('should do nothing if modal was dismissed for skipped products', function() {
-            this.selectProductsModalService.show.and.returnValue(this.$q.reject());
+            this.selectProductsModalService.show.andReturn(this.$q.reject());
 
             this.initController();
             this.vm.unskipFullSupplyProducts();
@@ -676,7 +675,7 @@ describe('ViewTabController', function() {
             this.initController();
             this.vm.unskipFullSupplyProducts();
 
-            var actualProducts = this.selectProductsModalService.show.calls.first().args[0];
+            var actualProducts = this.selectProductsModalService.show.calls[0].args[0];
 
             expect(actualProducts.products.length).toEqual(3);
             expect(actualProducts.products[0]).toEqual(this.skippedFullSupplyProducts[1]);
@@ -734,8 +733,8 @@ describe('ViewTabController', function() {
 
         it('should count the number of skipped line items and return the right message', function() {
             this.initController();
-
-            this.messageService.get.and.callFake(function(p1, p2) {
+            this.messageService.get.isSpy = false;
+            spyOn(this.messageService, 'get').andCallFake(function(p1, p2) {
                 return p2;
             });
             this.requisition.requisitionLineItems[0].skipped = true;
@@ -746,7 +745,8 @@ describe('ViewTabController', function() {
         it('should not count the number of skipped line items that are not full supply', function() {
             this.initController();
 
-            this.messageService.get.and.callFake(function(p1, p2) {
+            this.messageService.get.isSpy = false;
+            spyOn(this.messageService, 'get').andCallFake(function(p1, p2) {
                 return p2;
             });
             this.requisition.requisitionLineItems[0].skipped = true;

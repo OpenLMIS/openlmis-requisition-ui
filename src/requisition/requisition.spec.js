@@ -22,7 +22,7 @@ describe('Requisition', function() {
         module('requisition', function($provide) {
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
-            offlineFlag.getAll.and.returnValue([false]);
+            offlineFlag.getAll.andReturn([false]);
             $provide.factory('localStorageFactory', function() {
                 return function(name) {
                     if (name === 'offlineFlag') {
@@ -75,12 +75,12 @@ describe('Requisition', function() {
         };
         this.requisition = new this.Requisition(this.sourceRequisition);
 
-        spyOn(this.requisition.template, 'getColumn').and.returnValue(this.calculatedOrderQuantity);
+        spyOn(this.requisition.template, 'getColumn').andReturn(this.calculatedOrderQuantity);
         spyOn(this.authorizationService, 'isAuthenticated');
-        spyOn(this.requisitionCacheService, 'cacheRequisition').and.callThrough();
+        spyOn(this.requisitionCacheService, 'cacheRequisition').andCallThrough();
 
         var REQUISITION_RIGHTS = this.REQUISITION_RIGHTS;
-        spyOn(this.authorizationService, 'hasRight').and.callFake(function(right) {
+        spyOn(this.authorizationService, 'hasRight').andCallFake(function(right) {
             if (context.userHasApproveRight && right === REQUISITION_RIGHTS.REQUISITION_APPROVE) {
                 return true;
             }
@@ -101,7 +101,7 @@ describe('Requisition', function() {
 
         it('should submit requisition that is available offline', function() {
             var storedRequisition;
-            this.requisitionCacheService.cacheRequisition.and.callFake(function(argument) {
+            this.requisitionCacheService.cacheRequisition.andCallFake(function(argument) {
                 storedRequisition = argument;
             });
 
@@ -131,7 +131,7 @@ describe('Requisition', function() {
 
         it('should update modifiedDate, status and statusChanges of a requisition', function() {
             var storedRequisition, updatedRequisition;
-            this.requisitionCacheService.cacheRequisition.and.callFake(function(argument) {
+            this.requisitionCacheService.cacheRequisition.andCallFake(function(argument) {
                 storedRequisition = argument;
             });
 
@@ -158,7 +158,7 @@ describe('Requisition', function() {
 
         it('should save requisition to local storage after updating it', function() {
             var storedRequisition, updatedRequisition;
-            this.requisitionCacheService.cacheRequisition.and.callFake(function(argument) {
+            this.requisitionCacheService.cacheRequisition.andCallFake(function(argument) {
                 storedRequisition = argument;
             });
 
@@ -202,7 +202,7 @@ describe('Requisition', function() {
 
         it('should authorize requisition that is available offline', function() {
             var storedRequisition;
-            this.requisitionCacheService.cacheRequisition.and.callFake(function(argument) {
+            this.requisitionCacheService.cacheRequisition.andCallFake(function(argument) {
                 storedRequisition = argument;
             });
 
@@ -327,7 +327,7 @@ describe('Requisition', function() {
 
         it('should approve requisition that is available offline', function() {
             var storedRequisition;
-            this.requisitionCacheService.cacheRequisition.and.callFake(function(argument) {
+            this.requisitionCacheService.cacheRequisition.andCallFake(function(argument) {
                 storedRequisition = argument;
             });
 
@@ -930,7 +930,7 @@ describe('Requisition', function() {
             ])
                 .build();
 
-            this.requisition.template.getColumns.and.callFake(function(nonFullSupply) {
+            this.requisition.template.getColumns.andCallFake(function(nonFullSupply) {
                 return nonFullSupply ? nonFullSupplyColumns() : fullSupplyColumns();
             });
         });
@@ -950,7 +950,7 @@ describe('Requisition', function() {
         });
 
         it('should respect line items ability to skip', function() {
-            spyOn(this.requisition.requisitionLineItems[1], 'canBeSkipped').and.returnValue(false);
+            spyOn(this.requisition.requisitionLineItems[1], 'canBeSkipped').andReturn(false);
 
             this.requisition.skipAllFullSupplyLineItems();
 
@@ -1156,7 +1156,7 @@ describe('Requisition', function() {
             ];
 
             this.requisition = new this.RequisitionDataBuilder().build();
-            this.requisition.addLineItem.and.returnValue();
+            this.requisition.addLineItem.andReturn();
         });
 
         it('should create line item for all orderables', function() {

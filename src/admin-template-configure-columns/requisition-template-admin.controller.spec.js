@@ -102,23 +102,23 @@ describe('RequisitionTemplateAdminController', function() {
             errorNotificationServiceSpy = jasmine.createSpy();
 
         beforeEach(function() {
-            spyOn(notificationService, 'success').and.callFake(successNotificationServiceSpy);
-            spyOn(notificationService, 'error').and.callFake(errorNotificationServiceSpy);
+            spyOn(notificationService, 'success').andCallFake(successNotificationServiceSpy);
+            spyOn(notificationService, 'error').andCallFake(errorNotificationServiceSpy);
 
-            spyOn(state, 'go').and.callFake(stateGoSpy);
+            spyOn(state, 'go').andCallFake(stateGoSpy);
 
             spyOn(loadingModalService, 'close');
             spyOn(loadingModalService, 'open');
 
-            spyOn(confirmService, 'confirm').and.returnValue(q.resolve());
+            spyOn(confirmService, 'confirm').andReturn(q.resolve());
 
-            spyOn(requisitionTemplateService, 'save').and.returnValue(q.resolve());
+            spyOn(requisitionTemplateService, 'save').andReturn(q.resolve());
 
-            template.isValid = jasmine.createSpy().and.returnValue(true);
+            template.isValid = jasmine.createSpy().andReturn(true);
         });
 
         it('should display error message when template is invalid', function() {
-            template.isValid.and.returnValue(false);
+            template.isValid.andReturn(false);
 
             vm.saveTemplate();
 
@@ -131,7 +131,7 @@ describe('RequisitionTemplateAdminController', function() {
         });
 
         it('should not save template if confirm failed', function() {
-            confirmService.confirm.and.returnValue(q.reject());
+            confirmService.confirm.andReturn(q.reject());
 
             vm.saveTemplate();
 
@@ -164,7 +164,7 @@ describe('RequisitionTemplateAdminController', function() {
         });
 
         it('should close loading modal if template save was unsuccessful', function() {
-            requisitionTemplateService.save.and.returnValue(q.reject());
+            requisitionTemplateService.save.andReturn(q.reject());
 
             vm.saveTemplate();
             rootScope.$apply();
@@ -183,9 +183,9 @@ describe('RequisitionTemplateAdminController', function() {
     it('should call column drop method and display error notification when drop failed', function() {
         var notificationServiceSpy = jasmine.createSpy();
 
-        template.moveColumn = jasmine.createSpy().and.returnValue(false);
+        template.moveColumn = jasmine.createSpy().andReturn(false);
 
-        spyOn(notificationService, 'error').and.callFake(notificationServiceSpy);
+        spyOn(notificationService, 'error').andCallFake(notificationServiceSpy);
 
         vm.dropCallback(null, 1, template.columnsMap.total);
 
@@ -199,9 +199,9 @@ describe('RequisitionTemplateAdminController', function() {
 
         requestedQuantityColumn.columnDefinition.sources = [COLUMN_SOURCES.USER_INPUT];
 
-        spyOn(beginningBalanceColumn, 'isStockBasedColumn').and.returnValue(true);
-        spyOn(requestedQuantityColumn, 'isStockBasedColumn').and.returnValue(false);
-        spyOn(stockOnHandColumn, 'isStockBasedColumn').and.returnValue(true);
+        spyOn(beginningBalanceColumn, 'isStockBasedColumn').andReturn(true);
+        spyOn(requestedQuantityColumn, 'isStockBasedColumn').andReturn(false);
+        spyOn(stockOnHandColumn, 'isStockBasedColumn').andReturn(true);
 
         expect(vm.canChangeSource(beginningBalanceColumn)).toBe(true);
         expect(vm.canChangeSource(requestedQuantityColumn)).toBe(false);
