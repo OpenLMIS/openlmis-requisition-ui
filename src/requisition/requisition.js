@@ -91,7 +91,8 @@
                 },
                 unskipRequisitionWhenApproving: {
                     url: requisitionUrlFactory('/api/requisitions/unSkipRequisition'),
-                    method: 'GET'
+                    method: 'GET',
+                    forceHideOfflineModal: true
                 }
             });
 
