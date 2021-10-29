@@ -1,7 +1,14 @@
-7.0.6 / WIP
+7.0.6 / 2021-10-29
 ==================
 
 Improvements:
+* Updated dev-ui version to 9.0.3.
+* Updated ui-components version to 7.2.6.
+* Updated auth-ui version to 6.2.7.
+* Updated ui-layout version to 5.2.0.
+* Updated stockmanagement-ui version to 2.1.0.
+* Updated referencedata-ui version to 5.6.6.
+* Updated fulfillment-ui version to 6.1.0.
 * [OLMIS-7314](https://openlmis.atlassian.net/browse/OLMIS-7314): Update scss files to enable webpack build.
 
 Bug fixes:
