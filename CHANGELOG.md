@@ -1,3 +1,10 @@
+7.0.7 / WIP
+==================
+
+Bug fixes:
+* [OLMIS-5491](https://openlmis.atlassian.net/browse/OLMIS-5491): Fix Approved Quantity and Cost columns are still red after revert on the Batch Approval screen
+
+
 7.0.6 / 2021-10-29
 ==================
 
