@@ -34,6 +34,8 @@ describe('ConvertToOrderController', function() {
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
 
             this.key = 'key';
+            this.generatedControllerKey = 'requisition-convert-to-order/selected-requisitions/'
+                + this.key;
             spyOn(UuidGenerator.prototype, 'generate').andCallFake(function() {
                 return 'key';
             });
@@ -256,13 +258,15 @@ describe('ConvertToOrderController', function() {
         });
 
         it('should clear selected requisitions if convert passed', function() {
-            var sessionStorageKey = 'requisition-convert-to-order/selected-requisitions/key';
+            // INFO: Needed to not call vm.onInit()
+            this.vm.selectedRequisitionsStorageKey = this.generatedControllerKey;
+
             this.vm.requisitions[0].$selected = true;
+            this.vm.requisitions[0].requisition.supplyingFacility = this.supplyingDepots[0];
             this.vm.onRequisitionSelect(this.vm.requisitions[0]);
 
-            this.vm.requisitions[0].requisition.supplyingFacility = this.supplyingDepots[0];
-
-            expect(this.vm.window.sessionStorage.getItem(sessionStorageKey)).not.toBe(null);
+            expect(this.vm.$window.sessionStorage.getItem(this.generatedControllerKey))
+                .not.toBe(null);
 
             this.vm.convertToOrder();
             confirmDeferred.resolve();
@@ -271,9 +275,27 @@ describe('ConvertToOrderController', function() {
             loadingDeferred.resolve();
             this.$rootScope.$apply();
 
-            expect(selectedRequisitions).not.toBe(null);
+            expect(this.vm.$window.sessionStorage.getItem(this.generatedControllerKey))
+                .toBe(null);
+        });
 
-            expect(this.vm.window.sessionStorage.getItem(sessionStorageKey)).toBe(null);
+        it('should clear selected requisitions if convert failed', function() {
+            // INFO: Needed to not call vm.onInit()
+            this.vm.selectedRequisitionsStorageKey = this.generatedControllerKey;
+
+            this.vm.requisitions[0].$selected = true;
+            this.vm.requisitions[0].requisition.supplyingFacility = this.supplyingDepots[0];
+            this.vm.onRequisitionSelect(this.vm.requisitions[0]);
+
+            expect(this.vm.$window.sessionStorage.getItem(this.generatedControllerKey))
+                .not.toBe(null);
+
+            this.vm.convertToOrder();
+            confirmDeferred.resolve();
+            convertDeferred.reject();
+            this.$rootScope.$apply();
+
+            expect(this.vm.$window.sessionStorage.getItem(this.generatedControllerKey)).toBe(null);
         });
 
     });

@@ -358,7 +358,6 @@
                                     notificationService.success(withOrder ?
                                         'requisitionConvertToOrder.convertToOrder.success' :
                                         'requisitionConvertToOrder.releaseWithoutOrder.success');
-                                    $state.reload();
                                 })
                                 .catch(function() {
                                     loadingModalService.close();
@@ -366,9 +365,8 @@
                                     key = uuidGenerator.generate();
                                 })
                                 .finally(function() {
-                                    $window.sessionStorage.removeItem(
-                                        'requisition-convert-to-order/selected-requisitions/' + $stateParams.storageKey
-                                    );
+                                    vm.$window.sessionStorage.removeItem(vm.selectedRequisitionsStorageKey);
+
                                     $state.go($state.current.name, $stateParams, {
                                         reload: true
                                     });
