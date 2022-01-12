@@ -3,9 +3,11 @@
 
 Bug fixes:
 * [OLMIS-5491](https://openlmis.atlassian.net/browse/OLMIS-5491): Fix Approved Quantity and Cost columns are still red after revert on the Batch Approval screen
-
-Bug fixes:
 * [OLMIS-7479](https://openlmis.atlassian.net/browse/OLMIS-7479): Fix Requisitions cannot be converted to order multiple times in one session
+
+New functionality added in a backwards-compatible manner:
+* [OLMIS-7453](https://openlmis.atlassian.net/browse/OLMIS-7453): Added new page to create requisition-less order.
+* [OLMIS-7454](https://openlmis.atlassian.net/browse/OLMIS-7454): Created requisition-less order edit page.
 
 7.0.6 / 2021-10-29
 ==================
