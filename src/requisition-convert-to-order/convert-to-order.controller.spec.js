@@ -255,6 +255,27 @@ describe('ConvertToOrderController', function() {
             expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
+        it('should clear selected requisitions if convert passed', function() {
+            var sessionStorageKey = 'requisition-convert-to-order/selected-requisitions/key';
+            this.vm.requisitions[0].$selected = true;
+            this.vm.onRequisitionSelect(this.vm.requisitions[0]);
+
+            this.vm.requisitions[0].requisition.supplyingFacility = this.supplyingDepots[0];
+
+            expect(this.vm.window.sessionStorage.getItem(sessionStorageKey)).not.toBe(null);
+
+            this.vm.convertToOrder();
+            confirmDeferred.resolve();
+            convertDeferred.resolve();
+            this.$rootScope.$apply();
+            loadingDeferred.resolve();
+            this.$rootScope.$apply();
+
+            expect(selectedRequisitions).not.toBe(null);
+
+            expect(this.vm.window.sessionStorage.getItem(sessionStorageKey)).toBe(null);
+        });
+
     });
 
     describe('releaseWithoutOrder', function() {

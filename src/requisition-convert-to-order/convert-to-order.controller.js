@@ -364,6 +364,14 @@
                                     loadingModalService.close();
                                     notificationService.error('requisitionConvertToOrder.errorOccurred');
                                     key = uuidGenerator.generate();
+                                })
+                                .finally(function() {
+                                    $window.sessionStorage.removeItem(
+                                        'requisition-convert-to-order/selected-requisitions/' + $stateParams.storageKey
+                                    );
+                                    $state.go($state.current.name, $stateParams, {
+                                        reload: true
+                                    });
                                 });
                         });
                 }
