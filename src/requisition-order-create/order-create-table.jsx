@@ -98,15 +98,15 @@ const OrderCreteTable = () => {
         () => [
             {
                 Header: 'Product Code',
-                accessor: 'orderable.productCode',
+                accessor: 'orderable.productCode'
             },
             {
                 Header: 'Product',
-                accessor: 'orderable.fullProductName',
+                accessor: 'orderable.fullProductName'
             },
             {
                 Header: 'SOH',
-                accessor: 'soh',
+                accessor: 'soh'
             },
             {
                 Header: 'Quantity',
@@ -119,7 +119,7 @@ const OrderCreteTable = () => {
                 Cell: ({ value, row: { index }, deleteRow }) => (
                     <TrashButton onClick={() => deleteItem(value, index, deleteRow)} />
                 )
-            },
+            }
         ],
         []
     );

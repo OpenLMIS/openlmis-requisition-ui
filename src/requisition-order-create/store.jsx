@@ -18,7 +18,7 @@ import ordersReducer from "./reducers/orders.reducer";
 
 const store = configureStore({
     reducer: {
-        orders: ordersReducer,
+        orders: ordersReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false
