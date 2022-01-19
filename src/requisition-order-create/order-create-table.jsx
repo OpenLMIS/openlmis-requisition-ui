@@ -17,6 +17,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import TrashButton from '../react-components/buttons/trash-button';
+import Select from '../react-components/inputs/select';
 import EditableTable from '../react-components/table/editable-table';
 import InputCell from '../react-components/table/input-cell';
 
@@ -29,6 +30,9 @@ const OrderCreteTable = () => {
     const { orderId } = useParams();
 
     const [order, setOrder] = useState({ orderLineItems: [] });
+
+    const [orderableOptions, setOrderableOptions] = useState([]);
+    const [selectedOrderable, selectOrderable] = useState(null);
 
     const orderService = useMemo(
         () => {
@@ -72,6 +76,8 @@ const OrderCreteTable = () => {
                                     };
                                 })
                             };
+                            setOrderableOptions(_.map(stockItems, stockItem => ({ name: stockItem.orderable.fullProductName,
+                                value: stockItem.orderable })));
 
                             setOrder(orderWithSoh);
                         })
@@ -137,6 +143,30 @@ const OrderCreteTable = () => {
         orderService.update(order);
     };
 
+    const addOrderable = () => {
+        const newLineItem = {
+            orderedQuantity: undefined,
+            orderable: {
+                id: selectedOrderable.id,
+                productCode: selectedOrderable.productCode,
+                fullProductName: selectedOrderable.fullProductName,
+                meta: {
+                    versionNumber: selectedOrderable.meta.versionNumber
+                }
+            }
+        };
+
+        let orderNewLineItems = [...order.orderLineItems];
+        orderNewLineItems.push(newLineItem);
+
+        const updatedOrder = {
+            ...order,
+            orderLineItems: orderNewLineItems
+        };
+
+        setOrder(updatedOrder);
+    };
+
     const sendOrder = () => {
         orderService.send(order.id)
             .then(() => {
@@ -174,6 +204,18 @@ const OrderCreteTable = () => {
                         </li>
                     </ul>
                 </aside>
+                <div>
+                    <Select
+                        options={orderableOptions}
+                        value={selectedOrderable}
+                        onChange={value => selectOrderable(value)}
+                        objectKey={'id'}
+                    >Product</Select>
+                    <button
+                        onClick={addOrderable}
+                        disabled={!selectedOrderable}
+                    >Add</button>
+                </div>
                 <EditableTable columns={columns} data={order.orderLineItems || []} updateData={updateData} />
             </div>
             <div className="page-footer">

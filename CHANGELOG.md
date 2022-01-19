@@ -8,6 +8,7 @@ Bug fixes:
 New functionality added in a backwards-compatible manner:
 * [OLMIS-7453](https://openlmis.atlassian.net/browse/OLMIS-7453): Added new page to create requisition-less order.
 * [OLMIS-7454](https://openlmis.atlassian.net/browse/OLMIS-7454): Created requisition-less order edit page.
+* [OLMIS-7455](https://openlmis.atlassian.net/browse/OLMIS-7455): Addition products to requisition-less order page enabled.
 
 7.0.6 / 2021-10-29
 ==================
