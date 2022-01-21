@@ -30,6 +30,7 @@ const OrderCreteTable = () => {
     const { orderId } = useParams();
 
     const [order, setOrder] = useState({ orderLineItems: [] });
+    const [orderParams, setOrderParams] = useState({ programId: null , requestingFacilityId: null });
 
     const [orderableOptions, setOrderableOptions] = useState([]);
     const [selectedOrderable, selectOrderable] = useState(null);
@@ -53,6 +54,13 @@ const OrderCreteTable = () => {
         () => {
             orderService.get(orderId)
                 .then((fetchedOrder) => {
+                    const orderParams = {
+                        programId: fetchedOrder.program.id,
+                        facilityId: fetchedOrder.requestingFacility.id
+                    };
+
+                    setOrderParams(orderParams);
+
                     const orderableIds = fetchedOrder.orderLineItems.map((lineItem) => {
                         return lineItem.orderable.id;
                     });
@@ -76,8 +84,6 @@ const OrderCreteTable = () => {
                                     };
                                 })
                             };
-                            setOrderableOptions(_.map(stockItems, stockItem => ({ name: stockItem.orderable.fullProductName,
-                                value: stockItem.orderable })));
 
                             setOrder(orderWithSoh);
                         })
@@ -87,6 +93,24 @@ const OrderCreteTable = () => {
                 });
         },
         [orderService]
+    );
+
+    useEffect(
+        () => {
+            if(orderParams.programId !== null && orderParams.requestingFacilityId !== null){
+                stockCardSummaryRepositoryImpl.query({
+                    programId: orderParams.programId,
+                    facilityId: orderParams.facilityId
+                })
+                    .then(function(page) {
+                        const stockItems = page.content;
+
+                        setOrderableOptions(_.map(stockItems, stockItem => ({ name: stockItem.orderable.fullProductName,
+                            value: stockItem.orderable })));
+                    });
+            }
+        },
+        [orderParams]
     );
 
     const deleteItem = (itemId, index, deleteRow) => {
@@ -156,8 +180,7 @@ const OrderCreteTable = () => {
             }
         };
 
-        let orderNewLineItems = [...order.orderLineItems];
-        orderNewLineItems.push(newLineItem);
+        let orderNewLineItems = [...order.orderLineItems, newLineItem];
 
         const updatedOrder = {
             ...order,
