@@ -152,6 +152,33 @@ const OrderCreateForm = () => {
         [selectedProgram, selectedRequestingFacility]
     );
 
+    useEffect(
+        () => {
+            if (programOptions && programOptions.length === 1) {
+                selectProgram(programOptions[0].value)
+            }
+        },
+        [programOptions]
+    );
+
+    useEffect(
+        () => {
+            if (requestingFacilityOptions && requestingFacilityOptions.length === 1) {
+                selectRequestingFacility(requestingFacilityOptions[0].value)
+            }
+        },
+        [requestingFacilityOptions]
+    );
+
+    useEffect(
+        () => {
+            if (supplyingFacilityOptions && supplyingFacilityOptions.length === 1) {
+                selectSupplyingFacility(supplyingFacilityOptions[0].value)
+            }
+        },
+        [supplyingFacilityOptions]
+    );
+
     const createOrder = () => {
         const order = {
             emergency: true,
@@ -175,7 +202,7 @@ const OrderCreateForm = () => {
             </div>
             <div className="page-content order-create-form">
                 <div>
-                    <strong>Program</strong>
+                    <div><strong className="is-required">Program</strong></div>
                     <Select
                         options={programOptions}
                         value={selectedProgram}
@@ -183,7 +210,7 @@ const OrderCreateForm = () => {
                     />
                 </div>
                 <div>
-                    <strong>Requesting Facility</strong>
+                    <div><strong className="is-required">Requesting Facility</strong></div>
                     <Select
                         options={requestingFacilityOptions}
                         value={selectedRequestingFacility}
@@ -191,7 +218,7 @@ const OrderCreateForm = () => {
                     />
                 </div>
                 <div>
-                    <strong>Supplying Facility</strong>
+                    <div><strong className="is-required">Supplying Facility</strong></div>
                     <Select
                         options={supplyingFacilityOptions}
                         value={selectedSupplyingFacility}

@@ -1,7 +1,9 @@
 .order-create-page {
   .order-create-form {
-    div {
+    select {
+      min-width: 300px;
       margin-bottom: 1.5em;
+      margin-top: 0.5em;
     }
   }
 
@@ -9,6 +11,7 @@
     button {
       margin-right: 1em;
     }
+
+    justify-content: flex-end;
   }
 }
-

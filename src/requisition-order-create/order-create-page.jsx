@@ -16,8 +16,9 @@
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
-import OrderCreteTable from './order-create-table';
+import OrderCreateTable from './order-create-table';
 import OrderCreateForm from './order-create-form';
+import Breadcrumbs from '../react-components/breadcrumbs/breadcrumbs';
 
 const OrderCreatePage = () => {
 
@@ -27,9 +28,15 @@ const OrderCreatePage = () => {
                 basename="/"
                 hashType="hashbang"
             >
+                <Breadcrumbs
+                    routes={[
+                        { path: "/requisitions/orderCreate", breadcrumb: 'Order Create' },
+                        { path: "/requisitions/orderCreate/:orderId", breadcrumb: 'Edit' }
+                        ]}
+                />
                 <Switch>
                     <Route path="/requisitions/orderCreate/:orderId">
-                        <OrderCreteTable />
+                        <OrderCreateTable />
                     </Route>
                     <Route path="/requisitions/orderCreate/">
                         <OrderCreateForm />

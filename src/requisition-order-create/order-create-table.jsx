@@ -24,7 +24,7 @@ import InputCell from '../react-components/table/input-cell';
 import { formatDate } from '../react-components/utils/format-utils';
 import getService from '../react-components/utils/angular-utils';
 
-const OrderCreteTable = () => {
+const OrderCreateTable = () => {
 
     const history = useHistory();
     const { orderId } = useParams();
@@ -141,7 +141,9 @@ const OrderCreteTable = () => {
             {
                 Header: 'Quantity',
                 accessor: 'orderedQuantity',
-                Cell: InputCell
+                Cell: (props) => (
+                    <InputCell {...props} inputProps={{ numeric: true }} />
+                )
             },
             {
                 Header: 'Actions',
@@ -245,11 +247,13 @@ const OrderCreteTable = () => {
                 <button
                     type="button"
                     className="btn"
+                    disabled={!order.id}
                     onClick={() => updateOrder()}
                 >Save Draft</button>
                 <button
                     type="button"
                     className="btn primary"
+                    disabled={!order.id}
                     onClick={() => sendOrder()}
                 >Create Order</button>
             </div>
@@ -257,4 +261,4 @@ const OrderCreteTable = () => {
     );
 };
 
-export default OrderCreteTable;
+export default OrderCreateTable;
