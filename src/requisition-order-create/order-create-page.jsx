@@ -30,7 +30,7 @@ const OrderCreatePage = () => {
             >
                 <Breadcrumbs
                     routes={[
-                        { path: "/requisitions/orderCreate", breadcrumb: 'Order Create' },
+                        { path: "/requisitions/orderCreate", breadcrumb: 'Create Order' },
                         { path: "/requisitions/orderCreate/:orderId", breadcrumb: 'Edit' }
                         ]}
                 />

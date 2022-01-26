@@ -155,7 +155,7 @@ const OrderCreateForm = () => {
     useEffect(
         () => {
             if (programOptions && programOptions.length === 1) {
-                selectProgram(programOptions[0].value)
+                selectProgram(programOptions[0].value);
             }
         },
         [programOptions]
@@ -164,7 +164,7 @@ const OrderCreateForm = () => {
     useEffect(
         () => {
             if (requestingFacilityOptions && requestingFacilityOptions.length === 1) {
-                selectRequestingFacility(requestingFacilityOptions[0].value)
+                selectRequestingFacility(requestingFacilityOptions[0].value);
             }
         },
         [requestingFacilityOptions]
@@ -173,7 +173,7 @@ const OrderCreateForm = () => {
     useEffect(
         () => {
             if (supplyingFacilityOptions && supplyingFacilityOptions.length === 1) {
-                selectSupplyingFacility(supplyingFacilityOptions[0].value)
+                selectSupplyingFacility(supplyingFacilityOptions[0].value);
             }
         },
         [supplyingFacilityOptions]

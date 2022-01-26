@@ -105,24 +105,15 @@ const OrderCreateTable = () => {
                     .then(function(page) {
                         const stockItems = page.content;
 
-                        setOrderableOptions(_.map(stockItems, stockItem => ({ name: stockItem.orderable.fullProductName,
-                            value: stockItem.orderable })));
+                        setOrderableOptions(_.map(stockItems, stockItem => ({
+                            name: stockItem.orderable.fullProductName,
+                            value: { ...stockItem.orderable, soh: stockItem.stockOnHand }
+                        })));
                     });
             }
         },
         [orderParams]
     );
-
-    const deleteItem = (itemId, index, deleteRow) => {
-        if (itemId) {
-            orderService.deleteItem(itemId)
-                .then(() => {
-                    deleteRow(index);
-                });
-        } else {
-            deleteRow(index);
-        }
-    };
 
     const columns = useMemo(
         () => [
@@ -136,7 +127,8 @@ const OrderCreateTable = () => {
             },
             {
                 Header: 'SOH',
-                accessor: 'soh'
+                accessor: 'soh',
+                Cell: ({ value }) => (<div className="text-right">{value}</div>)
             },
             {
                 Header: 'Quantity',
@@ -148,8 +140,8 @@ const OrderCreateTable = () => {
             {
                 Header: 'Actions',
                 accessor: 'id',
-                Cell: ({ value, row: { index }, deleteRow }) => (
-                    <TrashButton onClick={() => deleteItem(value, index, deleteRow)} />
+                Cell: ({ row: { index }, deleteRow }) => (
+                    <TrashButton onClick={() => deleteRow(index)} />
                 )
             }
         ],
@@ -171,7 +163,8 @@ const OrderCreateTable = () => {
 
     const addOrderable = () => {
         const newLineItem = {
-            orderedQuantity: undefined,
+            orderedQuantity: '',
+            soh: selectedOrderable.soh,
             orderable: {
                 id: selectedOrderable.id,
                 productCode: selectedOrderable.productCode,
@@ -193,7 +186,7 @@ const OrderCreateTable = () => {
     };
 
     const sendOrder = () => {
-        orderService.send(order.id)
+        orderService.send(order)
             .then(() => {
                 history.push('/orders/fulfillment');
             });

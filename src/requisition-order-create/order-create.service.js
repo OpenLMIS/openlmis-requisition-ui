@@ -42,11 +42,7 @@
             },
             send: {
                 url: openlmisUrlFactory('/api/orders/:id/requisitionLess/send'),
-                method: 'GET'
-            },
-            deleteItem: {
-                url: openlmisUrlFactory('/api/orders/orderItem/:id'),
-                method: 'DELETE'
+                method: 'PUT'
             }
         });
 
@@ -54,7 +50,6 @@
         this.create = create;
         this.update = update;
         this.send = send;
-        this.deleteItem = deleteItem;
 
         function get(orderId) {
             return resource.get({
@@ -72,16 +67,10 @@
             }, order).$promise;
         }
 
-        function send(orderId) {
+        function send(order) {
             return resource.send({
-                id: orderId
-            }).$promise;
-        }
-
-        function deleteItem(orderItemId) {
-            return resource.deleteItem({
-                id: orderItemId
-            }).$promise;
+                id: order.id
+            }, order).$promise;
         }
     }
 })();
