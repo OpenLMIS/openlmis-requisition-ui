@@ -26,9 +26,9 @@ const OrderCreateForm = () => {
     const [programOptions, setProgramOptions] = useState([]);
     const [requestingFacilityOptions, setRequestingFacilityOptions] = useState([]);
     const [supplyingFacilityOptions, setSupplyingFacilityOptions] = useState([]);
-    const [selectedProgram, selectProgram] = useState(null);
-    const [selectedRequestingFacility, selectRequestingFacility] = useState(null);
-    const [selectedSupplyingFacility, selectSupplyingFacility] = useState(null);
+    const [selectedProgram, selectProgram] = useState('');
+    const [selectedRequestingFacility, selectRequestingFacility] = useState('');
+    const [selectedSupplyingFacility, selectSupplyingFacility] = useState('');
 
     const ADMINISTRATION_RIGHTS = useMemo(
         () => {
@@ -103,7 +103,7 @@ const OrderCreateForm = () => {
     );
 
     const updateSupplyingFacilities = () => {
-        selectSupplyingFacility(null);
+        selectSupplyingFacility('');
 
         if (selectedProgram && selectedRequestingFacility) {
             supervisoryNodeResource.query({

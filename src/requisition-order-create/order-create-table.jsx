@@ -33,7 +33,7 @@ const OrderCreateTable = () => {
     const [orderParams, setOrderParams] = useState({ programId: null , requestingFacilityId: null });
 
     const [orderableOptions, setOrderableOptions] = useState([]);
-    const [selectedOrderable, selectOrderable] = useState(null);
+    const [selectedOrderable, selectOrderable] = useState('');
 
     const orderService = useMemo(
         () => {
@@ -229,19 +229,23 @@ const OrderCreateTable = () => {
                         </li>
                     </ul>
                 </aside>
-                <div>
-                    <Select
-                        options={orderableOptions}
-                        value={selectedOrderable}
-                        onChange={value => selectOrderable(value)}
-                        objectKey={'id'}
-                    >Product</Select>
-                    <button
-                        onClick={addOrderable}
-                        disabled={!selectedOrderable}
-                    >Add</button>
-                </div>
-                <EditableTable columns={columns} data={order.orderLineItems || []} updateData={updateData} />
+                    <div className={'main'}>
+                        <div className={'toolbar'} >
+                            <Select
+                                options={orderableOptions}
+                                value={selectedOrderable}
+                                onChange={value => selectOrderable(value)}
+                                objectKey={'id'}
+                            >Product</Select>
+                            <button
+                                className={"add"}
+                                onClick={addOrderable}
+                                disabled={!selectedOrderable}
+                            >Add</button>
+                        </div>
+
+                        <EditableTable columns={columns} data={order.orderLineItems || []} updateData={updateData} />
+                    </div>
             </div>
             <div className="page-footer">
                 <button
