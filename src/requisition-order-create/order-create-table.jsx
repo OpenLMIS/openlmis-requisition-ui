@@ -15,6 +15,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import TrashButton from '../react-components/buttons/trash-button';
 import Select from '../react-components/inputs/select';
@@ -46,6 +47,13 @@ const OrderCreateTable = () => {
         () => {
             const stockCardSummaryRepository = getService('StockCardSummaryRepositoryImpl');
             return new stockCardSummaryRepository();
+        },
+        []
+    );
+
+    const notificationService = useMemo(
+        () => {
+            return getService('notificationService');
         },
         []
     );
@@ -158,7 +166,10 @@ const OrderCreateTable = () => {
     };
 
     const updateOrder = () => {
-        orderService.update(order);
+        orderService.update(order)
+            .then(() => {
+                toast.success("Order saved successfully");
+            });
     };
 
     const addOrderable = () => {
@@ -188,6 +199,7 @@ const OrderCreateTable = () => {
     const sendOrder = () => {
         orderService.send(order)
             .then(() => {
+                notificationService.success('requisition.orderCreate.submitted');
                 history.push('/orders/fulfillment');
             });
     };

@@ -16,6 +16,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import store from './store';
 import OrderCreatePage from './order-create-page';
@@ -39,6 +42,7 @@ import OrderCreatePage from './order-create-page';
                 ReactDOM.render(
                     <Provider store={store}>
                         <OrderCreatePage />
+                        <ToastContainer theme="colored" />
                     </Provider>,
                     app
                 );

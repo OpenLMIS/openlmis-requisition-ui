@@ -1,3 +1,4 @@
 {
-  "requisition.orderCreate": "Create Order"
+  "requisition.orderCreate": "Create Order",
+  "requisition.orderCreate.submitted": "Order created successfully"
 }
