@@ -15,9 +15,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import Select from '../react-components/inputs/select';
 import getService from '../react-components/utils/angular-utils';
+import { SearchSelect } from './search-select';
 
 const OrderCreateForm = () => {
 
@@ -201,28 +200,32 @@ const OrderCreateForm = () => {
                 <h2>Create Order</h2>
             </div>
             <div className="page-content order-create-form">
-                <div>
+                <div style={{ marginBottom: '1.5em' }}>
                     <div><strong className="is-required">Program</strong></div>
-                    <Select
+
+                    <SearchSelect
                         options={programOptions}
                         value={selectedProgram}
                         onChange={value => selectProgram(value)}
+                        placeholder="Select program"
                     />
                 </div>
-                <div>
+                <div style={{ marginBottom: '1.5em' }}>
                     <div><strong className="is-required">Requesting Facility</strong></div>
-                    <Select
+                    <SearchSelect
                         options={requestingFacilityOptions}
                         value={selectedRequestingFacility}
                         onChange={value => selectRequestingFacility(value)}
+                        placeholder="Select requesting facility"
                     />
                 </div>
-                <div>
+                <div style={{ marginBottom: '1.5em' }}>
                     <div><strong className="is-required">Supplying Facility</strong></div>
-                    <Select
+                    <SearchSelect
                         options={supplyingFacilityOptions}
                         value={selectedSupplyingFacility}
                         onChange={value => selectSupplyingFacility(value)}
+                        placeholder="Select supplying facility"
                         disabled={!selectedProgram || !selectedRequestingFacility}
                     />
                 </div>
