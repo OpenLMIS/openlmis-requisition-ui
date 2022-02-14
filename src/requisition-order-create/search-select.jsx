@@ -5,7 +5,7 @@ import Fuse from 'fuse.js';
 const fuzzySearch = (options) => {
     const fuse = new Fuse(options, {
         keys: ['name', 'groupName', 'items.name'],
-        threshold: 0.3,
+        threshold: 0.3
     });
 
     return (value) => {
