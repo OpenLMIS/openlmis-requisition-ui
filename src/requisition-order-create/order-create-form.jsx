@@ -200,9 +200,8 @@ const OrderCreateForm = () => {
                 <h2>Create Order</h2>
             </div>
             <div className="page-content order-create-form">
-                <div style={{ marginBottom: '1.5em' }}>
+                <div className={'section'}>
                     <div><strong className="is-required">Program</strong></div>
-
                     <SearchSelect
                         options={programOptions}
                         value={selectedProgram}
@@ -210,7 +209,7 @@ const OrderCreateForm = () => {
                         placeholder="Select program"
                     />
                 </div>
-                <div style={{ marginBottom: '1.5em' }}>
+                <div className={'section'}>
                     <div><strong className="is-required">Requesting Facility</strong></div>
                     <SearchSelect
                         options={requestingFacilityOptions}
@@ -219,7 +218,7 @@ const OrderCreateForm = () => {
                         placeholder="Select requesting facility"
                     />
                 </div>
-                <div style={{ marginBottom: '1.5em' }}>
+                <div className={'section'}>
                     <div><strong className="is-required">Supplying Facility</strong></div>
                     <SearchSelect
                         options={supplyingFacilityOptions}

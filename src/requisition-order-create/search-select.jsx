@@ -54,7 +54,14 @@ export const SearchSelect = ({
         const inputVal = (snapshot.focus) ? snapshot.search : snapshot.displayValue;
 
         return (
-            <input {...valueProps} className={className} value={inputVal}/>
+            <div className={'input-wrapper'}>
+                <input {...valueProps} className={className} value={inputVal}/>
+                <i
+                    className="fa fa-times clear-icon"
+                    aria-hidden="true"
+                    onClick={() => onChange(null)}
+                ></i>
+            </div>
         );
     };
 

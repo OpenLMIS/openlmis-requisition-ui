@@ -3,10 +3,11 @@
   $light-grey: #bebebe;
 
   .order-create-form {
-    select {
-      min-width: 300px;
-      margin-bottom: 1.5em;
-      margin-top: 0.5em;
+    .section {
+      margin: 0.5em 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
     }
   }
 
@@ -30,20 +31,45 @@
   .select-search {
     background: #fff;
     display: inline-block;
+    max-height: 40vh;
 
     .search {
 
-      .input {
-        box-shadow: inset 0 0 0.5em $light-grey;
-        border: 1px solid $light-grey;
-        background-color: inherit;
-        border-radius: 4px;
-        padding: 0.5em;
+      .input-wrapper {
+        display:inline-block;
+        position: relative;
 
-        &:focus {
-          outline: none;
-          border-color: $accent-color;
-          box-shadow: inset 0 0 0.5em $accent-color;
+        &:before {
+          font-family: 'FONTAWESOME';
+          content: '\f0d7'; // fa-caret-down
+          position: absolute;
+          left: 1em;
+          color: $light-grey;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .input {
+          box-shadow: inset 0 0 0.5em $light-grey;
+          border: 1px solid $light-grey;
+          background-color: inherit;
+          border-radius: 4px;
+          padding: 0.5em 0.5em 0.5em 2em;
+
+          &:focus {
+            outline: none;
+            border-color: $accent-color;
+            box-shadow: inset 0 0 0.5em $accent-color;
+          }
+        }
+
+        .clear-icon {
+          margin-left: -2em;
+          color: $light-grey;
+
+          &:hover {
+            color: #a94442;
+          }
         }
       }
     }
@@ -61,6 +87,8 @@
       border: $light-grey 1px solid;
       box-shadow: 0 0.25em 1em #e4e4e4;
       background-color: #fff;
+      overflow-y: auto;
+      max-height: 40vh;
 
       .options {
         list-style-type: none;
