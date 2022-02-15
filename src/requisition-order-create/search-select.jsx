@@ -1,19 +1,30 @@
+/*
+ * This program is part of the OpenLMIS logistics management information system platform software.
+ * Copyright © 2017 VillageReach
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU Affero General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU Affero General Public License for more details. You should have received a copy of
+ * the GNU Affero General Public License along with this program. If not, see
+ * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
+ */
+
 import React from 'react';
 import SelectSearch from 'react-select-search';
-import Fuse from 'fuse.js';
 
-const fuzzySearch = (options) => {
-    const fuse = new Fuse(options, {
-        keys: ['name', 'groupName', 'items.name'],
-        threshold: 0.3
-    });
-
-    return (value) => {
-        if (!value.length) {
+const filterOptions = options => {
+    return searchValue => {
+        if (searchValue.length === 0) {
             return options;
         }
 
-        return fuse.search(value);
+        const lowercaseSearchValue = searchValue.toLowerCase();
+
+        return options.filter(option => option.name.toLowerCase().startsWith(lowercaseSearchValue));
     };
 }
 
@@ -70,7 +81,7 @@ export const SearchSelect = ({
             className={mapClassName}
             disabled={disabled}
             emptyMessage={emptyMsg}
-            filterOptions={fuzzySearch}
+            filterOptions={filterOptions}
             onChange={onChange}
             options={options}
             placeholder={placeholder}
