@@ -18,12 +18,12 @@ import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import TrashButton from '../react-components/buttons/trash-button';
-import Select from '../react-components/inputs/select';
 import EditableTable from '../react-components/table/editable-table';
 import InputCell from '../react-components/table/input-cell';
 
 import { formatDate } from '../react-components/utils/format-utils';
 import getService from '../react-components/utils/angular-utils';
+import { SearchSelect } from './search-select';
 
 const OrderCreateTable = () => {
 
@@ -236,12 +236,26 @@ const OrderCreateTable = () => {
                 </aside>
                     <div className={'main'}>
                         <div className={'toolbar'} >
-                            <Select
-                                options={orderableOptions}
-                                value={selectedOrderable}
-                                onChange={value => selectOrderable(value)}
-                                objectKey={'id'}
-                            >Product</Select>
+                            <SearchSelect
+                                options={
+                                    orderableOptions.map(option => ({
+                                        name: option.name,
+                                        value: option.value.id
+                                    }))
+                                }
+                                onChange={value => {
+                                    const foundOrderable = _.find(
+                                        orderableOptions,
+                                        option => (option.value.id === value)
+                                    );
+
+                                    selectOrderable(foundOrderable === undefined
+                                        ? ''
+                                        : foundOrderable.value
+                                    );
+                                }}
+                                value={selectedOrderable === '' ? '' : selectedOrderable.id}
+                            >Product</SearchSelect>
                             <button
                                 className={"add"}
                                 onClick={addOrderable}
