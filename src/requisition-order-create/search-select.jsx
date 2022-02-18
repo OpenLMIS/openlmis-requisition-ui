@@ -50,6 +50,7 @@ export const SearchSelect = ({
                                  placeholder = 'Select an option',
                                  emptyMsg = 'Not found',
                                  disabled = false,
+                                 objectKey = null,
                              }) => {
 
     const renderOption = (props, {name}, snapshot, className) => {
@@ -76,19 +77,45 @@ export const SearchSelect = ({
         );
     };
 
+    const findOption = (value) => _.find(options, (option) => (_.get(option.value, objectKey) === value));
+
+    const handleOnChange = value => {
+        if (objectKey !== null) {
+            const option = findOption(value);
+            const parsedValue = option ? option.value : null;
+
+            onChange(parsedValue);
+        } else {
+            onChange(value);
+        }
+    }
+
+    const selectedValue = objectKey
+        ? _.get(value, objectKey, null)
+        : value;
+
     return (
         <SelectSearch
             className={mapClassName}
             disabled={disabled}
             emptyMessage={emptyMsg}
             filterOptions={filterOptions}
-            onChange={onChange}
-            options={options}
+            onChange={handleOnChange}
+            options={
+                options.map(
+                    ({value, name}) => {
+                        return {
+                            name: name,
+                            value: objectKey ? _.get(value, objectKey) : value
+                        }
+                    }
+                )
+            }
             placeholder={placeholder}
             renderOption={renderOption}
             renderValue={renderValue}
             search
-            value={value}
+            value={selectedValue}
         />
     )
 }

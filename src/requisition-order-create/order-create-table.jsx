@@ -270,24 +270,10 @@ const OrderCreateTable = () => {
                     <div className={'main'}>
                         <div className={'toolbar'} >
                             <SearchSelect
-                                options={
-                                    orderableOptions.map(option => ({
-                                        name: option.name,
-                                        value: option.value.id
-                                    }))
-                                }
-                                onChange={value => {
-                                    const foundOrderable = _.find(
-                                        orderableOptions,
-                                        option => (option.value.id === value)
-                                    );
-
-                                    selectOrderable(foundOrderable === undefined
-                                        ? ''
-                                        : foundOrderable.value
-                                    );
-                                }}
-                                value={selectedOrderable === '' ? '' : selectedOrderable.id}
+                                options={orderableOptions}
+                                value={selectedOrderable}
+                                onChange={value => selectOrderable(value)}
+                                objectKey={'id'}
                             >Product</SearchSelect>
                             <button
                                 className={"add"}

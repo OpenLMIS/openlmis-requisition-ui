@@ -13,9 +13,10 @@
 
   .toolbar {
     display: flex;
+    align-items: flex-start;
     margin-bottom: 1em;
 
-    * {
+    & > * {
       margin-right: 1em;
     }
   }
