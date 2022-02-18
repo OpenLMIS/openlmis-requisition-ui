@@ -156,6 +156,31 @@ const OrderCreateTable = () => {
         []
     );
 
+    const validateQuantity = (value) => {
+        if (value === null || value === undefined || value === '' || value < 0) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const validateOrder = (orderToValidate) => {
+        const lineItems = orderToValidate.orderLineItems;
+        let isValid = true;
+
+        if (!lineItems) {
+            return true;
+        }
+
+        lineItems.forEach(item => {
+            if (!validateQuantity(item.orderedQuantity)) {
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    };
+
     const updateData = (changedItems) => {
         const updatedOrder = {
             ...order,
@@ -166,10 +191,14 @@ const OrderCreateTable = () => {
     };
 
     const updateOrder = () => {
-        orderService.update(order)
-            .then(() => {
-                toast.success("Order saved successfully");
-            });
+        if (!validateOrder(order)) {
+            toast.error("Order quantity is required");
+        } else {
+            orderService.update(order)
+                .then(() => {
+                    toast.success("Order saved successfully");
+                });
+        }
     };
 
     const addOrderable = () => {
@@ -197,11 +226,15 @@ const OrderCreateTable = () => {
     };
 
     const sendOrder = () => {
-        orderService.send(order)
-            .then(() => {
-                notificationService.success('requisition.orderCreate.submitted');
-                history.push('/orders/fulfillment');
-            });
+        if (!validateOrder(order)) {
+            toast.error("Order quantity is required");
+        } else {
+            orderService.send(order)
+                .then(() => {
+                    notificationService.success('requisition.orderCreate.submitted');
+                    history.push('/orders/fulfillment');
+                });
+        }
     };
 
     return (
@@ -263,7 +296,12 @@ const OrderCreateTable = () => {
                             >Add</button>
                         </div>
 
-                        <EditableTable columns={columns} data={order.orderLineItems || []} updateData={updateData} />
+                        <EditableTable
+                            columns={columns}
+                            data={order.orderLineItems || []}
+                            updateData={updateData}
+                            validateCell={validateQuantity}
+                        />
                     </div>
             </div>
             <div className="page-footer">
