@@ -142,7 +142,7 @@ const OrderCreateTable = () => {
                 Header: 'Quantity',
                 accessor: 'orderedQuantity',
                 Cell: (props) => (
-                    <InputCell {...props} inputProps={{ numeric: true }} />
+                    <InputCell {...props} numeric validateCell={validateQuantity}/>
                 )
             },
             {
@@ -286,7 +286,6 @@ const OrderCreateTable = () => {
                             columns={columns}
                             data={order.orderLineItems || []}
                             updateData={updateData}
-                            validateCell={validateQuantity}
                         />
                     </div>
             </div>
