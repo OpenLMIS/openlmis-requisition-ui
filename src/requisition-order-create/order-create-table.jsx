@@ -36,6 +36,8 @@ const OrderCreateTable = () => {
     const [orderableOptions, setOrderableOptions] = useState([]);
     const [selectedOrderable, selectOrderable] = useState('');
 
+    const [showValidationErrors, setShowValidationErrors] = useState(false);
+
     const orderService = useMemo(
         () => {
             return getService('orderCreateService');
@@ -142,7 +144,7 @@ const OrderCreateTable = () => {
                 Header: 'Quantity',
                 accessor: 'orderedQuantity',
                 Cell: (props) => (
-                    <InputCell {...props} numeric validateCell={validateQuantity}/>
+                    <InputCell {...props} numeric />
                 )
             },
             {
@@ -156,29 +158,38 @@ const OrderCreateTable = () => {
         []
     );
 
-    const validateQuantity = (value) => {
-        if (value === null || value === undefined || value === '' || value < 0) {
-            return false;
+    const validateOrderItem = (item) => {
+        const errors = [];
+
+        if (item.orderedQuantity === null || item.orderedQuantity === undefined
+            || item.orderedQuantity === '') {
+            errors.push('Order quantity is required');
+        } else if (item.orderedQuantity < 0) {
+            errors.push('Order quantity cannot be negative');
         }
 
-        return true;
+        return errors;
+    };
+
+    const validateRow = (row) => {
+        const errors = validateOrderItem(row);
+
+        return !errors.length;
     };
 
     const validateOrder = (orderToValidate) => {
         const lineItems = orderToValidate.orderLineItems;
-        let isValid = true;
+        let errors = [];
 
         if (!lineItems) {
-            return true;
+            return errors;
         }
 
         lineItems.forEach(item => {
-            if (!validateQuantity(item.orderedQuantity)) {
-                isValid = false;
-            }
+            errors = errors.concat(validateOrderItem(item));
         });
 
-        return isValid;
+        return _.uniq(errors);
     };
 
     const updateData = (changedItems) => {
@@ -191,9 +202,14 @@ const OrderCreateTable = () => {
     };
 
     const updateOrder = () => {
-        if (!validateOrder(order)) {
-            toast.error("Order quantity is required");
+        const validationErrors = validateOrder(order);
+        if (validationErrors.length) {
+            validationErrors.forEach(error => {
+                toast.error(error);
+            });
+            setShowValidationErrors(true);
         } else {
+            setShowValidationErrors(false);
             orderService.update(order)
                 .then(() => {
                     toast.success("Order saved successfully");
@@ -226,8 +242,12 @@ const OrderCreateTable = () => {
     };
 
     const sendOrder = () => {
-        if (!validateOrder(order)) {
-            toast.error("Order quantity is required");
+        const validationErrors = validateOrder(order);
+        if (validationErrors.length) {
+            validationErrors.forEach(error => {
+                toast.error(error);
+            });
+            setShowValidationErrors(true);
         } else {
             orderService.send(order)
                 .then(() => {
@@ -286,6 +306,8 @@ const OrderCreateTable = () => {
                             columns={columns}
                             data={order.orderLineItems || []}
                             updateData={updateData}
+                            validateRow={validateRow}
+                            showValidationErrors={showValidationErrors}
                         />
                     </div>
             </div>
