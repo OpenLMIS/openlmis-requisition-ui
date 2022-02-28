@@ -19,10 +19,12 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { PersistGate } from "redux-persist/integration/react";
 
-import store from './store';
+import configureStore from './store';
 import OrderCreatePage from './order-create-page';
 
+const { persistor, store } = configureStore()
 (function () {
     'use strict';
 
@@ -41,7 +43,9 @@ import OrderCreatePage from './order-create-page';
 
                 ReactDOM.render(
                     <Provider store={store}>
-                        <OrderCreatePage />
+                        <PersistGate loading={null} persistor={persistor}>
+                            <OrderCreatePage />
+                        </PersistGate>
                         <ToastContainer theme="colored" />
                     </Provider>,
                     app

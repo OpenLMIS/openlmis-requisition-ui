@@ -17,15 +17,26 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const ordersSlice = createSlice({
     name: 'orders',
-    initialState: {},
+    initialState: {
+        drafts: {},
+        createdOffline: {}
+    },
     reducers: {
         createOrder: (state, action) => {
             const order = action.payload;
-            state[order.id] = order;
+
+            state.createdOffline[order.id] = order;
+            // TODO: Add removing sent order from draft
+        },
+
+        saveDraft: (state, action) => {
+            const draft = action.payload;
+
+            state.drafts[draft.id] = draft;
         }
     }
 });
 
-export const { createOrder } = ordersSlice.actions;
+export const {createOrder, saveDraft} = ordersSlice.actions;
 
 export default ordersSlice.reducer;

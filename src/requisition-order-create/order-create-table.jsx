@@ -16,6 +16,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { saveDraft } from './reducers/orders.reducer';
 
 import TrashButton from '../react-components/buttons/trash-button';
 import EditableTable from '../react-components/table/editable-table';
@@ -29,6 +31,8 @@ const OrderCreateTable = () => {
 
     const history = useHistory();
     const { orderId } = useParams();
+
+    const dispatch = useDispatch();
 
     const [order, setOrder] = useState({ orderLineItems: [] });
     const [orderParams, setOrderParams] = useState({ programId: null , requestingFacilityId: null });
@@ -210,6 +214,7 @@ const OrderCreateTable = () => {
             setShowValidationErrors(true);
         } else {
             setShowValidationErrors(false);
+            dispatch(saveDraft(order));
             orderService.update(order)
                 .then(() => {
                     toast.success("Order saved successfully");
