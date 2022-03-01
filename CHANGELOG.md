@@ -12,6 +12,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-7506](https://openlmis.atlassian.net/browse/OLMIS-7506): Add notifications in Requisition-less Order feature.
 * [OLMIS-7512](https://openlmis.atlassian.net/browse/OLMIS-7512): Add search select to order create form
 * [OLMIS-7508](https://openlmis.atlassian.net/browse/OLMIS-7508): Add validation on product addition table.
+* [OLMIS-7537](https://openlmis.atlassian.net/browse/OLMIS-7537): Configure redux-persist
 
 Improvements:
 * [OLMIS-7515](https://openlmis.atlassian.net/browse/OLMIS-7515): Order create table uses numeric input

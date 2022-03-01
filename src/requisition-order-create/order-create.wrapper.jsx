@@ -24,7 +24,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import configureStore from './store';
 import OrderCreatePage from './order-create-page';
 
-const { persistor, store } = configureStore()
+const { persistor, store } = configureStore();
+
 (function () {
     'use strict';
 

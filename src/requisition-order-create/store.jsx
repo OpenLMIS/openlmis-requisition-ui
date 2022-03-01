@@ -13,25 +13,21 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-import { configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import { combineReducers } from "redux";
-import { persistStore, persistReducer } from 'redux-persist'
 import orderReducer from "./reducers/orders.reducer";
 
-const reducers = combineReducers({
-    orders: orderReducer
-});
-
-const persistConfig = {
+const persistedReducer = persistReducer({
     key: 'requisition',
     storage
-};
-
-const persistedReducer = persistReducer(persistConfig, reducers);
+}, orderReducer);
 
 const store = configureStore({
-    reducer: persistedReducer
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    })
 });
 
 export default () => {
