@@ -225,7 +225,7 @@ const OrderCreateTable = () => {
 
         if(offlineService.isOffline()) {
             dispatch(saveDraft(order));
-            toast.warn("Draft order saved offline");
+            toast.success("Draft order saved offline");
         } else {
             setShowValidationErrors(false);
 
