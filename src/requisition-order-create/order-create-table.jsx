@@ -17,7 +17,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { saveDraft } from './reducers/orders.reducer';
+import { saveDraft, createOrder } from './reducers/orders.reducer';
 
 import TrashButton from '../react-components/buttons/trash-button';
 import EditableTable from '../react-components/table/editable-table';
@@ -60,6 +60,13 @@ const OrderCreateTable = () => {
     const notificationService = useMemo(
         () => {
             return getService('notificationService');
+        },
+        []
+    );
+
+    const offlineService = useMemo(
+        () => {
+            return getService('offlineService');
         },
         []
     );
@@ -207,14 +214,21 @@ const OrderCreateTable = () => {
 
     const updateOrder = () => {
         const validationErrors = validateOrder(order);
+
         if (validationErrors.length) {
             validationErrors.forEach(error => {
                 toast.error(error);
             });
-            setShowValidationErrors(true);
+            setShowValidationErrors(true)
+            return;
+        }
+
+        if(offlineService.isOffline()) {
+            dispatch(saveDraft(order));
+            toast.warn("Draft order saved offline");
         } else {
             setShowValidationErrors(false);
-            dispatch(saveDraft(order));
+
             orderService.update(order)
                 .then(() => {
                     toast.success("Order saved successfully");
@@ -248,16 +262,26 @@ const OrderCreateTable = () => {
 
     const sendOrder = () => {
         const validationErrors = validateOrder(order);
+
         if (validationErrors.length) {
             validationErrors.forEach(error => {
                 toast.error(error);
             });
             setShowValidationErrors(true);
+            return;
+        }
+
+        const redirectToFulfillment = () => history.push('/orders/fulfillment');
+
+        if(offlineService.isOffline()) {
+            dispatch(createOrder(order));
+            notificationService.success("Offline order created successfully. It will be sent when you are online.");
+            redirectToFulfillment();
         } else {
             orderService.send(order)
                 .then(() => {
                     notificationService.success('requisition.orderCreate.submitted');
-                    history.push('/orders/fulfillment');
+                    redirectToFulfillment();
                 });
         }
     };

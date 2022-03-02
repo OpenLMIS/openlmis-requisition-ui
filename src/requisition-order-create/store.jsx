@@ -20,7 +20,11 @@ import orderReducer from "./reducers/orders.reducer";
 
 const persistedReducer = persistReducer({
     key: 'requisition',
-    storage
+    storage: storage,
+    whitelist: [
+        'createdOffline',
+        'drafts',
+    ]
 }, orderReducer);
 
 const store = configureStore({

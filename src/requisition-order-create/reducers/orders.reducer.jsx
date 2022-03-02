@@ -26,7 +26,7 @@ export const ordersSlice = createSlice({
             const order = action.payload;
 
             state.createdOffline[order.id] = order;
-            // TODO: Add removing sent order from draft
+            delete state.drafts[order.id];
         },
 
         saveDraft: (state, action) => {
