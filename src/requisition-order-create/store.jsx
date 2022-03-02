@@ -23,7 +23,7 @@ const persistedReducer = persistReducer({
     storage: storage,
     whitelist: [
         'createdOffline',
-        'drafts',
+        'drafts'
     ]
 }, orderReducer);
 
