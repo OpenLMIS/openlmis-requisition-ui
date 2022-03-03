@@ -271,17 +271,15 @@ const OrderCreateTable = () => {
             return;
         }
 
-        const redirectToFulfillment = () => history.push('/orders/fulfillment');
-
         if(offlineService.isOffline()) {
             dispatch(createOrder(order));
             notificationService.success("Offline order created successfully. It will be sent when you are online.");
-            redirectToFulfillment();
+            history.push('/');
         } else {
             orderService.send(order)
                 .then(() => {
                     notificationService.success('requisition.orderCreate.submitted');
-                    redirectToFulfillment();
+                    history.push('/orders/fulfillment');
                 });
         }
     };
