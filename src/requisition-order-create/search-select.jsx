@@ -88,7 +88,7 @@ export const SearchSelect = ({
         } else {
             onChange(value);
         }
-    }
+    };
 
     const selectedValue = objectKey
         ? _.get(value, objectKey, null)
@@ -107,7 +107,7 @@ export const SearchSelect = ({
                         return {
                             name: name,
                             value: objectKey ? _.get(value, objectKey) : value
-                        }
+                        };
                     }
                 )
             }

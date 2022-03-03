@@ -14,8 +14,8 @@
  */
 
 import { configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import orderReducer from "./reducers/orders.reducer";
 
 const persistedReducer = persistReducer({
@@ -38,5 +38,5 @@ export default () => {
     return {
         store: store,
         persistor: persistStore(store)
-    }
-}
+    };
+};

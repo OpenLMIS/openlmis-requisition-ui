@@ -219,7 +219,7 @@ const OrderCreateTable = () => {
             validationErrors.forEach(error => {
                 toast.error(error);
             });
-            setShowValidationErrors(true)
+            setShowValidationErrors(true);
             return;
         }
 
