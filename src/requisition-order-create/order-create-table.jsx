@@ -17,7 +17,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { saveDraft, createOrder } from './reducers/orders.reducer';
+import Tippy from '@tippyjs/react';
 
 import TrashButton from '../react-components/buttons/trash-button';
 import EditableTable from '../react-components/table/editable-table';
@@ -26,6 +26,7 @@ import InputCell from '../react-components/table/input-cell';
 import { formatDate } from '../react-components/utils/format-utils';
 import getService from '../react-components/utils/angular-utils';
 import { SearchSelect } from './search-select';
+import { saveDraft, createOrder } from './reducers/orders.reducer';
 
 const OrderCreateTable = () => {
 
@@ -118,7 +119,7 @@ const OrderCreateTable = () => {
 
     useEffect(
         () => {
-            if(orderParams.programId !== null && orderParams.requestingFacilityId !== null){
+            if (orderParams.programId !== null && orderParams.requestingFacilityId !== null){
                 stockCardSummaryRepositoryImpl.query({
                     programId: orderParams.programId,
                     facilityId: orderParams.facilityId
@@ -223,7 +224,7 @@ const OrderCreateTable = () => {
             return;
         }
 
-        if(offlineService.isOffline()) {
+        if (offlineService.isOffline()) {
             dispatch(saveDraft(order));
             toast.success("Draft order saved offline");
         } else {
@@ -258,6 +259,7 @@ const OrderCreateTable = () => {
         };
 
         setOrder(updatedOrder);
+        selectOrderable('');
     };
 
     const sendOrder = () => {
@@ -271,7 +273,7 @@ const OrderCreateTable = () => {
             return;
         }
 
-        if(offlineService.isOffline()) {
+        if (offlineService.isOffline()) {
             dispatch(createOrder(order));
             notificationService.success("Offline order created successfully. It will be sent when you are online.");
             history.push('/');
@@ -283,6 +285,8 @@ const OrderCreateTable = () => {
                 });
         }
     };
+
+    const isProductAdded = selectedOrderable && _.find(order.orderLineItems, item => (item.orderable.id === selectedOrderable.id));
 
     return (
         <div className="page-container">
@@ -322,11 +326,18 @@ const OrderCreateTable = () => {
                                 onChange={value => selectOrderable(value)}
                                 objectKey={'id'}
                             >Product</SearchSelect>
-                            <button
-                                className={"add"}
-                                onClick={addOrderable}
-                                disabled={!selectedOrderable}
-                            >Add</button>
+                            <Tippy
+                                content="This product was already added to the table"
+                                disabled={!isProductAdded}
+                            >
+                                <div>
+                                    <button
+                                        className={"add"}
+                                        onClick={addOrderable}
+                                        disabled={!selectedOrderable || isProductAdded}
+                                    >Add</button>
+                                </div>
+                            </Tippy>
                         </div>
 
                         <EditableTable

@@ -26,7 +26,7 @@ const filterOptions = options => {
 
         return options.filter(option => option.name.toLowerCase().includes(lowercaseSearchValue));
     };
-}
+};
 
 const mapClassName = key => {
     const classMap = {
@@ -41,7 +41,7 @@ const mapClassName = key => {
     };
 
     return classMap[key] === undefined ? key : classMap[key];
-}
+};
 
 export const SearchSelect = ({
                                  options,
@@ -58,9 +58,8 @@ export const SearchSelect = ({
             <button {...props} className={className} type="button">
                 <span>{name}</span>
             </button>
-        )
-    }
-
+        );
+    };
 
     const renderValue = (valueProps, snapshot, className) => {
         const inputVal = (snapshot.focus) ? snapshot.search : snapshot.displayValue;
@@ -72,7 +71,7 @@ export const SearchSelect = ({
                     className="fa fa-times clear-icon"
                     aria-hidden="true"
                     onClick={() => onChange(null)}
-                ></i>
+                />
             </div>
         );
     };
@@ -117,5 +116,5 @@ export const SearchSelect = ({
             search
             value={selectedValue}
         />
-    )
-}
+    );
+};

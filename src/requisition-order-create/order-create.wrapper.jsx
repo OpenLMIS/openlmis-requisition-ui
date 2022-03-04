@@ -17,9 +17,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { PersistGate } from "redux-persist/integration/react";
+import 'tippy.js/dist/tippy.css';
 
 import configureStore from './store';
 import OrderCreatePage from './order-create-page';
