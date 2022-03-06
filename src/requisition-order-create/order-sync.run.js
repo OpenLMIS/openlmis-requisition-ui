@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function () {
+(function() {
 
     'use strict';
 
@@ -32,7 +32,7 @@
         'offlineService',
         'localStorageService',
         'orderCreateService',
-        'notificationService',
+        'notificationService'
     ];
 
     function synchronizeOrders(
@@ -40,11 +40,11 @@
         offlineService,
         localStorageService,
         orderCreateService,
-        notificationService,
+        notificationService
     ) {
-        $rootScope.$watch(function () {
+        $rootScope.$watch(function() {
             return offlineService.isOffline();
-        }, function (isOffline, wasOffline) {
+        }, function(isOffline, wasOffline) {
             if (!isOffline && isOffline !== wasOffline) {
                 var ordersLocalStorageKey = 'reduxPersist.requisition';
                 var orders = JSON.parse(localStorageService.get(ordersLocalStorageKey));
@@ -66,12 +66,12 @@
          * @description Send draft orders saved offline
          */
         function syncDraftOrders(drafts) {
-            _.each(drafts, function (orderDraft) {
+            _.each(drafts, function(orderDraft) {
                 orderCreateService.update(orderDraft)
-                    .then(() => {
+                    .then(function() {
                         notificationService.success('requisition.orderCreate.draftUpdate.success');
                     })
-                    .catch(function () {
+                    .catch(function() {
                         notificationService.error('requisition.orderCreate.draftUpdate.error');
                     });
             });
@@ -89,12 +89,12 @@
         function sendOfflineCreatedOrders(orders) {
             var notSentOfflineOrders = {};
 
-            _.each(orders, function (order) {
+            _.each(orders, function(order) {
                 orderCreateService.send(order)
-                    .then(() => {
+                    .then(function() {
                         notificationService.success('requisition.orderCreate.createdOrderSent.success');
                     })
-                    .catch(function () {
+                    .catch(function() {
                         notSentOfflineOrders[order.id] = order;
                         notificationService.error('requisition.orderCreate.createdOrderSent.error');
                     });
