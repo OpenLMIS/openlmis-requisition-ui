@@ -62,7 +62,7 @@
          * @methodOf order-sync
          * @name syncDraftOrders
          *
-         * @param drafts Drafts to update
+         * @param {Object} drafts id indexed drafts to update
          * @description Send draft orders saved offline
          */
         function syncDraftOrders(drafts) {
@@ -81,9 +81,9 @@
          * @ngdoc method
          * @methodOf order-sync
          * @name sendOfflineCreatedOrders
-         * @param orders Object Id-indexed object of orders
+         * @param {Object} orders id indexed orders
          *
-         * @return Object Orders which failed to create
+         * @return {Object} Orders which failed to create
          * @description Send orders created offline
          */
         function sendOfflineCreatedOrders(orders) {
