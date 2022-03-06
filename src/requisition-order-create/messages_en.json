@@ -1,4 +1,8 @@
 {
   "requisition.orderCreate": "Create Order",
-  "requisition.orderCreate.submitted": "Order created successfully"
+  "requisition.orderCreate.submitted": "Order created successfully",
+  "requisition.orderCreate.createdOrderSent.success": "Offline created order sent successfully.",
+  "requisition.orderCreate.createdOrderSent.error": "Error occurred while sending offline created order.",
+  "requisition.orderCreate.draftUpdate.success": "Draft order update success.",
+  "requisition.orderCreate.draftUpdate.error": "Error occurred while updating draft order."
 }

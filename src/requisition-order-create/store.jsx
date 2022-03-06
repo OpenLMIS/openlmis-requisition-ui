@@ -20,6 +20,7 @@ import orderReducer from "./reducers/orders.reducer";
 
 const persistedReducer = persistReducer({
     key: 'requisition',
+    keyPrefix: 'openlmis.reduxPersist.',
     storage: storage,
     whitelist: [
         'createdOffline',
