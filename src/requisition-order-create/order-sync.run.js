@@ -59,7 +59,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order-sync
+         * @methodOf order-sync.synchronizeOrders
          * @name syncDraftOrders
          *
          * @param {Object} drafts id indexed drafts to update
@@ -79,7 +79,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order-sync
+         * @methodOf order-sync.requisition-order-create
          * @name sendOfflineCreatedOrders
          * @param {Object} orders id indexed orders
          *
