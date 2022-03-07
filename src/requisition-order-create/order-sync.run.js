@@ -19,7 +19,7 @@
 
     /**
      * @ngdoc service
-     * @name order-sync.synchronizeOrders
+     * @name requisition-order-create.synchronizeOrders
      *
      * @description
      * Updates requisition-less draft and created when app is online.
@@ -60,7 +60,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order-sync.synchronizeOrders
+         * @methodOf requisition-order-create.synchronizeOrders
          * @name syncDraftOrders
          *
          * @param {Object} drafts id indexed drafts to update
@@ -80,7 +80,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order-sync.synchronizeOrders
+         * @methodOf requisition-order-create.synchronizeOrders
          * @name sendOfflineCreatedOrders
          * @param {Object} orders id indexed orders
          *
