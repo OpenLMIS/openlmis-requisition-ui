@@ -18,7 +18,8 @@
     'use strict';
 
     /**
-     * @name order-sync
+     * @ngdoc service
+     * @name order-sync.synchronizeOrders
      *
      * @description
      * Updates requisition-less draft and created when app is online.
