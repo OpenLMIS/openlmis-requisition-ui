@@ -80,7 +80,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order-sync.requisition-order-create
+         * @methodOf order-sync.synchronizeOrders
          * @name sendOfflineCreatedOrders
          * @param {Object} orders id indexed orders
          *
