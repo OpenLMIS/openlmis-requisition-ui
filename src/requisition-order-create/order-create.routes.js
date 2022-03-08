@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.requisitions.orderCreate', {
             url: '/orderCreate',
             label: 'requisition.orderCreate',
-            isOffline: true,
+            isOffline: false,
             priority: 14,
             showInNavigation: true,
             views: {

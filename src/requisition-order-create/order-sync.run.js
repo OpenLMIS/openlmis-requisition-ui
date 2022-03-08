@@ -50,7 +50,9 @@
                 var ordersLocalStorageKey = 'reduxPersist.requisition';
                 var orders = JSON.parse(localStorageService.get(ordersLocalStorageKey));
 
-                syncDraftOrders(JSON.parse(orders.drafts));
+                var notUpdatedDrafts = updateDraftOrders(JSON.parse(orders.drafts));
+                orders.drafts = JSON.stringify(notUpdatedDrafts);
+
                 var notSentOfflineOrders = sendOfflineCreatedOrders(JSON.parse(orders.createdOffline));
                 orders.createdOffline = JSON.stringify(notSentOfflineOrders);
 
@@ -61,21 +63,26 @@
         /**
          * @ngdoc method
          * @methodOf requisition-order-create.synchronizeOrders
-         * @name syncDraftOrders
+         * @name updateDraftOrders
          *
          * @param {Object} drafts id indexed drafts to update
          * @description Send draft orders saved offline
          */
-        function syncDraftOrders(drafts) {
+        function updateDraftOrders(drafts) {
+            var  notUpdatedDrafts = {};
+
             _.each(drafts, function(orderDraft) {
                 orderCreateService.update(orderDraft)
                     .then(function() {
                         notificationService.success('requisition.orderCreate.draftUpdate.success');
                     })
                     .catch(function() {
+                        notUpdatedDrafts[orderDraft.id] = orderDraft;
                         notificationService.error('requisition.orderCreate.draftUpdate.error');
                     });
             });
+
+            return notUpdatedDrafts;
         }
 
         /**
