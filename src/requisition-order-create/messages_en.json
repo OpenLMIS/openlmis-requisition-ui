@@ -1,8 +1,8 @@
 {
   "requisition.orderCreate": "Create Order",
   "requisition.orderCreate.submitted": "Order created successfully",
-  "requisition.orderCreate.createdOrderSent.success": "Offline created order sent successfully.",
-  "requisition.orderCreate.createdOrderSent.error": "Error occurred while sending offline created order.",
-  "requisition.orderCreate.draftUpdate.success": "Draft order update success.",
-  "requisition.orderCreate.draftUpdate.error": "Error occurred while updating draft order."
+  "requisition.orderCreate.createdOrderSent.success": "Successfully created ${count} offline created order(s).",
+  "requisition.orderCreate.createdOrderSent.error": "Error occurred while sending ${count} offline created order(s).",
+  "requisition.orderCreate.draftUpdate.success": "Successfully updated ${count} draft order(s).",
+  "requisition.orderCreate.draftUpdate.error": "Error occurred while updating ${count} draft order(s)."
 }

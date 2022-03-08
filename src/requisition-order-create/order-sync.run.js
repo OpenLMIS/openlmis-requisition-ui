@@ -33,7 +33,8 @@
         'offlineService',
         'localStorageService',
         'orderCreateService',
-        'notificationService'
+        'notificationService',
+        'messageService'
     ];
 
     function synchronizeOrders(
@@ -41,22 +42,41 @@
         offlineService,
         localStorageService,
         orderCreateService,
-        notificationService
+        notificationService,
+        messageService
     ) {
         $rootScope.$watch(function() {
             return offlineService.isOffline();
         }, function(isOffline, wasOffline) {
             if (!isOffline && isOffline !== wasOffline) {
                 var ordersLocalStorageKey = 'reduxPersist.requisition';
-                var orders = JSON.parse(localStorageService.get(ordersLocalStorageKey));
+                var localStorageOrders = JSON.parse(localStorageService.get(ordersLocalStorageKey));
 
-                var notUpdatedDrafts = updateDraftOrders(JSON.parse(orders.drafts));
-                orders.drafts = JSON.stringify(notUpdatedDrafts);
+                var updateDraftsPromise = updateDraftOrders(JSON.parse(localStorageOrders.drafts))
+                    .then(function(notUpdatedDrafts) {
+                        return {
+                            type: 'drafts',
+                            value: JSON.stringify(notUpdatedDrafts)
+                        };
+                    });
 
-                var notSentOfflineOrders = sendOfflineCreatedOrders(JSON.parse(orders.createdOffline));
-                orders.createdOffline = JSON.stringify(notSentOfflineOrders);
+                var sendOrdersPromise = sendOfflineCreatedOrders(JSON.parse(localStorageOrders.createdOffline))
+                    .then(function(notSentOrders) {
+                        return {
+                            type: 'createdOffline',
+                            value: JSON.stringify(notSentOrders)
+                        };
+                    });
 
-                localStorageService.add(ordersLocalStorageKey, JSON.stringify(orders));
+                //eslint-disable-next-line no-undef
+                Promise.all([updateDraftsPromise, sendOrdersPromise])
+                    .then(function(results) {
+                        _.each(results, function(result) {
+                            localStorageOrders[result.type] = result.value;
+                        });
+
+                        localStorageService.add(ordersLocalStorageKey, JSON.stringify(localStorageOrders));
+                    });
             }
         }, true);
 
@@ -66,23 +86,25 @@
          * @name updateDraftOrders
          *
          * @param {Object} drafts id indexed drafts to update
-         * @description Send draft orders saved offline
+         * @return {Promise} Promise which resolves to drafts which failed to update
+         * @description Update draft orders saved offline
          */
         function updateDraftOrders(drafts) {
-            var  notUpdatedDrafts = {};
-
-            _.each(drafts, function(orderDraft) {
-                orderCreateService.update(orderDraft)
-                    .then(function() {
-                        notificationService.success('requisition.orderCreate.draftUpdate.success');
-                    })
-                    .catch(function() {
-                        notUpdatedDrafts[orderDraft.id] = orderDraft;
-                        notificationService.error('requisition.orderCreate.draftUpdate.error');
-                    });
+            var updatePromises = _.map(drafts, function(orderDraft) {
+                return orderCreateService.update(orderDraft);
             });
 
-            return notUpdatedDrafts;
+            //eslint-disable-next-line no-undef
+            return Promise.allSettled(updatePromises)
+                .then(function(results) {
+                    var successfulIds = notifyAboutStatusCountAndGetFailedIds(
+                        results,
+                        'requisition.orderCreate.draftUpdate.success',
+                        'requisition.orderCreate.draftUpdate.error'
+                    );
+
+                    return mapOrdersExcludingNonSuccessful(drafts, successfulIds);
+                });
         }
 
         /**
@@ -91,25 +113,75 @@
          * @name sendOfflineCreatedOrders
          * @param {Object} orders id indexed orders
          *
-         * @return {Object} Orders which failed to create
+         * @return {Promise} Promise which resolves to orders which failed to create
          * @description Send orders created offline
          */
         function sendOfflineCreatedOrders(orders) {
-            var notSentOfflineOrders = {};
-
-            _.each(orders, function(order) {
-                orderCreateService.send(order)
-                    .then(function() {
-                        notificationService.success('requisition.orderCreate.createdOrderSent.success');
-                    })
-                    .catch(function() {
-                        notSentOfflineOrders[order.id] = order;
-                        notificationService.error('requisition.orderCreate.createdOrderSent.error');
-                    });
+            var sendPromises = _.map(orders, function(order) {
+                return orderCreateService.send(order);
             });
 
-            return notSentOfflineOrders;
+            //eslint-disable-next-line no-undef
+            return Promise.allSettled(sendPromises)
+                .then(function(results) {
+                    var successfulIds = notifyAboutStatusCountAndGetFailedIds(
+                        results,
+                        'requisition.orderCreate.createdOrderSent.success',
+                        'requisition.orderCreate.createdOrderSent.error'
+                    );
+
+                    return mapOrdersExcludingNonSuccessful(orders, successfulIds);
+                });
         }
+
+        function notifyAboutStatusCountAndGetFailedIds(settledPromiseResults, successMsgKey, errorMsgKey) {
+            var failCount = 0;
+            var successCount = 0;
+            var successfulIds = new Set();
+
+            _.each(settledPromiseResults, function(result) {
+                if (result.status === 'rejected') {
+                    failCount++;
+                    return;
+                }
+
+                if (result.status === 'fulfilled') {
+                    successCount++;
+                    successfulIds.add(result.value.id);
+                }
+            });
+
+            if (failCount > 0) {
+                notificationService.error(
+                    messageService.get(errorMsgKey, {
+                        count: failCount
+                    })
+                );
+            }
+
+            if (successCount > 0) {
+                notificationService.success(
+                    messageService.get(successMsgKey, {
+                        count: successCount
+                    })
+                );
+            }
+
+            return successfulIds;
+        }
+
+        function mapOrdersExcludingNonSuccessful(orders, successfulIds) {
+            var failedOrders = {};
+
+            for (var orderId in orders) {
+                if (!successfulIds.has(orderId)) {
+                    failedOrders[orderId] = orders[orderId];
+                }
+            }
+
+            return failedOrders;
+        }
+
     }
 })();
 
