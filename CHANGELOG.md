@@ -19,6 +19,7 @@ New functionality added in a backwards-compatible manner:
 Improvements:
 * [OLMIS-7515](https://openlmis.atlassian.net/browse/OLMIS-7515): Order create table uses numeric input
 * [OLMIS-7518](https://openlmis.atlassian.net/browse/OLMIS-7518): Prevent user from adding duplicated product to Requisition-less Order table.
+* [OLMIS-7516](https://openlmis.atlassian.net/browse/OLMIS-7516): Requisition-less Order styling improvements.
 
 7.0.6 / 2021-10-29
 ==================

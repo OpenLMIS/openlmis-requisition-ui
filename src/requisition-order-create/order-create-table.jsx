@@ -87,31 +87,35 @@ const OrderCreateTable = () => {
                         return lineItem.orderable.id;
                     });
 
-                    stockCardSummaryRepositoryImpl.query({
-                        programId: fetchedOrder.program.id,
-                        facilityId: fetchedOrder.requestingFacility.id,
-                        orderableId: orderableIds
-                    })
-                        .then(function(page) {
-                            const stockItems = page.content;
-
-                            const orderWithSoh = {
-                                ...fetchedOrder,
-                                orderLineItems: fetchedOrder.orderLineItems.map((lineItem) => {
-                                    const stockItem =_.find(stockItems, (item) => (item.orderable.id === lineItem.orderable.id));
-
-                                    return {
-                                        ...lineItem,
-                                        soh: stockItem ? stockItem.stockOnHand : 0
-                                    };
-                                })
-                            };
-
-                            setOrder(orderWithSoh);
+                    if (orderableIds && orderableIds.length) {
+                        stockCardSummaryRepositoryImpl.query({
+                            programId: fetchedOrder.program.id,
+                            facilityId: fetchedOrder.requestingFacility.id,
+                            orderableId: orderableIds
                         })
-                        .catch(function() {
-                            setOrder(fetchedOrder);
-                        });
+                            .then(function(page) {
+                                const stockItems = page.content;
+
+                                const orderWithSoh = {
+                                    ...fetchedOrder,
+                                    orderLineItems: fetchedOrder.orderLineItems.map((lineItem) => {
+                                        const stockItem =_.find(stockItems, (item) => (item.orderable.id === lineItem.orderable.id));
+
+                                        return {
+                                            ...lineItem,
+                                            soh: stockItem ? stockItem.stockOnHand : 0
+                                        };
+                                    })
+                                };
+
+                                setOrder(orderWithSoh);
+                            })
+                            .catch(function() {
+                                setOrder(fetchedOrder);
+                            });
+                    } else {
+                        setOrder(fetchedOrder);
+                    }
                 });
         },
         [orderService]
@@ -119,7 +123,7 @@ const OrderCreateTable = () => {
 
     useEffect(
         () => {
-            if (orderParams.programId !== null && orderParams.requestingFacilityId !== null){
+            if (orderParams.programId !== null && orderParams.requestingFacilityId !== null) {
                 stockCardSummaryRepositoryImpl.query({
                     programId: orderParams.programId,
                     facilityId: orderParams.facilityId
@@ -318,8 +322,9 @@ const OrderCreateTable = () => {
                         </li>
                     </ul>
                 </aside>
-                    <div className={'main'}>
-                        <div className={'toolbar'} >
+                <div className="order-create-table-container">
+                    <div className="order-create-table">
+                        <div className="order-create-table-header" >
                             <SearchSelect
                                 options={orderableOptions}
                                 value={selectedOrderable}
@@ -339,7 +344,6 @@ const OrderCreateTable = () => {
                                 </div>
                             </Tippy>
                         </div>
-
                         <EditableTable
                             columns={columns}
                             data={order.orderLineItems || []}
@@ -348,6 +352,7 @@ const OrderCreateTable = () => {
                             showValidationErrors={showValidationErrors}
                         />
                     </div>
+                </div>
             </div>
             <div className="page-footer">
                 <button
@@ -359,7 +364,7 @@ const OrderCreateTable = () => {
                 <button
                     type="button"
                     className="btn primary"
-                    disabled={!order.id}
+                    disabled={!order.orderLineItems || !order.orderLineItems.length || !order.id}
                     onClick={() => sendOrder()}
                 >Create Order</button>
             </div>

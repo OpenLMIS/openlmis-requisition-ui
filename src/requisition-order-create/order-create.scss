@@ -9,15 +9,32 @@
       flex-direction: column;
       gap: 0.5em;
     }
+
+    .select-search {
+      .input {
+        min-width: 400px;
+      }
+
+      .options {
+        min-width: 400px;
+      }
+    }
   }
 
-  .toolbar {
+  .order-create-table-container {
     display: flex;
-    align-items: flex-start;
-    margin-bottom: 1em;
 
-    & > * {
-      margin-right: 1em;
+    .order-create-table {
+      display: flex;
+      flex-direction: column;
+
+      .order-create-table-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 1em;
+      }
     }
   }
 
