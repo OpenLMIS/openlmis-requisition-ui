@@ -185,7 +185,8 @@ const OrderCreateForm = () => {
             program: { id: selectedProgram },
             requestingFacility: { id: selectedRequestingFacility },
             receivingFacility: { id: selectedRequestingFacility },
-            supplyingFacility: { id: selectedSupplyingFacility }
+            supplyingFacility: { id: selectedSupplyingFacility },
+            facility: { id: selectedRequestingFacility }
         };
 
         orderService.create(order)
