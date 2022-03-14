@@ -23,12 +23,14 @@
     routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+        var showRequisitionLessOrder = '@@SHOW_REQUISITION_LESS_ORDER' !== 'false';
+
         $stateProvider.state('openlmis.requisitions.orderCreate', {
             url: '/orderCreate',
             label: 'requisition.orderCreate',
             isOffline: false,
             priority: 14,
-            showInNavigation: true,
+            showInNavigation: showRequisitionLessOrder,
             views: {
                 '@': {
                     templateUrl: 'requisition-order-create/order-create.html'

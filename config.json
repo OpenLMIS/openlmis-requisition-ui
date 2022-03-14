@@ -9,5 +9,6 @@
     "/openlmis-requisition-ui",
     "/openlmis-stockmanagement-ui"
   ],
-  "requisitionServiceURL": "/"
+  "requisitionServiceURL": "/",
+  "showRequisitionLessOrder": "false"
 }
