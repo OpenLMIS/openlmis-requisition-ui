@@ -160,7 +160,11 @@ const OrderCreateTable = () => {
                 Header: 'Quantity',
                 accessor: 'orderedQuantity',
                 Cell: (props) => (
-                    <InputCell {...props} numeric />
+                    <InputCell
+                        {...props}
+                        numeric
+                        key={`row-${_.get(props, ['row', 'original', 'orderable', 'id'])}`}
+                    />
                 )
             },
             {
