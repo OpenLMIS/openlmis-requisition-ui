@@ -22,6 +22,7 @@
     "requisitionConvertToOrder.program": "Program",
     "requisitionConvertToOrder.search": "Search",
     "requisitionConvertToOrder.selectAtLeastOneRnr": "Please select at least one requisition for converting to order.",
+    "requisitionConvertToOrder.selectAtLeastOneRnrWithoutOrder" : "Please select at least one requisition to release without order.",
     "requisitionConvertToOrder.startDate": "Start date",
     "requisitionConvertToOrder.supplyingDepot": "Supplying depot",
     "requisitionConvertToOrder.searchInfo": "In order to filter Requisitions type in one of the following parameters: Program Name, Facility Name or Facility Code and click \"Search\" button."
