@@ -44,11 +44,7 @@
          * @description
          * Holds list of all programs with templates.
          */
-        vm.programs = programList.sort((a, b) => {
-            const nameA = a.name.toUpperCase();
-            const nameB = b.name.toUpperCase();
-            return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
-        });
+        vm.programs = programList;
 
         /**
          * @ngdoc method
