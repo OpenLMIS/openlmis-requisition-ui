@@ -320,7 +320,7 @@ describe('ConvertToOrderController', function() {
             this.vm.releaseWithoutOrder();
 
             expect(this.notificationService.error)
-                .toHaveBeenCalledWith('requisitionConvertToOrder.selectAtLeastOneRnr');
+                .toHaveBeenCalledWith('requisitionConvertToOrder.selectAtLeastOneRnrWithoutOrder');
         });
 
         it('should not call requisitionService if no requisition is selected', function() {
