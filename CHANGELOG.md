@@ -1,3 +1,9 @@
+7.0.8-SNAPSHOT / WIP
+==================
+
+Bug fixes:
+* [OLMIS-6034](https://openlmis.atlassian.net/browse/OLMIS-6034): Fix error message for requisition released withour order
+
 7.0.7 / 2022-04-21
 ==================
 

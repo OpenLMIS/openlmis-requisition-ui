@@ -374,7 +374,9 @@
                         });
                 }
             } else {
-                notificationService.error('requisitionConvertToOrder.selectAtLeastOneRnr');
+                withOrder ?
+                    notificationService.error('requisitionConvertToOrder.selectAtLeastOneRnr') :
+                    notificationService.error('requisitionConvertToOrder.selectAtLeastOneRnrWithoutOrder');
             }
         }
     }
