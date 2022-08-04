@@ -3,6 +3,7 @@
 
 Bug fixes:
 * [OLMIS-6034](https://openlmis.atlassian.net/browse/OLMIS-6034): Fix error message for requisition released withour order
+* [OLMIS-5900](https://openlmis.atlassian.net/browse/OLMIS-5900): Fix displaying programs in ascending alphabetical order
 
 7.0.7 / 2022-04-21
 ==================
