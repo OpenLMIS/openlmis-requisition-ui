@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="program in vm.programs">
+            <tr ng-repeat="program in vm.programs | orderBy:'name'">
                 <td>{{program.name}}</td>
                 <td>{{program.active ? 'adminProgramList.active' : 'adminProgramList.notActive' | message}}</td>
                 <td>
