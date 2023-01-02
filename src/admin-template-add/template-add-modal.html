@@ -13,6 +13,14 @@
                             ng-options="program.name for program in vm.programs" required>
                     </select>
                 </form>
+                <form class="form-inline" ng-submit="vm.create()" reload-form>
+                   <div><label>
+                        <input type="checkbox" id="requisitionReportOnly"  ng-model="vm.template.requisitionReportOnly"
+                               ng-change="vm.populateFacilityTypes()"
+                        />
+                        {{'adminTemplateAdd.requisitionReportOnly' | message}}
+                   </label> </div>
+                </form>
                 <div><label for="facilityType">{{'adminTemplateAdd.facilityType' | message}}</label>
                     <p class="note">{{'adminTemplateAdd.programNeedsToBeSelected' | message}}</p></div>
                 <form class="form-inline" ng-submit="vm.addFacilityType()" reload-form>

@@ -150,8 +150,8 @@
          * @name addFacilityType
          *
          * @description
-         * Adds new Facility Type to the Template. Removes it from the list of available Facility Types. 
-         * 
+         * Adds new Facility Type to the Template. Removes it from the list of available Facility Types.
+         *
          * @return {Promise} resolved promise
          */
         function addFacilityType() {
@@ -167,7 +167,7 @@
          *
          * @description
          * Removes new Facility Type from the Templates. Adds if back to the list of available Facility Types.
-         * 
+         *
          * @param {Object} facilityType Facility Type to be removed from list
          */
         function removeFacilityType(facilityType) {
@@ -189,14 +189,30 @@
             if (vm.template.program) {
                 vm.selectedFacilityType = undefined;
                 vm.template.facilityTypes = [];
+                var filteredProgramTemplates = [];
+
+                if (vm.template.requisitionReportOnly) {
+
+                    programTemplates[vm.template.program.id].forEach(function(template) {
+                        if (template.requisitionReportOnly) {
+                            filteredProgramTemplates.push(template);
+                        }
+                    });
+
+                } else {
+                    filteredProgramTemplates = programTemplates[vm.template.program.id];
+                }
 
                 vm.facilityTypes = facilityTypes
                     .filter(function(facilityType) {
                         var isAssigned = false;
-                        programTemplates[vm.template.program.id].forEach(function(template) {
+
+                        filteredProgramTemplates.forEach(function(template) {
+
                             template.facilityTypes.forEach(function(assignedFacilityType) {
                                 isAssigned = isAssigned || assignedFacilityType.id === facilityType.id;
                             });
+
                         });
                         return !isAssigned;
                     });

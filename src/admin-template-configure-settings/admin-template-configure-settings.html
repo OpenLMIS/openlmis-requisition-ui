@@ -12,7 +12,15 @@
             <input type="checkbox" id="rejectionReasonWindow"  ng-model="vm.template.rejectionReasonWindowVisible"/>
             {{'adminTemplateConfigureSettings.rejectionReasonWindow.title' | message}}
           </label>
+
           <p class="note">{{'adminTemplateConfigureSettings.rejectionReasonWindow.info' | message}}</p>
+
+          <label>
+            <input type="checkbox" id="requisitionReportOnly"  ng-model="vm.template.requisitionReportOnly"/>
+            {{'adminTemplateConfigureSettings.requisitionReportOnly.title' | message}}
+          </label>
+
+          <p class="note">{{'adminTemplateConfigureSettings.requisitionReportOnly.info' | message}}</p>
 
           <label for="facilityTypeSelect">{{'adminTemplateConfigureSettings.facilityType' | message}}</label>
           <select id="facilityTypeSelect" ng-model="vm.facilityType"

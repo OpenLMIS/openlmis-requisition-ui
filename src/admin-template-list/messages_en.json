@@ -6,5 +6,6 @@
     "adminTemplateList.action": "Action",
     "adminTemplateList.configure": "Configure",
     "adminTemplateList.addRequisitionTemplate": "Add Requisition Template",
-    "adminTemplateList.noRequisitionTemplates": "No requisition templates for ${program} program"
+    "adminTemplateList.noRequisitionTemplates": "No requisition templates for ${program} program",
+    "adminTemplateList.requisitionReportOnly": "Requisition Report Only"
 }

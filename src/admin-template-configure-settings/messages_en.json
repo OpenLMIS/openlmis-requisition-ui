@@ -14,5 +14,8 @@
     "adminTemplateConfigureSettings.templateSettingsSave.success": "Template Settings saved successfully!",
     "adminTemplateConfigureSettings.templateSettingsSave.title": "Save changes to the requisition template",
     "adminTemplateConfigureSettings.rejectionReasonWindow.title": "Active Rejection Reason",
-    "adminTemplateConfigureSettings.rejectionReasonWindow.info": "This determines whether or not a window to select a rejection reason will display"
+    "adminTemplateConfigureSettings.rejectionReasonWindow.info": "This determines whether or not a window to select a rejection reason will display",
+    "adminTemplateConfigureSettings.requisitionReportOnly.title": "Requisition Report Only",
+    "adminTemplateConfigureSettings.requisitionReportOnly.info": "Determines whether the requisition template can be configured as report only or not"
+
 }

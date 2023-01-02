@@ -10,6 +10,7 @@
                 <tr>
                     <th>{{'adminTemplateList.templateName' | message}}</th>
                     <th>{{'adminTemplateList.facilityType' | message}}</th>
+                    <th>{{'adminTemplateList.requisitionReportOnly' | message}}</th>
                     <th>{{'adminTemplateList.action' | message}}</th>
                 </tr>
             </thead>
@@ -20,6 +21,7 @@
                         popover-template="admin-template-list/facility-types-popover.html">
                         {{'adminTemplateList.facilityTypes' | message: {'number': vm.templateFacilityTypes[template.id].length } }}</td>
                     <td ng-if="!(template.facilityTypes.length > 1)">{{vm.templateFacilityTypes[template.id][0].name}}</td>
+                    <td>{{template.requisitionReportOnly}}</td>
                     <td>
                         <button ui-sref="openlmis.administration.requisitionTemplates.configure.columns({id: template.id})">{{'adminTemplateList.configure' | message}}</button>
                     </td>

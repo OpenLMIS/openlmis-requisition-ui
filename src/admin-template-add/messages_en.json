@@ -19,5 +19,6 @@
     "adminTemplateAdd.requisitionColumn": "Requisition Column",
     "adminTemplateAdd.display": "Display",
     "adminTemplateAdd.name": "Name",
-    "adminTemplateAdd.programNeedsToBeSelected": "You need to select program first"
+    "adminTemplateAdd.programNeedsToBeSelected": "You need to select program first",
+    "adminTemplateAdd.requisitionReportOnly": "Requisition Report Only"
 }

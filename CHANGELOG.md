@@ -1,3 +1,9 @@
+7.0.9 / 2023-01-02
+==================
+
+New functionality added in a backwards-compatible manner:
+* [TZUP-274](https://openlmis.atlassian.net/browse/TZUP-274): Added UI for requisition report only flag in requisition template.
+
 7.0.8 / 2022-10-07
 ==================
 

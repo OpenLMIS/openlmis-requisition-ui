@@ -65,6 +65,7 @@
             this.columnsMap = {};
             this.facilityTypes = template.facilityTypes;
             this.name = template.name;
+            this.requisitionReportOnly = template.requisitionReportOnly;
 
             for (var columnName in template.columnsMap) {
                 this.columnsMap[columnName] = new TemplateColumn(template.columnsMap[columnName]);
