@@ -193,8 +193,9 @@ describe('requisitionValidator', function() {
 
         it('should return true if column is Total Losses and Adjustments', function() {
             column.name = TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS;
+            requisition.reportOnly = true;
 
-            var result = validator.validateLineItemField(lineItem, column);
+            var result = validator.validateLineItemField(lineItem, column, requisition);
 
             expect(result).toBe(true);
         });
