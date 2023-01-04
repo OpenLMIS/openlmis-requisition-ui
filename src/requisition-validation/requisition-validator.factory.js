@@ -127,7 +127,7 @@
             var name = column.name,
                 error;
 
-            if (shouldSkipValidation(lineItem, column)) {
+            if (shouldSkipValidation(lineItem, column, requisition)) {
                 return true;
             }
 
@@ -245,7 +245,11 @@
             return allSkipped;
         }
 
-        function shouldSkipValidation(lineItem, column) {
+        function shouldSkipValidation(lineItem, column, requisition) {
+
+            if (requisition.reportOnly && column.name === TEMPLATE_COLUMNS.STOCK_ON_HAND) {
+                return true;
+            }
             return lineItem[TEMPLATE_COLUMNS.SKIPPED] ||
                 column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS ||
                 !column.$display;

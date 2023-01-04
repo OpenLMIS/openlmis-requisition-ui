@@ -91,7 +91,7 @@
                 validateSource(column) ||
                 validateOption(column) ||
                 validateCalculated(column, template) ||
-                validateUserInput(column) ||
+                validateUserInput(column, template) ||
                 validateColumn(column, template) ||
                 validateTag(column, template) ||
                 validateSelectedStockCard(column, template);
@@ -197,10 +197,11 @@
             return message;
         }
 
-        function validateUserInput(column) {
+        function validateUserInput(column, template) {
             if (!column.isDisplayed
                 && column.source === COLUMN_SOURCES.USER_INPUT
-                && column.columnDefinition.sources.length > 1) {
+                && column.columnDefinition.sources.length > 1
+                && !template.requisitionReportOnly) {
                 return messageService.get('adminProgramTemplate.shouldBeDisplayed') +
                     messageService.get('adminProgramTemplate.isUserInput');
             }
@@ -230,7 +231,7 @@
                 template.columnsMap[TEMPLATE_COLUMNS.REQUESTED_QUANTITY_EXPLANATION];
 
             if (!column.isDisplayed && (!requestedQuantityColumn.isDisplayed ||
-                !requestedQuantityExplanationColumn.isDisplayed)) {
+                !requestedQuantityExplanationColumn.isDisplayed) && !template.requisitionReportOnly) {
                 return messageService.get('adminProgramTemplate.shouldDisplayRequestedQuantity', {
                     calculatedOrderQuantity: column.label,
                     requestedQuantity: requestedQuantityColumn.label,

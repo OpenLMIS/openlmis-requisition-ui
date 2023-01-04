@@ -1,8 +1,11 @@
-7.0.8 / 2023-01-02
+7.0.9-SNAPSHOT / WIP
 ==================
 
 New functionality added in a backwards-compatible manner:
 * [TZUP-274](https://openlmis.atlassian.net/browse/TZUP-274): Added UI for requisition report only flag in requisition template.
+
+7.0.8 / 2022-10-07
+==================
 
 Bug fixes:
 * [OLMIS-6034](https://openlmis.atlassian.net/browse/OLMIS-6034): Fix error message for requisition released withour order
@@ -25,8 +28,8 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-7512](https://openlmis.atlassian.net/browse/OLMIS-7512): Add search select to order create form
 * [OLMIS-7508](https://openlmis.atlassian.net/browse/OLMIS-7508): Add validation on product addition table.
 * [OLMIS-7537](https://openlmis.atlassian.net/browse/OLMIS-7537): Configure redux-persist
-* [OLMIS-7538](https://openlmis.atlassian.net/browse/OLMIS-7538): User can create requisition-less order while offline 
-* [OLMIS-7539](https://openlmis.atlassian.net/browse/OLMIS-7539): Offline created requisition-less orders are synchronised when user is back online 
+* [OLMIS-7538](https://openlmis.atlassian.net/browse/OLMIS-7538): User can create requisition-less order while offline
+* [OLMIS-7539](https://openlmis.atlassian.net/browse/OLMIS-7539): Offline created requisition-less orders are synchronised when user is back online
 
 Improvements:
 * [OLMIS-7515](https://openlmis.atlassian.net/browse/OLMIS-7515): Order create table uses numeric input
@@ -325,7 +328,7 @@ Bug fixes:
 
 * [OLMIS-2638:](https://openlmis.atlassian.net/browse/OLMIS-2638) Updated read-only check to make sure user right and requisition status match
 * [OLMIS-2664:](https://openlmis.atlassian.net/browse/OLMIS-2664) Requisition will now be saved
-before getting rejected to preserve the status message.
+  before getting rejected to preserve the status message.
 * [OLMIS-2704:](https://openlmis.atlassian.net/browse/OLMIS-2704) Added warning if cached requistion is outdated.
 
 5.0.1 / 2017-05-26
