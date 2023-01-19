@@ -300,6 +300,14 @@ describe('requisitionValidator', function() {
             expect(result).toBe(true);
         });
 
+        it('should return true if column is Stock On Hand and the requisition is report Only', function() {
+            column.name = TEMPLATE_COLUMNS.STOCK_ON_HAND;
+            requisition.reportOnly = true;
+            var result = validator.validateLineItemField(lineItem, column, requisition);
+
+            expect(result).toBe(true);
+        });
+
     });
 
     describe('isLineItemValid', function() {
