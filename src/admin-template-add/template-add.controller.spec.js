@@ -18,7 +18,7 @@ describe('TemplateAddController', function() {
     var $rootScope, $q, $state, $controller, ProgramDataBuilder, vm, program, FacilityTypeDataBuilder,
         TemplateDataBuilder, TemplateColumnDataBuilder, facilityTypes, productCodeColumn, Template,
         confirmService, messageService, templateOne, templateTwo, healthCenter, districtHospital,
-        programTemplates, programTwo, calculatedOrderQuantityIsaColumn, skippedColumn;
+        programTemplates, programTwo, calculatedOrderQuantityIsaColumn, skippedColumn, filteredProgramTemplates;
 
     beforeEach(function() {
         module('admin-template-add');
@@ -61,6 +61,7 @@ describe('TemplateAddController', function() {
             .withFacilityTypes([healthCenter])
             .build();
 
+        filteredProgramTemplates = [];
         programTemplates = {};
         programTemplates[program.id] = [templateOne];
         programTemplates[programTwo.id] = [templateTwo];
@@ -187,6 +188,23 @@ describe('TemplateAddController', function() {
                 .toHaveBeenCalledWith('adminTemplateAdd.createTemplate.confirm', 'adminTemplateAdd.create');
 
             expect(vm.template.create).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('populateFacilityTypes', function() {
+
+        beforeEach(function() {
+            vm.template.facilityTypes = [facilityTypes[0]];
+            vm.facilityTypes = facilityTypes;
+        });
+
+        it('should assign facility type to requisition only template', function() {
+            vm.selectedFacilityType = facilityTypes[0];
+            vm.template.requisitionReportOnly = true;
+            filteredProgramTemplates.push(templateOne);
+            vm.populateFacilityTypes();
+
+            expect(vm.template.facilityTypes).toEqual([vm.selectedFacilityType]);
         });
     });
 });
