@@ -83,7 +83,8 @@ describe('TemplateAddController', function() {
             template: new Template({
                 populateStockOnHandFromStockCards: false,
                 columnsMap: {},
-                facilityTypes: []
+                facilityTypes: [],
+                requisitionReportOnly: false
             })
         });
         vm.$onInit();
