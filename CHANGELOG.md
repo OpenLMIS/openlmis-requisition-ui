@@ -6,6 +6,7 @@ New functionality added in a backwards-compatible manner:
 
 Bug fixes:
 * [OLMIS-7638](https://openlmis.atlassian.net/browse/OLMIS-7638): Fix error related to 'Facilities is still possible to select after being disabled'
+* [OLMIS-7697](https://openlmis.atlassian.net/browse/OLMIS-7697): Added requisition report only when initializing the requisition template to fix save requisition Template properly.
 
 7.0.8 / 2022-10-07
 ==================

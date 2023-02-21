@@ -66,7 +66,8 @@
             var template = new Template({
                 populateStockOnHandFromStockCards: false,
                 columnsMap: {},
-                facilityTypes: []
+                facilityTypes: [],
+                requisitionReportOnly: false
             }, this.repository);
 
             decorateCreate(template);
