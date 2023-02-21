@@ -56,6 +56,9 @@
                         );
                     }
                     return false;
+                },
+                permissions: function(permissionService) {
+                    return permissionService.empty();
                 }
             }
         });
