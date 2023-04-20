@@ -1,3 +1,9 @@
+7.0.10-SNAPSHOT / WIP
+==================
+
+Bug fixes:
+* [OLMIS-7723](https://openlmis.atlassian.net/browse/OLMIS-7723): Fix error related to 'Approve buttons not visible when trying to approve requisition'
+
 7.0.9 / 2023-04-05
 ==================
 
