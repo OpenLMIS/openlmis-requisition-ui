@@ -1,8 +1,9 @@
-7.0.10-SNAPSHOT / WIP
+7.0.10 / 2023-06-26
 ==================
 
 Bug fixes:
 * [OLMIS-7723](https://openlmis.atlassian.net/browse/OLMIS-7723): Fix error related to 'Approve buttons not visible when trying to approve requisition'
+* [OLMIS-7772](https://openlmis.atlassian.net/browse/OLMIS-7772): Fix issues with new Chrome popover functionality
 
 7.0.9 / 2023-04-05
 ==================
