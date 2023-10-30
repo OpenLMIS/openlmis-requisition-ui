@@ -1,3 +1,9 @@
+7.0.11 / WIP
+==================
+
+Bug fixes:
+* [OLMIS-7802](https://openlmis.atlassian.net/browse/OLMIS-7802): Fix issue related to second approve
+
 7.0.10 / 2023-06-26
 ==================
 

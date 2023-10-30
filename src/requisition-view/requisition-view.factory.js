@@ -100,7 +100,7 @@
         function canApproveAndReject(user, requisition) {
             if (requisition.$isAuthorized() || requisition.$isInApproval()) {
                 return permissionService.hasRoleWithRightForProgramAndSupervisoryNode(
-                    REQUISITION_RIGHTS.REQUISITION_APPROVE, requisition.program.id, requisition.facility.id
+                    REQUISITION_RIGHTS.REQUISITION_APPROVE, requisition
                 );
             }
             return $q.resolve(false);
