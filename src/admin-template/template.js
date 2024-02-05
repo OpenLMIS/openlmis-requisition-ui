@@ -66,6 +66,7 @@
             this.facilityTypes = template.facilityTypes;
             this.name = template.name;
             this.requisitionReportOnly = template.requisitionReportOnly;
+            this.patientsTabEnabled = template.patientsTabEnabled;
 
             for (var columnName in template.columnsMap) {
                 this.columnsMap[columnName] = new TemplateColumn(template.columnsMap[columnName]);
@@ -83,10 +84,10 @@
          * @ngdoc method
          * @methodOf admin-template.Template
          * @name create
-         * 
+         *
          * @description
          * Saves new Template using Template Repository.
-         * 
+         *
          * @return {Promise} the promise resolving to created Template, rejected if save was unsuccessful
          */
         function create() {
@@ -175,7 +176,7 @@
          * If there is no column with given name error will be thrown.
          *
          * @param  {String}  columnName name of the column to be verified
-         * @return {boolean}            true if template has stock based flag set to true and column supports tag 
+         * @return {boolean}            true if template has stock based flag set to true and column supports tag
          */
         function canAssignTag(columnName) {
             if (this.columnsMap.hasOwnProperty(columnName)) {
@@ -229,7 +230,7 @@
 
             if (isMovingUpTheList) {
                 newDisplayOrder = columns[dropSpotIndex].displayOrder;
-            // new displayOrder value depends on if column was dropped below or above
+                // new displayOrder value depends on if column was dropped below or above
             } else {
                 newDisplayOrder = columns[dropSpotIndex - 1].displayOrder;
             }
@@ -241,12 +242,12 @@
                     if (isInDroppableArea(column.displayOrder) && column.columnDefinition.canChangeOrder) {
                         if (droppedItem.name === column.name) {
                             column.displayOrder = newDisplayOrder;
-                        // setting new displayOrder for dropped column
+                            // setting new displayOrder for dropped column
                         } else if (shouldIncrementDisplayOrder(
                             column, droppedItem, newDisplayOrder, isMovingUpTheList
                         )) {
                             column.displayOrder++;
-                        // columns between old and new position must be
+                            // columns between old and new position must be
                         } else if (shouldDecrementDisplayOrder(column, droppedItem, newDisplayOrder)) {
                             // incremented or decremented
                             column.displayOrder--;
