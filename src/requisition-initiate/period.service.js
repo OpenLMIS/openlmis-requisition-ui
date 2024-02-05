@@ -86,9 +86,16 @@
                     period.startDate = dateUtils.toDate(period.startDate);
                     period.endDate = dateUtils.toDate(period.endDate);
                 });
-                return periods;
+
+                return periods.sort(orderByEndDate);
             }
             return data;
+        }
+
+        function orderByEndDate(a, b) {
+            var firstEndDate = dateUtils.toDate(a.endDate).getTime();
+            var secondEndDate = dateUtils.toDate(b.endDate).getTime();
+            return firstEndDate > secondEndDate ? 1 : -1;
         }
     }
 })();
