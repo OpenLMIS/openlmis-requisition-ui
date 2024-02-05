@@ -125,19 +125,26 @@
                 if (requisition.$isApproved() || requisition.$isReleased()) {
                     return true;
                 }
-                if (scope.canApprove && isApprovalColumn(column)) {
+                if (scope.canApprove && isApprovalColumn(requisition, column)) {
                     return false;
                 }
                 if (canEditColumn(column)) {
                     return false;
                 }
-
                 // If we don't know that the field is editable, its read only
                 return true;
             }
 
             function canEditColumn(column) {
-                return column.source === COLUMN_SOURCES.USER_INPUT && scope.userCanEdit;
+
+                var TBMonthlyColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
+
+                if (column.name === 'totalReceivedQuantity') {
+                    return true;
+                }
+
+                return (column.source === COLUMN_SOURCES.USER_INPUT ||
+                    TBMonthlyColumns.includes(column.name)) && scope.userCanEdit;
             }
 
             function canSkip() {
@@ -167,9 +174,12 @@
             });
         }
 
-        function isApprovalColumn(column) {
-            return [TEMPLATE_COLUMNS.APPROVED_QUANTITY, TEMPLATE_COLUMNS.REMARKS]
-                .indexOf(column.name) !== -1;
+        function isApprovalColumn(requisition, column) {
+            var approvalColumns = requisition.template.patientsTabEnabled ?
+                [TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY, TEMPLATE_COLUMNS.REMARKS] :
+                [TEMPLATE_COLUMNS.APPROVED_QUANTITY];
+
+            return approvalColumns.indexOf(column.name) !== -1;
         }
     }
 
