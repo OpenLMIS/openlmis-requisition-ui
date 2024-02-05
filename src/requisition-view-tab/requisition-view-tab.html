@@ -2,6 +2,7 @@
 	<h4 ng-show="vm.showSkipControls">{{'requisitionViewTab.skip' | message}}</h4>
 	<ul ng-show="vm.showSkipControls">
 		<li><a ng-click="vm.requisition.skipAllFullSupplyLineItems()">{{'requisitionViewTab.all' | message}}</a></li>
+		<li><a ng-click="vm.skipCurrentPageFullSupplyLineItems()">{{'requisitionViewTab.page' | message}}</a></li>
 		<li><a ng-click="vm.requisition.unskipAllFullSupplyLineItems()">{{'requisitionViewTab.none' | message}}</a></li>
 	</ul>
 	<span ng-if="vm.showAddFullSupplyProductControls">
@@ -17,7 +18,7 @@
 			<tr>
 				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'" 
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
-					openlmis-popover-trigger-area="element">{{column.label}}</th>
+					popover-trigger-area="element">{{column.label}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
 			</tr>
 		</thead>
@@ -28,7 +29,7 @@
 					requisition="vm.requisition"
 					column="column"
 					line-item="lineItem"
-					user-can-edit="vm.userCanEdit"
+					user-can-edit="vm.userCanEditColumn(column)"
 					can-approve="vm.canApproveAndReject">
 				</td>
 				<td ng-if="vm.showDeleteColumn()">

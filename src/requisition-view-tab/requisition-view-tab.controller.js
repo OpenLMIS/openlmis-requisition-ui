@@ -41,17 +41,19 @@
                                paginationService, $stateParams, requisitionCacheService,
                                canUnskipRequisitionItemWhenApproving) {
         var vm = this;
-
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
         vm.addFullSupplyProducts = addFullSupplyProducts;
         vm.addNonFullSupplyProducts = addNonFullSupplyProducts;
         vm.unskipFullSupplyProducts = unskipFullSupplyProducts;
         vm.showDeleteColumn = showDeleteColumn;
+        vm.skipCurrentPageFullSupplyLineItems = skipCurrentPageFullSupplyLineItems;
         vm.isLineItemValid = requisitionValidator.isLineItemValid;
         vm.getDescriptionForColumn = getDescriptionForColumn;
         vm.skippedFullSupplyProductCountMessage = skippedFullSupplyProductCountMessage;
         vm.cacheRequisition = cacheRequisition;
+        vm.userCanEditColumn = userCanEditColumn;
+        vm.monthlyTBColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
 
         /**
          * @ngdoc property
@@ -144,6 +146,12 @@
         vm.columns = undefined;
 
         function onInit() {
+            angular.forEach(columns, function(column) {
+                angular.forEach(lineItems, function(lineItem) {
+                    lineItem.updateFieldValue(column, requisition);
+                });
+            });
+
             vm.lineItems = lineItems;
             vm.items = items;
             vm.requisition = requisition;
@@ -198,7 +206,7 @@
          *
          * @description
          * Caches given requisition in the local storage.
-         * 
+         *
          * @return {Promise} the promise resolved after adding requisition to the local storage
          */
         function cacheRequisition() {
@@ -281,7 +289,7 @@
          * from full supply requisition.
          */
         function skippedFullSupplyProductCountMessage() {
-            return  messageService.get('requisitionViewTab.fullSupplyProductsSkipped', {
+            return messageService.get('requisitionViewTab.fullSupplyProductsSkipped', {
                 skippedProductCount: getCountOfSkippedFullSupplyProducts()
             });
         }
@@ -317,8 +325,8 @@
 
         function refreshLineItems() {
             var filterObject = (fullSupply &&
-                                    vm.requisition.template.hasSkipColumn() &&
-                                    vm.requisition.template.hideSkippedLineItems()) ?
+                vm.requisition.template.hasSkipColumn() &&
+                vm.requisition.template.hideSkippedLineItems()) ?
                 {
                     skipped: '!true',
                     $program: {
@@ -388,6 +396,21 @@
             return fullSupply ?
                 'requisitionViewTab.noFullSupplyProducts' :
                 'requisitionViewTab.noNonFullSupplyProducts';
+        }
+
+        function skipCurrentPageFullSupplyLineItems() {
+            vm.items.forEach(function(lineItem) {
+                if (lineItem.canBeSkipped(requisition)) {
+                    lineItem.skipped = true;
+                }
+            });
+        }
+
+        function userCanEditColumn(column) {
+            if (vm.monthlyTBColumns.includes(column.name)) {
+                return vm.canApproveAndReject;
+            }
+            return vm.userCanEdit;
         }
     }
 
