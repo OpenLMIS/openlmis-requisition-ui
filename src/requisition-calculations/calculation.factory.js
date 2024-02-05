@@ -774,71 +774,75 @@
             var numberOfPatients = 0;
 
             switch (product.productCode) {
-                case ORDERABLE_CODES.RIFAMPICIN_INH_RHZE_TABLET_150_75_400_275_MG:
-                    var noOfAdultsRHZE = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_ADULT_PATIENTS_NEW);
-                    numberOfPatients = calculateNumberOfPatients(noOfAdultsRHZE, [0, 1]);
+            case ORDERABLE_CODES.RIFAMPICIN_INH_RHZE_TABLET_150_75_400_275_MG:
+                var noOfAdultsRHZE = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_ADULT_PATIENTS_NEW);
+                numberOfPatients = calculateNumberOfPatients(noOfAdultsRHZE, [0, 1]);
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.RIFAMPICIN_INH_RH_TABLET_150_75_MG_MG:
-                    var noOfChildrenRH = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_NEW);
-                    numberOfPatients = calculateNumberOfPatients(noOfChildrenRH, [2, 3, 4, 5]);
+                return numberOfPatients;
+            case ORDERABLE_CODES.RIFAMPICIN_INH_RH_TABLET_150_75_MG_MG:
+                var noOfChildrenRH = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_NEW);
+                numberOfPatients = calculateNumberOfPatients(noOfChildrenRH, [2, 3, 4, 5]);
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.MB_BLISTER_ADULT_TABLET:
-                    var numberOfAdultsOnMB = findProperPatients(
-                        storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_ADULT_ON_MB_REGIMEN
-                    );
-                    var numberOfAdultsOnPB = findProperPatients(
-                        storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_ADULT_ON_PB_REGIMEN
-                    );
-                    var firstSixMonthsAdultsOnMB = calculateNumberOfPatients(numberOfAdultsOnMB, [0, 1, 2, 3, 4, 5]);
-                    var adultsOnPB = sumRow(numberOfAdultsOnPB);
-                    numberOfPatients =  adultsOnPB + firstSixMonthsAdultsOnMB;
+                return numberOfPatients;
+            case ORDERABLE_CODES.MB_BLISTER_ADULT_TABLET:
+                var numberOfAdultsOnMB = findProperPatients(
+                    storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_ADULT_ON_MB_REGIMEN
+                );
+                var numberOfAdultsOnPB = findProperPatients(
+                    storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_ADULT_ON_PB_REGIMEN
+                );
+                var firstSixMonthsAdultsOnMB = calculateNumberOfPatients(numberOfAdultsOnMB, [0, 1, 2, 3, 4, 5]);
+                var adultsOnPB = sumRow(numberOfAdultsOnPB);
+                numberOfPatients =  adultsOnPB + firstSixMonthsAdultsOnMB;
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.RIFAMPICIN_INH_PYRAZ_RHZ_TABLET_75_50_150_MG:
-                    var noOfChildrenOnIPTPyraz = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT);
-                    numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPTPyraz, [0, 1]);
+                return numberOfPatients;
+            case ORDERABLE_CODES.RIFAMPICIN_INH_PYRAZ_RHZ_TABLET_75_50_150_MG:
+                var noOfChildrenOnIPTPyraz =
+                    findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT);
+                numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPTPyraz, [0, 1]);
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.ETHAMBUTOL_TABLET_100_MG:
-                    var noOfChildrenOnIPTEthambutol = findProperPatients(
-                        storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT
-                    );
-                    numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPTEthambutol, [0, 1]);
+                return numberOfPatients;
+            case ORDERABLE_CODES.ETHAMBUTOL_TABLET_100_MG:
+                var noOfChildrenOnIPTEthambutol = findProperPatients(
+                    storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT
+                );
+                numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPTEthambutol, [0, 1]);
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.RIFAMPICIN_INH_RH_TABLET_75_50_MG:
-                    var noOfChildrenOnIPTRH = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT);
-                    numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPTRH, [2, 3, 4, 5]);
+                return numberOfPatients;
+            case ORDERABLE_CODES.RIFAMPICIN_INH_RH_TABLET_75_50_MG:
+                var noOfChildrenOnIPTRH =
+                    findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT);
+                numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPTRH, [2, 3, 4, 5]);
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.MB_BLISTER_CHILD_TABLET:
-                    var numberOfChildrenOnMB = findProperPatients(
-                        storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_MB_REGIMEN
-                    );
-                    var numberOfChildrenOnPB = findProperPatients(
-                        storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_PB_REGIMEN
-                    );
-                    var firstSixMonthsChildrenOnMB = calculateNumberOfPatients(
-                        numberOfChildrenOnMB, [0, 1, 2, 3, 4, 5]
-                    );
-                    var childrenOnPB = sumRow(numberOfChildrenOnPB);
-                    numberOfPatients = childrenOnPB + firstSixMonthsChildrenOnMB;
+                return numberOfPatients;
+            case ORDERABLE_CODES.MB_BLISTER_CHILD_TABLET:
+                var numberOfChildrenOnMB = findProperPatients(
+                    storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_MB_REGIMEN
+                );
+                var numberOfChildrenOnPB = findProperPatients(
+                    storedLeprosyArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_PB_REGIMEN
+                );
+                var firstSixMonthsChildrenOnMB = calculateNumberOfPatients(
+                    numberOfChildrenOnMB, [0, 1, 2, 3, 4, 5]
+                );
+                var childrenOnPB = sumRow(numberOfChildrenOnPB);
+                numberOfPatients = childrenOnPB + firstSixMonthsChildrenOnMB;
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.ISONIAZID_BP_100MG_TABLETS_TABLET_100_MG:
-                    var noOfChildrenOnIPT = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT);
-                    numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPT, [0, 1, 2, 3, 4, 5]);
+                return numberOfPatients;
+            case ORDERABLE_CODES.ISONIAZID_BP_100MG_TABLETS_TABLET_100_MG:
+                var noOfChildrenOnIPT =
+                    findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_CHILDREN_ON_IPT);
+                numberOfPatients = calculateNumberOfPatients(noOfChildrenOnIPT, [0, 1, 2, 3, 4, 5]);
 
-                    return numberOfPatients;
-                case ORDERABLE_CODES.ISONIAZID_TABLET_300_MG:
-                    var noOfAdultsOnIPT = findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_ADULTS_ON_IPT);
-                    numberOfPatients = calculateNumberOfPatients(noOfAdultsOnIPT, [0, 1, 2, 3, 4, 5]);
+                return numberOfPatients;
+            case ORDERABLE_CODES.ISONIAZID_TABLET_300_MG:
+                var noOfAdultsOnIPT =
+                    findProperPatients(storedTbArray, PATIENT_TYPES.NUMBER_OF_ADULTS_ON_IPT);
+                numberOfPatients = calculateNumberOfPatients(noOfAdultsOnIPT, [0, 1, 2, 3, 4, 5]);
 
-                    return numberOfPatients;
-                default:
-                    return numberOfPatients;
+                return numberOfPatients;
+            default:
+                return numberOfPatients;
             }
         }
     }

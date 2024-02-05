@@ -85,16 +85,16 @@ describe('RequisitionColumn', function() {
             source: 'USER_INPUT',
             result: true
         }, {
-        name: 'should not be required if it is not mandatory',
-        column: 'remarks',
-        source: 'USER_INPUT',
-        result: false
-    }, {
-        name: 'should not be required if it mandatory but not use input',
-        column: 'stockOnHand',
-        source: 'CALCULATED',
-        result: false
-    }
+            name: 'should not be required if it is not mandatory',
+            column: 'remarks',
+            source: 'USER_INPUT',
+            result: false
+        }, {
+            name: 'should not be required if it mandatory but not use input',
+            column: 'stockOnHand',
+            source: 'CALCULATED',
+            result: false
+        }
     ].forEach(function(testCase) {
         it(testCase.name, function() {
             columnDef.name = testCase.column;
