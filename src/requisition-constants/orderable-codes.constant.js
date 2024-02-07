@@ -17,22 +17,28 @@
 
     'use strict';
 
-    angular.module('requisition').config(routes);
+    /**
+     * @ngdoc object
+     * @name requisition-constants.ORDERABLE_CODES
+     *
+     * @description
+     * This is constant for all orderable codes.
+     */
+    angular
+        .module('requisition-constants')
+        .constant('ORDERABLE_CODES', codes());
 
-    routes.$inject = ['$stateProvider'];
-
-    function routes($stateProvider) {
-
-        $stateProvider.state('openlmis.requisitions', {
-            isOffline: true,
-            abstract: true,
-            showInNavigation: true,
-            priority: 998,
-            label: 'requisition.requisitions',
-            url: '/requisitions',
-            template: '<div ui-view></div>'
-        });
-
+    function codes() {
+        return {
+            RIFAMPICIN_INH_RHZE_TABLET_150_75_400_275_MG: '10010510AE',
+            RIFAMPICIN_INH_RH_TABLET_150_75_MG_MG: '10010508AE',
+            MB_BLISTER_ADULT_TABLET: '10010110AE',
+            RIFAMPICIN_INH_PYRAZ_RHZ_TABLET_75_50_150_MG: '10010515AE',
+            ETHAMBUTOL_TABLET_100_MG: '10010233AE',
+            RIFAMPICIN_INH_RH_TABLET_75_50_MG: '10010514AE',
+            MB_BLISTER_CHILD_TABLET: '10010113AE',
+            ISONIAZID_BP_100MG_TABLETS_TABLET_100_MG: '10010114AE',
+            ISONIAZID_TABLET_300_MG: '10010315AE'
+        };
     }
-
 })();

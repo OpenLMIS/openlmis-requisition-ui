@@ -42,6 +42,9 @@ describe('RequisitionColumn', function() {
         };
         requisition = {
             status: REQUISITION_STATUS.SUBMITTED,
+            template: {
+                patientsTabEnabled: false
+            },
             $isAfterAuthorize: function() {
                 return false;
             }

@@ -22,6 +22,13 @@
 
           <p class="note">{{'adminTemplateConfigureSettings.requisitionReportOnly.info' | message}}</p>
 
+          <label>
+            <input type="checkbox" id="patientsTabEnabled"  ng-model="vm.template.patientsTabEnabled"/>
+            {{:: 'adminTemplateConfigureSettings.patientsTabEnabled.title' | message}}
+          </label>
+
+          <p class="note">{{:: 'adminTemplateConfigureSettings.patientsTabEnabled.info' | message}}</p>
+
           <label for="facilityTypeSelect">{{'adminTemplateConfigureSettings.facilityType' | message}}</label>
           <select id="facilityTypeSelect" ng-model="vm.facilityType"
                   ng-options="facilityType.name for facilityType in vm.facilityTypes" required>

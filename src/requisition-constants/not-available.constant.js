@@ -13,26 +13,17 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
+/**
+* @ngdoc object
+* @name requisition-constants.NOT_AVAILABLE
+*
+* @description
+* This is constant for util constant.
+*/
+
 (function() {
 
-    'use strict';
-
-    angular.module('requisition').config(routes);
-
-    routes.$inject = ['$stateProvider'];
-
-    function routes($stateProvider) {
-
-        $stateProvider.state('openlmis.requisitions', {
-            isOffline: true,
-            abstract: true,
-            showInNavigation: true,
-            priority: 998,
-            label: 'requisition.requisitions',
-            url: '/requisitions',
-            template: '<div ui-view></div>'
-        });
-
-    }
-
+    angular
+        .module('requisition-constants')
+        .constant('NOT_AVAILABLE', '-');
 })();

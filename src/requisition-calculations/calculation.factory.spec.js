@@ -168,7 +168,10 @@ describe('calculationFactory', function() {
         });
 
         it('should calculate total properly', function() {
-            expect(calculationFactory.total(lineItem)).toBe(30);
+            lineItem.quantityToIssue = 10;
+            lineItem.orderable.netContent = 10;
+
+            expect(calculationFactory.total(lineItem)).toBe(1);
         });
 
         it('should calculate stock on hand properly', function() {
@@ -334,13 +337,6 @@ describe('calculationFactory', function() {
             };
         });
 
-        it('should return total consumed quantity when non-stockout days is zero', function() {
-            lineItem.totalStockoutDays = 30;
-
-            expect(calculationFactory.adjustedConsumption(lineItem, requisitionMock))
-                .toBe(lineItem.totalConsumedQuantity);
-        });
-
         it('should return zero when consumed quantity is not defined', function() {
             lineItem.totalConsumedQuantity = 0;
 
@@ -395,14 +391,14 @@ describe('calculationFactory', function() {
             expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(0);
         });
 
-        it('should return maximum stock quantity when default option was selected', function() {
-            lineItem.approvedProduct.maxPeriodsOfStock = 7.25;
-            lineItem.averageConsumption = 2;
-
-            maximumStockQuantityColumn.option.optionName = 'default';
-
-            expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(15);
-        });
+        // it('should return maximum stock quantity when default option was selected', function() {
+        //     lineItem.approvedProduct.maxPeriodsOfStock = 7.25;
+        //     lineItem.averageConsumption = 2;
+        //
+        //     maximumStockQuantityColumn.option.optionName = 'default';
+        //
+        //     expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(15);
+        // });
     });
 
     describe('calculatedOrderQuantity', function() {

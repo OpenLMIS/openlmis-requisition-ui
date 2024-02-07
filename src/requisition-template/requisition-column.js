@@ -66,7 +66,6 @@
                 TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY,
                 TEMPLATE_COLUMNS.TOTAL_CONSUMED_QUANTITY,
                 TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS
-
             ],
             totalConsumedQuantity: [
                 TEMPLATE_COLUMNS.BEGINNING_BALANCE,
@@ -74,11 +73,10 @@
                 TEMPLATE_COLUMNS.STOCK_ON_HAND,
                 TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS
             ],
-            total: [
+            convertedQuantityToIssue: [
                 TEMPLATE_COLUMNS.BEGINNING_BALANCE,
-                TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY
+                TEMPLATE_COLUMNS.QUANTITY_TO_ISSUE
             ],
-
             packsToShip: [
                 TEMPLATE_COLUMNS.REQUESTED_QUANTITY,
                 TEMPLATE_COLUMNS.APPROVED_QUANTITY,
@@ -106,6 +104,18 @@
             calculatedOrderQuantity: [
                 TEMPLATE_COLUMNS.MAXIMUM_STOCK_QUANTITY,
                 TEMPLATE_COLUMNS.STOCK_ON_HAND
+            ],
+            quantityToIssue: [
+                TEMPLATE_COLUMNS.STOCK_ON_HAND,
+                TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH
+            ],
+            totalRequirement: [
+                TEMPLATE_COLUMNS.STOCK_ON_HAND,
+                TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH
+            ],
+            totalQuantityNeededByHf: [
+                TEMPLATE_COLUMNS.STOCK_ON_HAND,
+                TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH
             ]
         };
 
@@ -152,8 +162,8 @@
 
             this.$type = column.columnDefinition.columnType;
             this.$display = displayColumn(column, requisition);
-            this.$required = (nonMandatoryFields.indexOf(this.name) === -1 &&
-                this.source === COLUMN_SOURCES.USER_INPUT);
+            this.$required = nonMandatoryFields.indexOf(this.name) === -1 &&
+                this.source === COLUMN_SOURCES.USER_INPUT;
             this.$fullSupplyOnly = nonFullSupplyColumns.indexOf(this.name) === -1;
             this.$dependencies = dependencies[this.name];
             this.$canChangeOrder = column.columnDefinition.canChangeOrder;
@@ -173,13 +183,18 @@
          */
         function displayColumn(column, requisition) {
             if (column.isDisplayed && TEMPLATE_COLUMNS.PACKS_TO_SHIP === column.name &&
-                typeof column.option !== 'undefined') {
+                column.option !== undefined && column.option !== null) {
                 return (column.option.optionName === 'showPackToShipInApprovalPage' &&
-                requisition.$isAfterAuthorize()) || column.option.optionName === 'showPackToShipInAllPages';
+                    requisition.$isAfterAuthorize()) || column.option.optionName === 'showPackToShipInAllPages';
             }
+
+            var approvalColumns = requisition.template.patientsTabEnabled ?
+                [TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY, TEMPLATE_COLUMNS.REMARKS] :
+                [TEMPLATE_COLUMNS.APPROVED_QUANTITY];
+
             return column.isDisplayed && (
-                [TEMPLATE_COLUMNS.APPROVED_QUANTITY, TEMPLATE_COLUMNS.REMARKS].indexOf(column.name) === -1 ||
-             requisition.$isAfterAuthorize());
+                approvalColumns.indexOf(column.name) === -1 ||
+                requisition.$isAfterAuthorize());
         }
 
         function columnDependencies(column) {

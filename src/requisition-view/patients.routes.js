@@ -17,22 +17,22 @@
 
     'use strict';
 
-    angular.module('requisition').config(routes);
+    angular
+        .module('requisition-view')
+        .config(routes);
 
-    routes.$inject = ['$stateProvider'];
+    routes.$inject = ['selectProductsModalStateProvider'];
 
-    function routes($stateProvider) {
-
-        $stateProvider.state('openlmis.requisitions', {
-            isOffline: true,
-            abstract: true,
-            showInNavigation: true,
-            priority: 998,
-            label: 'requisition.requisitions',
-            url: '/requisitions',
-            template: '<div ui-view></div>'
-        });
-
+    function routes(selectProductsModalStateProvider) {
+        selectProductsModalStateProvider
+            .stateWithAddOrderablesChildState('openlmis.requisitions.requisition.patients', {
+                url: '/patients',
+                templateUrl: 'requisition-view-tab/requisition-patients-view-tab.html',
+                controller: 'PatientsViewTabController',
+                controllerAs: 'vm',
+                isOffline: true,
+                nonTrackable: true
+            });
     }
 
 })();

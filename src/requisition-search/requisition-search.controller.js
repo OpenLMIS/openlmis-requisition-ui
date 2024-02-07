@@ -29,11 +29,13 @@
 
     RequisitionSearchController.$inject = [
         '$state', '$filter', '$stateParams', 'facilities', 'offlineService', 'localStorageFactory', 'confirmService',
-        'requisitions', 'REQUISITION_STATUS'
+        'requisitions', 'REQUISITION_STATUS', 'requisitionService', 'TB_STORAGE', 'LEPROSY_STORAGE',
+        'RequisitionViewService'
     ];
 
     function RequisitionSearchController($state, $filter, $stateParams, facilities, offlineService, localStorageFactory,
-                                         confirmService, requisitions, REQUISITION_STATUS) {
+                                         confirmService, requisitions, REQUISITION_STATUS, requisitionService,
+                                         TB_STORAGE, LEPROSY_STORAGE) {
 
         var vm = this,
             offlineRequisitions = localStorageFactory('requisitions');
@@ -228,10 +230,32 @@
          *
          * @param {String} requisitionId Requisition UUID
          */
-        function openRnr(requisitionId) {
-            $state.go('openlmis.requisitions.requisition.fullSupply', {
-                rnr: requisitionId
-            });
+        function openRnr(requisition) {
+            // Clear Patients Tab local storage before openRnr
+            localStorageFactory(TB_STORAGE).clearAll();
+            localStorageFactory(LEPROSY_STORAGE).clearAll();
+
+            if (typeof requisition === 'object') {
+                redirectRequisition(requisition);
+            } else {
+                requisitionService.get(requisition).then(function(requisitionDetails) {
+                    redirectRequisition(requisitionDetails);
+                });
+            }
+        }
+
+        function redirectRequisition(requisition) {
+            if (requisition.template.patientsTabEnabled) {
+                $state.go('openlmis.requisitions.requisition.patients', {
+                    rnr: requisition.id,
+                    requisition: requisition
+                });
+            } else {
+                $state.go('openlmis.requisitions.requisition.fullSupply', {
+                    rnr: requisition.id,
+                    requisition: requisition
+                });
+            }
         }
 
         /**

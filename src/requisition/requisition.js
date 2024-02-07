@@ -93,6 +93,14 @@
                     url: requisitionUrlFactory('/api/requisitions/unSkipRequisition'),
                     method: 'GET',
                     forceHideOfflineModal: true
+                },
+
+                skipSecondApproval: {
+                    headers: {
+                        'Idempotency-Key': getIdempotencyKey
+                    },
+                    url: requisitionUrlFactory('/api/tzRequisitions/:id/approve'),
+                    method: 'POST'
                 }
             });
 
@@ -101,6 +109,7 @@
         Requisition.prototype.$submit = submit;
         Requisition.prototype.$remove = remove;
         Requisition.prototype.$approve = approve;
+        Requisition.prototype.$skipSecondApproval = skipSecondApproval;
         Requisition.prototype.$reject = reject;
         Requisition.prototype.$skip = skip;
         Requisition.prototype.$isInitiated = isInitiated;
@@ -280,6 +289,28 @@
         function approve() {
             var requisition = this;
             return handlePromise(resource.approve({
+                id: requisition.id,
+                idempotencyKey: requisition.idempotencyKey
+            }, {}).$promise, function(approved) {
+                updateRequisition(requisition, approved);
+            }, function(data) {
+                handleFailure(data, requisition);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition.Requisition
+         * @name skipSecondApproval
+         *
+         * @description
+         * Approves requisition.
+         *
+         * @return {Promise} promise that resolves when requisition is approved
+         */
+        function skipSecondApproval() {
+            var requisition = this;
+            return handlePromise(resource.skipSecondApproval({
                 id: requisition.id,
                 idempotencyKey: requisition.idempotencyKey
             }, {}).$promise, function(approved) {
@@ -845,7 +876,11 @@
 
         function transformLineItem(lineItem, columns) {
             angular.forEach(columns, function(column) {
-                if (!column.$display || column.source === COLUMN_SOURCES.CALCULATED) {
+                // TZUP-598 START HERE
+                if (column.name === 'numberOfPatientsOnTreatmentNextMonth') {
+                    return lineItem[column.name];
+                    // TZUP-598 END HERE
+                } else if (!column.$display || column.source === COLUMN_SOURCES.CALCULATED) {
                     lineItem[column.name] = null;
                 }
             });

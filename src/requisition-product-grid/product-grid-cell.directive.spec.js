@@ -57,6 +57,7 @@ describe('ProductGridCell', function() {
         ];
 
         this.scope.requisition = new this.RequisitionDataBuilder().build();
+        this.scope.requisition.template.patientsTabEnabled = false;
         this.scope.column = this.fullSupplyColumns[0];
         this.scope.lineItem = this.scope.requisition.requisitionLineItems[0];
 

@@ -49,6 +49,7 @@
             areLineItemsValid: areLineItemsValid,
             areAllLineItemsSkipped: areAllLineItemsSkipped
         };
+
         return validator;
 
         /**
@@ -73,7 +74,8 @@
                     fullSupply: true
                 }
             }), function(lineItem) {
-                valid = validator.validateLineItem(lineItem, fullSupplyColumns, requisition) && valid;
+                valid = validator.validateLineItem(lineItem, fullSupplyColumns, requisition)
+                    && valid;
             });
 
             angular.forEach($filter('filter')(requisition.requisitionLineItems, {
@@ -81,7 +83,8 @@
                     fullSupply: false
                 }
             }), function(lineItem) {
-                valid = validator.validateLineItem(lineItem, nonFullSupplyColumns, requisition) && valid;
+                valid = validator.validateLineItem(lineItem, nonFullSupplyColumns, requisition)
+                    && valid;
             });
 
             return valid;
@@ -146,6 +149,7 @@
             if (validateNumeric(lineItem, column)) {
                 error = error || messageService.get('requisitionValidation.numberTooLarge');
             }
+
             return !(lineItem.$errors[name] = error);
         }
 
@@ -202,8 +206,13 @@
                 TEMPLATE_COLUMNS.getStockBasedColumns().includes(column.name)) {
                 return false;
             }
+
+            if (template.patientsTabEnabled  && column.name === 'stockOnHand') {
+                return false;
+            }
+
             return calculationFactory[column.name] && !isCalculated(column) && counterpart &&
-                    !isCalculated(counterpart);
+                !isCalculated(counterpart);
 
         }
 
@@ -246,17 +255,32 @@
         }
 
         function shouldSkipValidation(lineItem, column, requisition) {
-
-            if (requisition.reportOnly && column.name === TEMPLATE_COLUMNS.STOCK_ON_HAND) {
+            if (lineItem[TEMPLATE_COLUMNS.SKIPPED] || (requisition.reportOnly &&
+                column.name === TEMPLATE_COLUMNS.STOCK_ON_HAND)) {
                 return true;
             }
-            return lineItem[TEMPLATE_COLUMNS.SKIPPED] ||
-                column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS ||
-                !column.$display;
+
+            if (requisition.template.patientsTabEnabled) {
+                return validateTbMonthly(requisition, column);
+            }
+
+            return column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS || !column.$display;
         }
 
         function validateNumeric(lineItem, column) {
             return column.$type === COLUMN_TYPES.NUMERIC && lineItem[column.name] > MAX_INTEGER_VALUE;
+        }
+
+        function validateTbMonthly(requisition, column) {
+            if ([TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY, TEMPLATE_COLUMNS.REMARKS].includes(column.name)) {
+                return true;
+            } else if (['INITIATED', 'SUBMITTED'].includes(requisition.status) &&
+                column.name ===  TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH) {
+                return true;
+            } else if (requisition.status === 'AUTHORIZED' && column.name === TEMPLATE_COLUMNS.STOCK_ON_HAND) {
+                return true;
+            }
+            return false;
         }
     }
 
