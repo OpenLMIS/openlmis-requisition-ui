@@ -20,6 +20,7 @@ describe('RequisitionBatchApprovalController', function() {
 
     beforeEach(function() {
         module('requisition-batch-approval');
+        module('requisition-view-tab');
 
         var requisitionWatcherMock = jasmine.createSpy('RequisitionWatcher');
         module(function($provide) {

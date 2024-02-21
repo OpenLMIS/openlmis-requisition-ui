@@ -96,10 +96,10 @@ describe('ViewTabController', function() {
         ];
 
         this.totalLossesAndAdjustmentsColumn = new RequisitionColumnDataBuilder()
-            .buildTotalLossesAndAdjustmentsColumn();
+            .buildTotalLossesAndAdjustmentsColumn(this.requisition);
 
         this.columns = [
-            new RequisitionColumnDataBuilder().buildSkipColumn()
+            new RequisitionColumnDataBuilder().buildSkipColumn(false, this.requisition)
         ];
 
         this.fullSupply = false;

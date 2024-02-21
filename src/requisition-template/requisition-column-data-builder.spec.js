@@ -205,7 +205,7 @@
             return builder.build(requisition);
         }
 
-        function buildSkipColumn(hideOptionSelected) {
+        function buildSkipColumn(hideOptionSelected, requisition) {
             var builder = this;
 
             builder.name = 'skipped';
@@ -229,10 +229,10 @@
                 canChangeOrder: false,
                 columnType: 'BOOLEAN'
             };
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildTotalLossesAndAdjustmentsColumn() {
+        function buildTotalLossesAndAdjustmentsColumn(requisition) {
             var builder = this;
 
             builder.name = 'totalLossesAndAdjustments';
@@ -247,7 +247,7 @@
                 canChangeOrder: true,
                 columnType: COLUMN_TYPES.NUMERIC
             };
-            return builder.build();
+            return builder.build(requisition);
         }
 
         function buildCalculatedOrderQuantityColumn() {

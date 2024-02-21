@@ -91,8 +91,9 @@
             };
         }
 
-        function withSkipColumn(hideOptionSelected) {
-            this.columnsMap.skipped = new RequisitionColumnDataBuilder().buildSkipColumn(hideOptionSelected);
+        function withSkipColumn(hideOptionSelected, requisition) {
+            this.columnsMap.skipped = new RequisitionColumnDataBuilder()
+                .buildSkipColumn(hideOptionSelected, requisition);
             return this;
         }
 

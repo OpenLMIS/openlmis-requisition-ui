@@ -20,6 +20,7 @@ describe('LossesAndAdjustmentsController', function() {
 
     beforeEach(function() {
         module('requisition-losses-and-adjustments');
+        module('requisition-view-tab');
 
         module(function($provide) {
             requisitionValidatorMock = jasmine.createSpyObj('requisitionValidator', ['validateLineItem']);

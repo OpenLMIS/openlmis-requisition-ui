@@ -23,6 +23,7 @@ describe('RequisitionApprovalListController', function() {
 
     beforeEach(function() {
         module('requisition-approval');
+        module('requisition-view-tab');
 
         module(function($provide) {
             requisitionsStorage = jasmine.createSpyObj('requisitionsStorage', ['search', 'put', 'getBy', 'removeBy']);

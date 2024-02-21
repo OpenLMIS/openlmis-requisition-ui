@@ -17,6 +17,7 @@ describe('openlmis.requisitions.convertToOrder', function() {
 
     beforeEach(function() {
         module('requisition-convert-to-order');
+        module('requisition-view-tab');
 
         var ProgramDataBuilder, FacilityDataBuilder, RequisitionDataBuilder,
             PageDataBuilder;
