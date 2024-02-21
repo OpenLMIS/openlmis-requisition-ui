@@ -19,6 +19,7 @@ describe('ConvertToOrderController', function() {
 
     beforeEach(function() {
         module('requisition-convert-to-order');
+        module('requisition-view-tab');
 
         inject(function($injector) {
             this.$q = $injector.get('$q');

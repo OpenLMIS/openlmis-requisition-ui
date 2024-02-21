@@ -111,7 +111,7 @@
             return this;
         }
 
-        function buildProductCodeColumn() {
+        function buildProductCodeColumn(requisition) {
             var builder = this;
             builder.name = 'orderable.productCode';
             builder.label = 'Product code';
@@ -125,10 +125,11 @@
                 canChangeOrder: false,
                 columnType: COLUMN_TYPES.TEXT
             };
-            return builder.build();
+
+            return builder.build(requisition);
         }
 
-        function buildProductNameColumn() {
+        function buildProductNameColumn(requisition) {
             var builder = this;
             builder.name = 'orderable.fullProductName';
             builder.label = 'Product';
@@ -142,10 +143,10 @@
                 canChangeOrder: false,
                 columnType: COLUMN_TYPES.TEXT
             };
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildRequestedQuantityColumn() {
+        function buildRequestedQuantityColumn(requisition) {
             var builder = this;
             builder.name = 'requestedQuantity';
             builder.label = 'Requested quantity';
@@ -159,10 +160,10 @@
                 canChangeOrder: true,
                 columnType: COLUMN_TYPES.NUMERIC
             };
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildRequestedQuantityExplanationColumn() {
+        function buildRequestedQuantityExplanationColumn(requisition) {
             var builder = this;
             builder.name = 'requestedQuantityExplanation';
             builder.label = 'Requested quantity explanation';
@@ -176,16 +177,16 @@
                 canChangeOrder: true,
                 columnType: COLUMN_TYPES.TEXT
             };
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildStockOnHandColumn() {
+        function buildStockOnHandColumn(requisition) {
             return this
                 .asStockOnHand()
-                .build();
+                .build(requisition);
         }
 
-        function buildBeginningBalanceColumn() {
+        function buildBeginningBalanceColumn(requisition) {
             var builder = this;
 
             builder.name = 'beginningBalance';
@@ -201,7 +202,7 @@
                 canChangeOrder: true,
                 columnType: COLUMN_TYPES.NUMERIC
             };
-            return builder.build();
+            return builder.build(requisition);
         }
 
         function buildSkipColumn(hideOptionSelected) {

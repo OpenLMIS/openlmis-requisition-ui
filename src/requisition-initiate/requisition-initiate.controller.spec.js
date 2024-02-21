@@ -17,6 +17,7 @@ describe('RequisitionInitiateController', function() {
 
     beforeEach(function() {
         module('requisition-initiate');
+        module('requisition-view-tab');
 
         var FacilityDataBuilder, ProgramDataBuilder, PeriodDataBuilder, RequisitionDataBuilder;
 

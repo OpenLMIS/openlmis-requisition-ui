@@ -19,6 +19,8 @@ describe('Requisition', function() {
         this.offlineRequisitions = jasmine.createSpyObj('offlineRequisitions', ['remove', 'removeBy']);
 
         var context = this;
+        module('requisition-view-tab');
+        module('requisition-template');
         module('requisition', function($provide) {
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
@@ -31,7 +33,6 @@ describe('Requisition', function() {
                     return context.offlineRequisitions;
                 };
             });
-
         });
 
         inject(function($injector) {
@@ -44,6 +45,7 @@ describe('Requisition', function() {
             this.Requisition = $injector.get('Requisition');
             this.RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
             this.RequisitionLineItemDataBuilder = $injector.get('RequisitionLineItemDataBuilder');
+            this.VersionObjectReferenceDataBuilder = $injector.get('VersionObjectReferenceDataBuilder');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.LineItem = $injector.get('LineItem');
             this.UuidGenerator = $injector.get('UuidGenerator');
@@ -52,18 +54,33 @@ describe('Requisition', function() {
             this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
-        var requisitionDataBuilder = new this.RequisitionDataBuilder();
-        this.sourceRequisition = requisitionDataBuilder.withRequisitionLineItems([
-            new this.RequisitionLineItemDataBuilder()
-                .fullSupplyForProgram(requisitionDataBuilder.program)
-                .buildJson(),
-            new this.RequisitionLineItemDataBuilder()
-                .nonFullSupplyForProgram(requisitionDataBuilder.program)
-                .buildJson(),
-            new this.RequisitionLineItemDataBuilder()
-                .fullSupplyForProgram(requisitionDataBuilder.program)
-                .buildJson()
-        ]).buildJson();
+        this.availableProductsIdentities = [
+            new this.VersionObjectReferenceDataBuilder()
+                .build(),
+            new this.VersionObjectReferenceDataBuilder()
+                .build(),
+            new this.VersionObjectReferenceDataBuilder()
+                .build(),
+            new this.VersionObjectReferenceDataBuilder()
+                .build()
+        ];
+
+        this.program = new this.ProgramDataBuilder().build();
+
+        this.sourceRequisition = new this.RequisitionDataBuilder()
+            .withRequisitionLineItems([
+                new this.RequisitionLineItemDataBuilder()
+                    .fullSupplyForProgram(this.program)
+                    .buildJson(),
+                new this.RequisitionLineItemDataBuilder()
+                    .nonFullSupplyForProgram(this.program)
+                    .buildJson(),
+                new this.RequisitionLineItemDataBuilder()
+                    .fullSupplyForProgram(this.program)
+                    .buildJson()
+            ])
+            .withAvailableProducts(this.availableProductsIdentities)
+            .buildJson();
 
         this.calculatedOrderQuantity = {
             isDisplayed: true
@@ -75,7 +92,6 @@ describe('Requisition', function() {
         };
         this.requisition = new this.Requisition(this.sourceRequisition);
 
-        spyOn(this.requisition.template, 'getColumn').andReturn(this.calculatedOrderQuantity);
         spyOn(this.authorizationService, 'isAuthenticated');
         spyOn(this.requisitionCacheService, 'cacheRequisition').andCallThrough();
 
@@ -1282,8 +1298,11 @@ describe('Requisition', function() {
         });
 
         it('should unskip line items for passed products', function() {
+            console.log(this.requisition.requisitionLineItems);
             this.requisition.requisitionLineItems[0].skipped = true;
             this.requisition.requisitionLineItems[2].skipped = true;
+
+            console.log(this.requisition.requisitionLineItems);
 
             this.requisition.unskipFullSupplyProducts([
                 this.requisition.requisitionLineItems[0].orderable,

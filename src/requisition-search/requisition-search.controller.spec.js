@@ -18,6 +18,8 @@ describe('RequisitionSearchController', function() {
     beforeEach(function() {
 
         module('requisition-search');
+        module('requisition-view-tab');
+        module('requisition-view');
 
         inject(function($injector) {
             this.$q = $injector.get('$q');

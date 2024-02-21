@@ -19,6 +19,7 @@ describe('requisitionValidator', function() {
         lineItems, column, columns, requisition;
 
     beforeEach(function() {
+        module('requisition-view-tab');
         module('requisition-validation', function($provide) {
             var methods = [
                 'stockOnHand',

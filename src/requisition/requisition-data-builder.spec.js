@@ -22,7 +22,7 @@
         .factory('RequisitionDataBuilder', RequisitionDataBuilder);
 
     RequisitionDataBuilder.$inject = [
-        'RequisitionLineItemDataBuilder', 'FacilityDataBuilder', 'ProgramDataBuilder',
+        'RequisitionLineItemV2DataBuilder', 'FacilityDataBuilder', 'ProgramDataBuilder',
         'PeriodDataBuilder', 'RequisitionTemplateDataBuilder', 'OrderableDataBuilder',
         'REQUISITION_STATUS', 'ReasonDataBuilder', 'Requisition', 'ProgramOrderableDataBuilder'
     ];
@@ -78,7 +78,6 @@
             this.emergency = false;
             this.supplyingFacility = 'supplying-facility-id-' + instanceNumber;
             this.supervisoryNode = 'supervisory-node-id-' + instanceNumber;
-            this.template = new RequisitionTemplateDataBuilder().buildJson();
             this.eTag = 'W/1';
 
             var programsForNonFullSupplyOrderables = [
@@ -143,6 +142,8 @@
                 new ReasonDataBuilder().build(),
                 new ReasonDataBuilder().build()
             ];
+
+            this.template = new RequisitionTemplateDataBuilder(this.buildJson()).buildJson();
         }
 
         function buildJson() {

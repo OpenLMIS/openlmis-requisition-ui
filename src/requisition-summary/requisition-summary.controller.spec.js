@@ -20,6 +20,7 @@ describe('RequisitionSummaryController', function() {
     beforeEach(function() {
 
         module('requisition-summary');
+        module('requisition-view-tab');
 
         lineItems = [
             createLineItem(false, true),

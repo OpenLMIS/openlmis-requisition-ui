@@ -26,6 +26,7 @@ describe('calculationFactory', function() {
         module('stock-reason');
         module('requisition-calculations');
         module('referencedata-facility-type-approved-product');
+        module('requisition-view-tab');
 
         inject(function($injector) {
             calculationFactory = $injector.get('calculationFactory');

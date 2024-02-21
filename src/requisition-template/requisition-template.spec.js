@@ -21,6 +21,7 @@ describe('RequisitionTemplate', function() {
     beforeEach(function() {
         module('requisition');
         module('requisition-template');
+        module('requisition-view-tab');
 
         inject(function($injector) {
             RequisitionTemplateDataBuilder = $injector.get('RequisitionTemplateDataBuilder');

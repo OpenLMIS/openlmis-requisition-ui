@@ -17,6 +17,7 @@ describe('ProductGridCell', function() {
     beforeEach(function() {
         this.getCompiledElement = getCompiledElement;
 
+        module('requisition-view-tab');
         module('requisition');
         module('requisition-product-grid', function($compileProvider, $provide) {
             $compileProvider.directive('lossesAndAdjustments', function() {

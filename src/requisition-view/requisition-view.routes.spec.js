@@ -22,6 +22,7 @@ describe('openlmis.requisitions.requisition state', function() {
         module('referencedata-facility');
         module('referencedata-program');
         module('referencedata-period');
+        module('requisition-template');
 
         inject(function($injector) {
             this.UserDataBuilder = $injector.get('UserDataBuilder');
@@ -30,6 +31,7 @@ describe('openlmis.requisitions.requisition state', function() {
             this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             this.PeriodDataBuilder = $injector.get('PeriodDataBuilder');
             this.RequisitionLineItemDataBuilder = $injector.get('RequisitionLineItemDataBuilder');
+            this.RequisitionTemplateDataBuilder = $injector.get('RequisitionTemplateDataBuilder');
 
             this.$state = $injector.get('$state');
             this.$rootScope = $injector.get('$rootScope');
