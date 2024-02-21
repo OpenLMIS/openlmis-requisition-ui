@@ -103,28 +103,6 @@
          */
         vm.isBatchApproveScreenActive = undefined;
 
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-approval.controller:RequisitionApprovalListController
-         * @name selectedFacility
-         * @type {Object}
-         *
-         * @description
-         * The facility selected by the user.
-         */
-        vm.selectedFacility = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-approval.controller:RequisitionApprovalListController
-         * @name facilities
-         * @type {Array}
-         *
-         * @description
-         * The facility selected by the user.
-         */
-        vm.facilities = [];
-
         vm.options = {
             'requisitionApproval.newestAuthorized': ['emergency,desc', 'authorizedDate,desc'],
             'requisitionApproval.oldestAuthorized': ['emergency,desc', 'authorizedDate,asc']
@@ -145,18 +123,6 @@
             vm.selectedProgram = selectedProgram;
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
             vm.isBatchApproveScreenActive = isBatchApproveScreenActive;
-
-            if (requisitions !== undefined) {
-
-                angular.forEach(requisitions, function(requisition) {
-                    var facilityObject = {};
-                    facilityObject.id = requisition.facility.id;
-                    facilityObject.name = requisition.facility.name;
-                    facilityObject.code = requisition.facility.code;
-                    vm.facilities.push(facilityObject);
-                });
-
-            }
         }
 
         /**

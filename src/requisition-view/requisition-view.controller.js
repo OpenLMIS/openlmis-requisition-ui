@@ -34,9 +34,7 @@
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
-        'requisitionBudgetModalService', 'notFunctionalEquipmentsModalService',
-        'inventoryItemService', '$q', 'requisitionBudgetService', '$rootScope', 'rejectionReasonModalService',
-        'TB_STORAGE', 'LEPROSY_STORAGE', 'RequisitionViewService'
+        'rejectionReasonModalService', '$q', 'TB_STORAGE', 'LEPROSY_STORAGE', '$rootScope', 'RequisitionViewService'
     ];
 
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
@@ -45,18 +43,11 @@
                                        RequisitionWatcher, accessTokenFactory, messageService, stateTrackerService,
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
                                        canApproveAndReject, canDelete, canSkip, canSync,
-                                       program, facility, processingPeriod, requisitionBudgetModalService,
-                                       notFunctionalEquipmentsModalService, inventoryItemService, $q,
-                                       requisitionBudgetService, $rootScope, rejectionReasonModalService,
-                                       TB_STORAGE, LEPROSY_STORAGE, RequisitionViewService) {
+                                       program, facility, processingPeriod, rejectionReasonModalService, $q,
+                                       TB_STORAGE, LEPROSY_STORAGE, $rootScope, RequisitionViewService) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
-
-        vm.requisitionBudgets = undefined;
-
-        vm.oldValues = undefined;
-
         /**
          * @ngdoc property
          * @propertyOf requisition-view.controller:RequisitionViewController
@@ -238,7 +229,7 @@
         vm.isFullSupplyTabValid = isFullSupplyTabValid;
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
         vm.close = close;
-        vm.loadRequisitionBudgetModal = loadRequisitionBudgetModal;
+        vm.loadRejectionReasonModal = loadRejectionReasonModal;
 
         /**
          * @ngdoc method
@@ -396,78 +387,20 @@
             });
 
             function saveThenSubmit() {
-                loadingModalService.open();
+                var loadingPromise = loadingModalService.open();
                 vm.requisition.$save().then(function() {
-                    var allProducts = vm.requisition.$getProducts(true).concat(
-                        vm.requisition.$getProducts(false)
-                    );
-
-                    var requestedProducts = {};
-                    for (var i = 0; i < allProducts.length; i++) {
-                        var entry = allProducts[i];
-                        if (entry.skipped === false || entry.skipped === '') {
-                            requestedProducts[entry.orderable.id] = entry.orderable;
-                        }
-                    }
-                    var requestedProductIds = Object.keys(requestedProducts);
-
-                    inventoryItemService.getOrderablesEquipments({
-                        facilityId: vm.requisition.facility.id,
-                        programId: vm.requisition.program.id,
-                        orderableIds: requestedProductIds,
-                        functionalStatuses: ['UNSERVICEABLE', 'AWAITING_REPAIR']
-                    }).then(function(response) {
-                        loadingModalService.close();
-                        reloadState();
-
-                        var orderableEquipments = {};
-                        for (var i = 0; i < requestedProductIds.length; i++) {
-                            var orderableId = requestedProductIds[i];
-
-                            if (response.hasOwnProperty(orderableId)) {
-                                var value = response[orderableId];
-                                if (value.length && value.length > 0) {
-                                    orderableEquipments[requestedProducts[orderableId].fullProductName] = value;
-                                }
-                            }
-                        }
-
-                        var notFunctionalAvailable = Object.keys(orderableEquipments).length > 0;
-
-                        if (notFunctionalAvailable) {
-
-                            notFunctionalEquipmentsModalService.show(vm.requisition, orderableEquipments)
-                                .then(function() {
-                                    submitOnly();
-                                });
-                        } else {
-                            submitOnly();
-                        }
-
-                    }, function(response) {
-                        handleSaveError(response.status);
-                        loadingModalService.close();
-                    });
-
+                    vm.requisition.$submit().then(function() {
+                        watcher.disableWatcher();
+                        loadingPromise.then(function() {
+                            notificationService.success('requisitionView.submit.success');
+                            clearPatientsLocalStorage();
+                        });
+                        stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
+                    }, loadingModalService.close);
                 }, function(response) {
                     handleSaveError(response.status);
-                    loadingModalService.close();
                 });
             }
-
-            function submitOnly() {
-                var loadingPromise = loadingModalService.open();
-                vm.requisition.$submit().then(function() {
-                    watcher.disableWatcher();
-                    loadingPromise.then(function() {
-                        notificationService.success('requisitionView.submit.success');
-                        clearPatientsLocalStorage();
-                    });
-                    stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
-                }, loadingModalService.close);
-
-            }
-
         }
 
         /**
@@ -519,7 +452,6 @@
                 }, function(response) {
                     handleSaveError(response.status);
                 });
-
             }
         }
 
@@ -548,7 +480,6 @@
                     stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
                 }, loadingModalService.close);
             });
-
         }
 
         /**
@@ -570,27 +501,14 @@
                 if (requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();
                     vm.requisition.$save().then(function() {
-                        if (requisition.status === 'IN_APPROVAL'
-                            && !requisition.reportOnly) {
-
-                            vm.requisition.$skipSecondApproval().then(function() {
-                                watcher.disableWatcher();
-                                loadingPromise.then(function() {
-                                    notificationService.success('requisitionView.approve.success');
-                                    clearPatientsLocalStorage();
-                                });
-                                stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
-                            }, loadingModalService.close);
-                        } else {
-                            vm.requisition.$approve().then(function() {
-                                watcher.disableWatcher();
-                                loadingPromise.then(function() {
-                                    notificationService.success('requisitionView.approve.success');
-                                    clearPatientsLocalStorage();
-                                });
-                                stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
-                            }, loadingModalService.close);
-                        }
+                        vm.requisition.$approve().then(function() {
+                            watcher.disableWatcher();
+                            loadingPromise.then(function() {
+                                notificationService.success('requisitionView.approve.success');
+                                clearPatientsLocalStorage();
+                            });
+                            stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
+                        }, loadingModalService.close);
                     }, function(response) {
                         handleSaveError(response.status);
                     });
@@ -642,7 +560,7 @@
          * Display rejection reason dialog if enabled.
          */
         function loadRejectionReasonModal() {
-            return $q(function(resolve) {
+            return $q(function(resolve)  {
                 if (vm.requisition.template.rejectionReasonWindowVisible) {
                     rejectionReasonModalService.open().then(function(rejectionReasons) {
                         resolve(rejectionReasons);
@@ -673,12 +591,10 @@
                     watcher.disableWatcher();
                     loadingPromise.then(function() {
                         notificationService.success('requisitionView.skip.success');
-                        clearPatientsLocalStorage();
                     });
                     stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
                 }, failWithMessage('requisitionView.skip.failure'));
             });
-
         }
 
         /**
@@ -743,32 +659,6 @@
             return valid;
         }
 
-        /**
-         * @ngdoc method
-         * @methodOf requisition-view.controller:RequisitionViewController
-         * @name loadRequisitionBudgetModal
-         *
-         * @description
-         * Display requisition budget dialog if enabled.
-         */
-        function loadRequisitionBudgetModal() {
-
-            return $q(function(resolve) {
-
-                requisitionBudgetModalService.open(vm, requisitionBudgetService, vm.oldValue)
-                    .then(function(otherSourcesOfFund) {
-                        broadCastOtherSourcesOfFund(otherSourcesOfFund);
-                        resolve(otherSourcesOfFund);
-                    });
-
-            });
-        }
-
-        function broadCastOtherSourcesOfFund(otherSourcesOfFund) {
-            vm.oldValue = otherSourcesOfFund;
-            $rootScope.$broadcast('otherSourcesOfFund', otherSourcesOfFund);
-        }
-
         function handleSaveError(status) {
             if (status === 409) {
                 // in case of conflict, use the server version
@@ -799,10 +689,6 @@
             localStorageFactory(LEPROSY_STORAGE).clearAll();
         }
 
-        $rootScope.$on('validRequisitionCoast', function(event, validRequisitionCoast) {
-            vm.validRequisitionCoast = validRequisitionCoast;
-        });
-
         function getFromLocalStorage(storageName) {
             return localStorageFactory(storageName).getAll();
         }
@@ -817,7 +703,7 @@
             }
 
             return RequisitionViewService.isArrayFullyFilled(TBArray) &&
-            RequisitionViewService.isArrayFullyFilled(LeprosyArray);
+                RequisitionViewService.isArrayFullyFilled(LeprosyArray);
         }
 
         function addPatientsDataToRequisition() {
