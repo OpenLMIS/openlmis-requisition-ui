@@ -54,32 +54,21 @@ describe('Requisition', function() {
             this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
-        this.availableProductsIdentities = [
-            new this.VersionObjectReferenceDataBuilder()
-                .build(),
-            new this.VersionObjectReferenceDataBuilder()
-                .build(),
-            new this.VersionObjectReferenceDataBuilder()
-                .build(),
-            new this.VersionObjectReferenceDataBuilder()
-                .build()
-        ];
-
         this.program = new this.ProgramDataBuilder().build();
 
-        this.sourceRequisition = new this.RequisitionDataBuilder()
+        var requisitionDataBuilder = new this.RequisitionDataBuilder();
+        this.sourceRequisition = requisitionDataBuilder
             .withRequisitionLineItems([
                 new this.RequisitionLineItemDataBuilder()
-                    .fullSupplyForProgram(this.program)
+                    .fullSupplyForProgram(requisitionDataBuilder.program)
                     .buildJson(),
                 new this.RequisitionLineItemDataBuilder()
-                    .nonFullSupplyForProgram(this.program)
+                    .nonFullSupplyForProgram(requisitionDataBuilder.program)
                     .buildJson(),
                 new this.RequisitionLineItemDataBuilder()
-                    .fullSupplyForProgram(this.program)
+                    .fullSupplyForProgram(requisitionDataBuilder.program)
                     .buildJson()
             ])
-            .withAvailableProducts(this.availableProductsIdentities)
             .buildJson();
 
         this.calculatedOrderQuantity = {
@@ -92,6 +81,7 @@ describe('Requisition', function() {
         };
         this.requisition = new this.Requisition(this.sourceRequisition);
 
+        spyOn(this.requisition.template, 'getColumn').andReturn(this.calculatedOrderQuantity);
         spyOn(this.authorizationService, 'isAuthenticated');
         spyOn(this.requisitionCacheService, 'cacheRequisition').andCallThrough();
 
@@ -1298,11 +1288,8 @@ describe('Requisition', function() {
         });
 
         it('should unskip line items for passed products', function() {
-            console.log(this.requisition.requisitionLineItems);
             this.requisition.requisitionLineItems[0].skipped = true;
             this.requisition.requisitionLineItems[2].skipped = true;
-
-            console.log(this.requisition.requisitionLineItems);
 
             this.requisition.unskipFullSupplyProducts([
                 this.requisition.requisitionLineItems[0].orderable,

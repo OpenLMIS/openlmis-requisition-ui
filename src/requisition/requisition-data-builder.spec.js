@@ -22,7 +22,7 @@
         .factory('RequisitionDataBuilder', RequisitionDataBuilder);
 
     RequisitionDataBuilder.$inject = [
-        'RequisitionLineItemV2DataBuilder', 'FacilityDataBuilder', 'ProgramDataBuilder',
+        'RequisitionLineItemDataBuilder', 'FacilityDataBuilder', 'ProgramDataBuilder',
         'PeriodDataBuilder', 'RequisitionTemplateDataBuilder', 'OrderableDataBuilder',
         'REQUISITION_STATUS', 'ReasonDataBuilder', 'Requisition', 'ProgramOrderableDataBuilder'
     ];
