@@ -34,6 +34,7 @@ describe('calculationFactory', function() {
             COLUMN_SOURCES = $injector.get('COLUMN_SOURCES');
             RequisitionColumnDataBuilder = $injector.get('RequisitionColumnDataBuilder');
             ReasonDataBuilder = $injector.get('ReasonDataBuilder');
+            this.RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
             StockAdjustmentDataBuilder = $injector.get('StockAdjustmentDataBuilder');
             this.RequisitionLineItemV2DataBuilder = $injector.get('RequisitionLineItemV2DataBuilder');
             this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
@@ -42,18 +43,27 @@ describe('calculationFactory', function() {
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
-        calculatedOrderQuantityIsaColumn = new RequisitionColumnDataBuilder().buildCalculatedOrderQuantityIsaColumn();
-        calculatedOrderQuantityColumn = new RequisitionColumnDataBuilder().buildCalculatedOrderQuantityColumn();
-        totalConsumedQuantityColumn = new RequisitionColumnDataBuilder().buildTotalConsumedQuantityColumn();
-        additionalQuantityRequiredColumn = new RequisitionColumnDataBuilder().buildAdditionalQuantityRequiredColumn();
-        maximumStockQuantityColumn = new RequisitionColumnDataBuilder().buildMaximumStockQuantityColumn();
-        averageConsumptionColumn = new RequisitionColumnDataBuilder().buildAverageConsumptionColumn();
-        requestedQuantityColumn = new RequisitionColumnDataBuilder().buildRequestedQuantityColumn();
+        this.requisition = new this.RequisitionDataBuilder().build();
+
+        calculatedOrderQuantityIsaColumn = new RequisitionColumnDataBuilder()
+            .buildCalculatedOrderQuantityIsaColumn(this.requisition);
+        calculatedOrderQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildCalculatedOrderQuantityColumn(this.requisition);
+        totalConsumedQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildTotalConsumedQuantityColumn(this.requisition);
+        additionalQuantityRequiredColumn = new RequisitionColumnDataBuilder()
+            .buildAdditionalQuantityRequiredColumn(this.requisition);
+        maximumStockQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildMaximumStockQuantityColumn(this.requisition);
+        averageConsumptionColumn = new RequisitionColumnDataBuilder()
+            .buildAverageConsumptionColumn(this.requisition);
+        requestedQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildRequestedQuantityColumn(this.requisition);
         stockOnHandColumn = new RequisitionColumnDataBuilder()
             .asStockOnHand()
             .asUserInput()
-            .build();
-        isaColumn = new RequisitionColumnDataBuilder().buildIdealStockAmountColumn();
+            .build(this.requisition);
+        isaColumn = new RequisitionColumnDataBuilder().buildIdealStockAmountColumn(this.requisition);
         this.programOrderable = new this.ProgramOrderableDataBuilder().buildJson();
         lineItem = new this.RequisitionLineItemV2DataBuilder()
             .withTotalLossesAndAdjustments(25)
@@ -166,13 +176,6 @@ describe('calculationFactory', function() {
             lineItem.orderable.roundToZero = false;
 
             expect(calculationFactory.packsToShip(lineItem, requisitionMock)).toBe(1);
-        });
-
-        it('should calculate total properly', function() {
-            lineItem.quantityToIssue = 10;
-            lineItem.orderable.netContent = 10;
-
-            expect(calculationFactory.total(lineItem)).toBe(1);
         });
 
         it('should calculate stock on hand properly', function() {

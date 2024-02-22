@@ -16,7 +16,7 @@
 describe('RequisitionApprovalListController', function() {
 
     //injects
-    var vm, $state, alertService, $controller, requisitionsStorage, batchRequisitionsStorage;
+    var vm, $state, alertService, $controller, requisitionsStorage, batchRequisitionsStorage, TBArray, LeprosyArray;
 
     //variables
     var requisitions, programs;
@@ -27,6 +27,8 @@ describe('RequisitionApprovalListController', function() {
 
         module(function($provide) {
             requisitionsStorage = jasmine.createSpyObj('requisitionsStorage', ['search', 'put', 'getBy', 'removeBy']);
+            TBArray = jasmine.createSpyObj('TBArray', ['clearAll']);
+            LeprosyArray = jasmine.createSpyObj('LeprosyArray', ['clearAll']);
             batchRequisitionsStorage = jasmine.createSpyObj('batchRequisitionsStorage', ['search', 'put', 'getBy',
                 'removeBy']);
 
@@ -38,6 +40,12 @@ describe('RequisitionApprovalListController', function() {
                 }
                 if (resourceName === 'batchApproveRequisitions') {
                     return batchRequisitionsStorage;
+                }
+                if (resourceName === 'TBArray') {
+                    return TBArray;
+                }
+                if (resourceName === 'LeprosyArray') {
+                    return LeprosyArray;
                 }
                 return requisitionsStorage;
             });
@@ -52,7 +60,11 @@ describe('RequisitionApprovalListController', function() {
             $controller = $injector.get('$controller');
             $state = $injector.get('$state');
             alertService = $injector.get('alertService');
+            alertService = $injector.get('alertService');
+            this.RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
         });
+
+        this.requistion = new this.RequisitionDataBuilder();
 
         programs = [{
             id: '1',
@@ -184,10 +196,11 @@ describe('RequisitionApprovalListController', function() {
         });
 
         it('should go to fullSupply state', function() {
-            vm.openRnr(requisitions[0].id);
+            vm.openRnr(this.requistion);
 
             expect($state.go).toHaveBeenCalledWith('openlmis.requisitions.requisition.fullSupply', {
-                rnr: requisitions[0].id
+                rnr: this.requistion.id,
+                requisition: this.requistion
             });
         });
     });

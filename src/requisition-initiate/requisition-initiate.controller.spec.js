@@ -60,6 +60,8 @@ describe('RequisitionInitiateController', function() {
 
             this.canInitiateRnr = true;
 
+            this.requistionSource = new RequisitionDataBuilder();
+
             this.permissionService = $injector.get('permissionService');
             spyOn(this.permissionService, 'hasPermission').andReturn(this.$q.resolve());
 
@@ -83,10 +85,11 @@ describe('RequisitionInitiateController', function() {
     it('should change page to requisitions.requisition for with selected period with rnrId', function() {
         spyOn(this.$state, 'go');
 
-        this.vm.goToRequisition(1);
+        this.vm.goToRequisition(this.requistionSource);
 
         expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.requisition.fullSupply', {
-            rnr: 1
+            rnr: this.requistionSource.id,
+            requisition: this.requistionSource
         });
     });
 

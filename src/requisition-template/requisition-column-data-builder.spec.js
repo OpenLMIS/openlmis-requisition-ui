@@ -250,7 +250,7 @@
             return builder.build(requisition);
         }
 
-        function buildCalculatedOrderQuantityColumn() {
+        function buildCalculatedOrderQuantityColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -270,7 +270,7 @@
             builder.source = 'CALCULATED';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
         function buildTotalConsumedQuantityColumn(requisition) {
@@ -296,7 +296,7 @@
             return builder.build(requisition);
         }
 
-        function buildAdditionalQuantityRequiredColumn() {
+        function buildAdditionalQuantityRequiredColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -315,10 +315,10 @@
             builder.source = 'USER_INPUT';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildMaximumStockQuantityColumn() {
+        function buildMaximumStockQuantityColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -342,10 +342,10 @@
             builder.source = 'USER_INPUT';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildAverageConsumptionColumn() {
+        function buildAverageConsumptionColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -365,10 +365,10 @@
             builder.source = 'USER_INPUT';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildIdealStockAmountColumn() {
+        function buildIdealStockAmountColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -388,10 +388,10 @@
             builder.source = 'REFERENCE_DATA';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
-        function buildCalculatedOrderQuantityIsaColumn() {
+        function buildCalculatedOrderQuantityIsaColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -411,7 +411,7 @@
             builder.source = 'CALCULATED';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
         function buildTotalCostColumn(requisition) {
