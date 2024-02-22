@@ -273,7 +273,7 @@
             return builder.build();
         }
 
-        function buildTotalConsumedQuantityColumn() {
+        function buildTotalConsumedQuantityColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -293,7 +293,7 @@
             builder.source = 'USER_INPUT';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
         function buildAdditionalQuantityRequiredColumn() {
@@ -414,7 +414,7 @@
             return builder.build();
         }
 
-        function buildTotalCostColumn() {
+        function buildTotalCostColumn(requisition) {
             var builder = this;
 
             builder.columnDefinition = {
@@ -434,7 +434,7 @@
             builder.source = 'CALCULATED';
             builder.tag = null;
 
-            return builder.build();
+            return builder.build(requisition);
         }
 
         function buildApprovedQuantityColumn(requisition) {
