@@ -19,6 +19,8 @@ describe('Requisition', function() {
         this.offlineRequisitions = jasmine.createSpyObj('offlineRequisitions', ['remove', 'removeBy']);
 
         var context = this;
+        module('requisition-view-tab');
+        module('requisition-template');
         module('requisition', function($provide) {
 
             var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll']);
@@ -31,7 +33,6 @@ describe('Requisition', function() {
                     return context.offlineRequisitions;
                 };
             });
-
         });
 
         inject(function($injector) {
@@ -44,6 +45,7 @@ describe('Requisition', function() {
             this.Requisition = $injector.get('Requisition');
             this.RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
             this.RequisitionLineItemDataBuilder = $injector.get('RequisitionLineItemDataBuilder');
+            this.VersionObjectReferenceDataBuilder = $injector.get('VersionObjectReferenceDataBuilder');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.LineItem = $injector.get('LineItem');
             this.UuidGenerator = $injector.get('UuidGenerator');
@@ -52,18 +54,22 @@ describe('Requisition', function() {
             this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
+        this.program = new this.ProgramDataBuilder().build();
+
         var requisitionDataBuilder = new this.RequisitionDataBuilder();
-        this.sourceRequisition = requisitionDataBuilder.withRequisitionLineItems([
-            new this.RequisitionLineItemDataBuilder()
-                .fullSupplyForProgram(requisitionDataBuilder.program)
-                .buildJson(),
-            new this.RequisitionLineItemDataBuilder()
-                .nonFullSupplyForProgram(requisitionDataBuilder.program)
-                .buildJson(),
-            new this.RequisitionLineItemDataBuilder()
-                .fullSupplyForProgram(requisitionDataBuilder.program)
-                .buildJson()
-        ]).buildJson();
+        this.sourceRequisition = requisitionDataBuilder
+            .withRequisitionLineItems([
+                new this.RequisitionLineItemDataBuilder()
+                    .fullSupplyForProgram(requisitionDataBuilder.program)
+                    .buildJson(),
+                new this.RequisitionLineItemDataBuilder()
+                    .nonFullSupplyForProgram(requisitionDataBuilder.program)
+                    .buildJson(),
+                new this.RequisitionLineItemDataBuilder()
+                    .fullSupplyForProgram(requisitionDataBuilder.program)
+                    .buildJson()
+            ])
+            .buildJson();
 
         this.calculatedOrderQuantity = {
             isDisplayed: true

@@ -17,6 +17,7 @@ describe('openlmis.requisitions.approvalList', function() {
 
     beforeEach(function() {
         module('requisition-approval');
+        module('requisition-view-tab');
 
         inject(function($injector) {
             this.$state = $injector.get('$state');

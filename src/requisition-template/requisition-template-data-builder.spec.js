@@ -37,7 +37,7 @@
 
         return RequisitionTemplateDataBuilder;
 
-        function RequisitionTemplateDataBuilder() {
+        function RequisitionTemplateDataBuilder(requisition) {
             RequisitionTemplateDataBuilder.instanceNumber =
                 (RequisitionTemplateDataBuilder.instanceNumber || 0) + 1;
 
@@ -55,19 +55,22 @@
                     .withId('facility-type-' + instanceNumber)
                     .build()
             ];
+            // temporary template to build columnsMap and later it will be replaced
+            requisition.template = this.buildJson();
+
             this.columnsMap = {
                 productCode: new RequisitionColumnDataBuilder()
-                    .buildProductCodeColumn(),
+                    .buildProductCodeColumn(requisition),
                 productName: new RequisitionColumnDataBuilder()
-                    .buildProductNameColumn(),
+                    .buildProductNameColumn(requisition),
                 stockOnHand: new RequisitionColumnDataBuilder()
-                    .buildStockOnHandColumn(),
+                    .buildStockOnHandColumn(requisition),
                 requestedQuantity: new RequisitionColumnDataBuilder()
-                    .buildRequestedQuantityColumn(),
+                    .buildRequestedQuantityColumn(requisition),
                 requestedQuantityExplanation: new RequisitionColumnDataBuilder()
-                    .buildRequestedQuantityExplanationColumn(),
+                    .buildRequestedQuantityExplanationColumn(requisition),
                 beginningBalance: new RequisitionColumnDataBuilder()
-                    .buildBeginningBalanceColumn()
+                    .buildBeginningBalanceColumn(requisition)
             };
         }
 
@@ -88,8 +91,9 @@
             };
         }
 
-        function withSkipColumn(hideOptionSelected) {
-            this.columnsMap.skipped = new RequisitionColumnDataBuilder().buildSkipColumn(hideOptionSelected);
+        function withSkipColumn(hideOptionSelected, requisition) {
+            this.columnsMap.skipped = new RequisitionColumnDataBuilder()
+                .buildSkipColumn(hideOptionSelected, requisition);
             return this;
         }
 

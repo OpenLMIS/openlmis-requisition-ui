@@ -87,7 +87,7 @@ describe('openlmis.requisitions.requisition.fullSupply state', function() {
         ];
 
         this.columns = [
-            new this.RequisitionColumnDataBuilder().buildProductCodeColumn()
+            new this.RequisitionColumnDataBuilder().buildProductCodeColumn(this.requisition)
         ];
 
         spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));

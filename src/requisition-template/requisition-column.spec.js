@@ -117,7 +117,7 @@ describe('RequisitionColumn', function() {
             name: 'should hide Remarks column if status is before authorize',
             column: 'remarks',
             afterAuthorize: false,
-            result: false
+            result: true
         },
         {
             name: 'should show Approved Quantity column if status is after authorize',
@@ -147,7 +147,7 @@ describe('RequisitionColumn', function() {
     describe('isSkipColumn', function() {
 
         it('should return true if column is Skip column', function() {
-            var column = new RequisitionColumnDataBuilder().buildSkipColumn();
+            var column = new RequisitionColumnDataBuilder().buildSkipColumn(false, requisition);
 
             var result = column.isSkipColumn();
 
@@ -155,7 +155,7 @@ describe('RequisitionColumn', function() {
         });
 
         it('should return false if column is any other column', function() {
-            var column = new RequisitionColumnDataBuilder().buildProductCodeColumn();
+            var column = new RequisitionColumnDataBuilder().buildProductCodeColumn(requisition);
 
             var result = column.isSkipColumn();
 

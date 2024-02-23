@@ -18,6 +18,8 @@ describe('RequisitionSearchController', function() {
     beforeEach(function() {
 
         module('requisition-search');
+        module('requisition-view-tab');
+        module('requisition-view');
 
         inject(function($injector) {
             this.$q = $injector.get('$q');
@@ -28,7 +30,10 @@ describe('RequisitionSearchController', function() {
             this.offlineService = $injector.get('offlineService');
             this.confirmService = $injector.get('confirmService');
             this.REQUISITION_STATUS = $injector.get('REQUISITION_STATUS');
+            this.RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
         });
+
+        this.requistion = new this.RequisitionDataBuilder();
 
         this.facilities = [{
             name: 'facilityOne',
@@ -306,10 +311,11 @@ describe('RequisitionSearchController', function() {
         it('should go to requisitions.requisition.fullSupply state', function() {
             spyOn(this.$state, 'go').andReturn();
 
-            this.vm.openRnr('requisition-id');
+            this.vm.openRnr(this.requistion);
 
             expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.requisition.fullSupply', {
-                rnr: 'requisition-id'
+                rnr: this.requistion.id,
+                requisition: this.requistion
             });
         });
 

@@ -17,6 +17,7 @@ describe('requisitionSearch filter', function() {
 
     beforeEach(function() {
         module('requisition-search');
+        module('requisition-view-tab');
 
         var RequisitionDataBuilder;
         inject(function($injector) {

@@ -35,6 +35,8 @@ describe('requisitionCacheService', function() {
             userPrograms: this.userProgramsStorage,
             facilities: this.facilitiesStorage
         };
+
+        module('requisition-view-tab');
         module('requisition', function($provide) {
             $provide.service('offlineService', function() {
                 return function() {};
