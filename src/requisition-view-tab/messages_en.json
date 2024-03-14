@@ -11,7 +11,19 @@
     "requisitionViewTab.noProductsToAdd.label": "Warning",
     "requisitionViewTab.noProductsToAdd.message": "There are no more products to add. All available products have already been added into this requisition.",
     "requisitionViewTab.all": "All",
+    "requisitionViewTab.page": "This Page",
     "requisitionViewTab.none": "None",
     "requisitionViewTab.skip": "Skip",
-    "requisitionViewTab.totalLossesAndAdjustment.disabled": "Total losses and adjustments modal is disabled for stock based requisitions."
+    "requisitionViewTab.totalLossesAndAdjustment.disabled": "Total losses and adjustments modal is disabled for stock based requisitions.",
+
+    "requisitionPatientsViewTab.monthOfTreatment.label": "Month of treatment",
+    "requisitionPatientsViewTab.numberOfAdultPatients.label": "Number of adult patients(new)",
+    "requisitionPatientsViewTab.numberOfChildren.label": "Number of children(new)",
+    "requisitionPatientsViewTab.numberOfRetreatmentPatients.label": "Number of retreatment patients",
+    "requisitionPatientsViewTab.numberOfAdultsOnIPT.label": "Number of adults on IPT",
+    "requisitionPatientsViewTab.numberOfChildrenOnIPT.label": "Number of children on IPT",
+    "requisitionPatientsViewTab.numberOfAdultOnMBRegimen.label": "Number of adults on MB regimen",
+    "requisitionPatientsViewTab.numberOfAdultOnPBRegimen.label": "Number of adults on PB regimen",
+    "requisitionPatientsViewTab.numberOfChildrenOnMBRegimen.label": "Number of children on MB regimen",
+    "requisitionPatientsViewTab.numberOfChildrenOnPBRegimen.label": "Number of children on PB regimen"
 }
