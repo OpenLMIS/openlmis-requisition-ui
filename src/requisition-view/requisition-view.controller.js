@@ -213,6 +213,17 @@
          */
         vm.displaySyncButton = undefined;
 
+        /**
+         * ngdoc property
+         * @propertyOf requisition-view.controller:RequisitionViewController
+         * @name displaySyncButton
+         * @type {Boolean}
+         *
+         * @description
+         * Flag defining whether current user should see the sync to server button.
+         */
+        vm.patientsTabEnabled = vm.requisition.template.patientsTabEnabled;
+
         // Functions
         vm.$onInit = onInit;
         vm.updateRequisition = updateRequisition;
