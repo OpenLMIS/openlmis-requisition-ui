@@ -216,11 +216,11 @@
         /**
          * ngdoc property
          * @propertyOf requisition-view.controller:RequisitionViewController
-         * @name displaySyncButton
+         * @name patientsTabEnabled
          * @type {Boolean}
          *
          * @description
-         * Flag defining whether current user should see the sync to server button.
+         * Flag to define requisition tab names whenever patientsTabEnabled is true or false.
          */
         vm.patientsTabEnabled = vm.requisition.template.patientsTabEnabled;
 
