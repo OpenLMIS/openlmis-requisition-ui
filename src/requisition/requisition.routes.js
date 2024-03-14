@@ -27,7 +27,7 @@
             isOffline: true,
             abstract: true,
             showInNavigation: true,
-            priority: 998,
+            priority: 10,
             label: 'requisition.requisitions',
             url: '/requisitions',
             template: '<div ui-view></div>'

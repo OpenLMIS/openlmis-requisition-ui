@@ -117,7 +117,7 @@ describe('RequisitionColumn', function() {
             name: 'should hide Remarks column if status is before authorize',
             column: 'remarks',
             afterAuthorize: false,
-            result: true
+            result: false
         },
         {
             name: 'should show Approved Quantity column if status is after authorize',
