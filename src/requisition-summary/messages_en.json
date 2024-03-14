@@ -3,5 +3,20 @@
     "requisitionSummary.nonFullSupplyProducts": "Non full supply product(s)",
     "requisitionSummary.requisitionCost": "Requisition cost",
     "requisitionSummary.showDetails": "Show details",
-    "requisitionSummary.totalRequisitionCost": "Total requisition cost"
+    "requisitionSummary.totalRequisitionCost": "Total requisition cost",
+    "requisitionSummary.totalSupplementalFund": "Total Supplemental Fund(s)",
+    "requisitionSummary.allocatedBudget": "Allocated Budget",
+    "requisitionSummary.netBalance": "Net Balance",
+    "requisitionSummary.addSupplementalFund": "Add Supplemental Fund (s)",
+    "requisitionSummary.totalSupplemental": "Total Supplemental",
+    "supplementalFund.name": "Name",
+    "supplementalFund.amount": "Amount",
+    "supplementalFund.actions": "Actions",
+    "sourceOfFund.add": "Add",
+    "sourceOfFund.remove": "Remove",
+    "sourceOfFund.required": "This field is required",
+    "sourceOfFund.numberTooLarge": "The number is too large",
+    "requisitionSummary.requisition.fund.source.label.summary": "Fund Source Summary",
+    "requisitionSummary.requisition.fund.source.updated.success": "Updated successful",
+    "requisitionSummary.requisition.fund.source.updated.failed": "Failed to update"
 }
