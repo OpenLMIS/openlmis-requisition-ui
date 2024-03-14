@@ -213,6 +213,17 @@
          */
         vm.displaySyncButton = undefined;
 
+        /**
+         * ngdoc property
+         * @propertyOf requisition-view.controller:RequisitionViewController
+         * @name patientsTabEnabled
+         * @type {Boolean}
+         *
+         * @description
+         * Flag to define requisition tab names whenever patientsTabEnabled is true or false.
+         */
+        vm.patientsTabEnabled = vm.requisition.template.patientsTabEnabled;
+
         // Functions
         vm.$onInit = onInit;
         vm.updateRequisition = updateRequisition;
