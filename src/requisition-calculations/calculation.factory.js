@@ -531,13 +531,9 @@
                 pValue = getColumnValue(lineItem, requisition, pColumn);
                 pValue = pValue === undefined ? 0 : pValue;
             }
-            /*
-            * This formula has changed based on Tanzania specific requirements
-            * instead of maxPeriodsOfStock changed to minPeriodsOfStock.
-            *
-            */
+
             return hColumn && hColumn.option.optionName === 'default' ?
-                Math.round(pValue * lineItem.approvedProduct.minPeriodsOfStock) : 0;
+                Math.round(pValue * lineItem.approvedProduct.maxPeriodsOfStock) : 0;
         }
 
         /**
