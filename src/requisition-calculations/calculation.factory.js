@@ -598,7 +598,7 @@
 
         function getColumnValue(lineItem, requisition, column) {
 
-            if (column.source === COLUMN_SOURCES.CALCULATED || column.source === COLUMN_SOURCES.REFERENCE_DATA) {
+            if (column.source === COLUMN_SOURCES.CALCULATED || column.name === 'dosesPerPatient') {
                 return calculationFactory[column.name](lineItem, requisition);
             }
 
