@@ -1,7 +1,6 @@
-7.0.12-SNAPSHOT / WIP
+7.0.12 / 2024-04-19
 ==================
-
-New functionality that are backwards-compatible:
+New functionalities that are backwards-compatible:
 * [OLMIS-7838](https://openlmis.atlassian.net/browse/OLMIS-7838): Move BUQ and TM Monthly functionalities from Tanzania to Core instance
 
 7.0.11 / 2023-11-07
