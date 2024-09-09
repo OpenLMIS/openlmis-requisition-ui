@@ -40,7 +40,7 @@
 
   .page-footer {
     button {
-      margin-right: 1em;
+      @include margin-right(1em);
     }
 
     justify-content: flex-end;
@@ -61,7 +61,7 @@
           font-family: 'FONTAWESOME';
           content: '\f0d7'; // fa-caret-down
           position: absolute;
-          left: 1em;
+          @include left(1em);
           color: $light-grey;
           top: 50%;
           transform: translateY(-50%);
@@ -72,7 +72,7 @@
           border: 1px solid $light-grey;
           background-color: inherit;
           border-radius: 4px;
-          padding: 0.5em 0.5em 0.5em 2em;
+          @include padding(0.5em, 0.5em, 0.5em, 2em);
 
           &:focus {
             outline: none;
@@ -82,7 +82,7 @@
         }
 
         .clear-icon {
-          margin-left: -2em;
+          @include margin-left(-2em);
           color: $light-grey;
 
           &:hover {
@@ -136,7 +136,7 @@
             font: inherit;
             outline: inherit;
             padding: 0.5em;
-            text-align: left;
+            @include text-align(left);
             width: 100%;
 
             &.is-selected {
