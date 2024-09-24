@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import Modal from '../react-components/modals/modal';
+import Modal from '../react-components/modals/Modal';
 import EditableTable from '../react-components/table/editable-table';
 import { orderTableColumns } from './order-create.constant';
 import TabNavigation from '../react-components/tab-navigation/tab-navigation';
