@@ -2,6 +2,20 @@
   $accent-color: #49baeb;
   $light-grey: #bebebe;
 
+  .tabs-container {
+    width: calc(100% - 2em);
+    margin-left: 1em;
+  }
+
+  .requisition-info {
+    width: calc(100% - 2em);
+    margin: 1em 0 0 1em;
+    position: relative;
+    background-color: $background-color-alt;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+  }
+
   .order-create-form {
     .section {
       margin: 0.5em 0;
@@ -19,6 +33,10 @@
         min-width: 400px;
       }
     }
+
+    .facilities-table {
+      width: fit-content;
+    }
   }
 
   .order-create-table-container {
@@ -34,13 +52,25 @@
         justify-content: space-between;
         width: 100%;
         margin-bottom: 1em;
+
+        .buttons-container {
+          @include flex-layout(row, $gap: 1rem);
+
+          .order-print {
+            @include icon('print');
+
+            &::before {
+              margin-right: .5em;
+            }
+          }
+        }
       }
     }
   }
 
   .page-footer {
     button {
-      @include margin-right(1em);
+      margin-right: 1em;
     }
 
     justify-content: flex-end;
@@ -52,16 +82,15 @@
     max-height: 40vh;
 
     .search {
-
       .input-wrapper {
-        display:inline-block;
+        display: inline-block;
         position: relative;
 
         &:before {
-          font-family: 'FONTAWESOME';
-          content: '\f0d7'; // fa-caret-down
+          font-family: "FONTAWESOME";
+          content: "\f0d7"; // fa-caret-down
           position: absolute;
-          @include left(1em);
+          left: 1em;
           color: $light-grey;
           top: 50%;
           transform: translateY(-50%);
@@ -72,7 +101,7 @@
           border: 1px solid $light-grey;
           background-color: inherit;
           border-radius: 4px;
-          @include padding(0.5em, 0.5em, 0.5em, 2em);
+          padding: 0.5em 0.5em 0.5em 2em;
 
           &:focus {
             outline: none;
@@ -82,7 +111,7 @@
         }
 
         .clear-icon {
-          @include margin-left(-2em);
+          margin-left: -2em;
           color: $light-grey;
 
           &:hover {
@@ -101,7 +130,7 @@
 
     .select {
       position: absolute;
-      z-index:100;
+      z-index: 100;
       border: $light-grey 1px solid;
       box-shadow: 0 0.25em 1em #e4e4e4;
       background-color: #fff;
@@ -136,12 +165,12 @@
             font: inherit;
             outline: inherit;
             padding: 0.5em;
-            @include text-align(left);
+            text-align: left;
             width: 100%;
 
             &.is-selected {
-                background-color: $accent-color;
-                color: #fff;
+              background-color: $accent-color;
+              color: #fff;
             }
           }
         }

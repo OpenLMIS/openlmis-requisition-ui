@@ -14,41 +14,32 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import Tippy from '@tippyjs/react';
-
-import TrashButton from '../react-components/buttons/trash-button';
-import EditableTable from '../react-components/table/editable-table';
-import InputCell from '../react-components/table/input-cell';
-
-import { formatDate } from '../react-components/utils/format-utils';
 import getService from '../react-components/utils/angular-utils';
-import { SearchSelect } from './search-select';
+import { createOrderDisabled, getIsOrderValidArray, getOrderValue, saveDraftDisabled } from './order-create-table-helper-functions';
+import OrderCreateTab from './order-create-tab';
 import { saveDraft, createOrder } from './reducers/orders.reducer';
+import { isOrderInvalid } from './order-create-validation-helper-functions';
+import OrderCreateSummaryModal from './order-create-summary-modal';
+import TabNavigation from '../react-components/tab-navigation/tab-navigation';
 
-const OrderCreateTable = () => {
+const OrderCreateTable = ({ isReadOnly }) => {
+    const [orders, setOrders] = useState([]);
+    const [currentTab, setCurrentTab] = useState(0);
+    const [showValidationErrors, setShowValidationErrors] = useState(false);
+    const [isSummaryModalOpen, setIsSummaryModalOpen] = useState(false);
+    const [cachedOrderableOptions, setCachedOrderableOptions] = useState([]);
 
-    const history = useHistory();
-    const { orderId } = useParams();
+    const { orderIds } = useParams();
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    const [order, setOrder] = useState({ orderLineItems: [] });
-    const [orderParams, setOrderParams] = useState({ programId: null , requestingFacilityId: null });
-
-    const [orderableOptions, setOrderableOptions] = useState([]);
-    const [selectedOrderable, selectOrderable] = useState('');
-
-    const [showValidationErrors, setShowValidationErrors] = useState(false);
-
-    const orderService = useMemo(
-        () => {
-            return getService('orderCreateService');
-        },
-        []
-    );
+    const orderService = useMemo(() => getService('orderCreateService'), []);
+    const notificationService = useMemo(() => getService('notificationService'), []);
+    const offlineService = useMemo(() => getService('offlineService'), []);
 
     const stockCardSummaryRepositoryImpl = useMemo(
         () => {
@@ -58,319 +49,148 @@ const OrderCreateTable = () => {
         []
     );
 
-    const notificationService = useMemo(
-        () => {
-            return getService('notificationService');
-        },
-        []
-    );
-
-    const offlineService = useMemo(
-        () => {
-            return getService('offlineService');
-        },
-        []
-    );
-
     useEffect(
         () => {
-            orderService.get(orderId)
-                .then((fetchedOrder) => {
-                    const orderParams = {
-                        programId: fetchedOrder.program.id,
-                        facilityId: fetchedOrder.requestingFacility.id
-                    };
-
-                    setOrderParams(orderParams);
-
-                    const orderableIds = fetchedOrder.orderLineItems.map((lineItem) => {
-                        return lineItem.orderable.id;
-                    });
-
-                    if (orderableIds && orderableIds.length) {
-                        stockCardSummaryRepositoryImpl.query({
-                            programId: fetchedOrder.program.id,
-                            facilityId: fetchedOrder.requestingFacility.id,
-                            orderableId: orderableIds
-                        })
-                            .then(function(page) {
-                                const stockItems = page.content;
-
-                                const orderWithSoh = {
-                                    ...fetchedOrder,
-                                    orderLineItems: fetchedOrder.orderLineItems.map((lineItem) => {
-                                        const stockItem =_.find(stockItems, (item) => (item.orderable.id === lineItem.orderable.id));
-
-                                        return {
-                                            ...lineItem,
-                                            soh: stockItem ? stockItem.stockOnHand : 0
-                                        };
-                                    })
-                                };
-
-                                setOrder(orderWithSoh);
-                            })
-                            .catch(function() {
-                                setOrder(fetchedOrder);
+            if (orderIds) {
+                const orderIdsArray = orderIds.split(',');
+                const ordersPromises = orderIdsArray.map(orderId => orderService.get(orderId));
+                setCachedOrderableOptions(orderIdsArray.map(() => []));
+                Promise.all(ordersPromises)
+                    .then((orders) => {
+                        const orderValuePromisses = orders.map(order => getOrderValue(order, stockCardSummaryRepositoryImpl));
+                        Promise.all(orderValuePromisses)
+                            .then((orders) => {
+                                setOrders(orders);
                             });
-                    } else {
-                        setOrder(fetchedOrder);
-                    }
-                });
+                    });
+            }
         },
         [orderService]
     );
 
-    useEffect(
-        () => {
-            if (orderParams.programId !== null && orderParams.requestingFacilityId !== null) {
-                stockCardSummaryRepositoryImpl.query({
-                    programId: orderParams.programId,
-                    facilityId: orderParams.facilityId
-                })
-                    .then(function(page) {
-                        const stockItems = page.content;
-
-                        setOrderableOptions(_.map(stockItems, stockItem => ({
-                            name: stockItem.orderable.fullProductName,
-                            value: { ...stockItem.orderable, soh: stockItem.stockOnHand }
-                        })));
-                    });
-            }
-        },
-        [orderParams]
-    );
-
-    const columns = useMemo(
-        () => [
-            {
-                Header: 'Product Code',
-                accessor: 'orderable.productCode'
-            },
-            {
-                Header: 'Product',
-                accessor: 'orderable.fullProductName'
-            },
-            {
-                Header: 'SOH',
-                accessor: 'soh',
-                Cell: ({ value }) => (<div className="text-right">{value}</div>)
-            },
-            {
-                Header: 'Quantity',
-                accessor: 'orderedQuantity',
-                Cell: (props) => (
-                    <InputCell
-                        {...props}
-                        numeric
-                        key={`row-${_.get(props, ['row', 'original', 'orderable', 'id'])}`}
-                    />
-                )
-            },
-            {
-                Header: 'Actions',
-                accessor: 'id',
-                Cell: ({ row: { index }, deleteRow }) => (
-                    <TrashButton onClick={() => deleteRow(index)} />
-                )
-            }
-        ],
-        []
-    );
-
-    const validateOrderItem = (item) => {
-        const errors = [];
-
-        if (item.orderedQuantity === null || item.orderedQuantity === undefined
-            || item.orderedQuantity === '') {
-            errors.push('Order quantity is required');
-        } else if (item.orderedQuantity < 0) {
-            errors.push('Order quantity cannot be negative');
-        }
-
-        return errors;
-    };
-
-    const validateRow = (row) => {
-        const errors = validateOrderItem(row);
-
-        return !errors.length;
-    };
-
-    const validateOrder = (orderToValidate) => {
-        const lineItems = orderToValidate.orderLineItems;
-        let errors = [];
-
-        if (!lineItems) {
-            return errors;
-        }
-
-        lineItems.forEach(item => {
-            errors = errors.concat(validateOrderItem(item));
-        });
-
-        return _.uniq(errors);
-    };
-
-    const updateData = (changedItems) => {
-        const updatedOrder = {
-            ...order,
-            orderLineItems: changedItems
-        };
-
-        setOrder(updatedOrder);
-    };
-
-    const updateOrder = () => {
-        const validationErrors = validateOrder(order);
-
-        if (validationErrors.length) {
-            validationErrors.forEach(error => {
-                toast.error(error);
-            });
-            setShowValidationErrors(true);
-            return;
-        }
-
-        if (offlineService.isOffline()) {
-            dispatch(saveDraft(order));
-            toast.success("Draft order saved offline");
-        } else {
-            setShowValidationErrors(false);
-
-            orderService.update(order)
-                .then(() => {
-                    toast.success("Order saved successfully");
-                });
-        }
-    };
-
-    const addOrderable = () => {
-        const newLineItem = {
-            orderedQuantity: '',
-            soh: selectedOrderable.soh,
-            orderable: {
-                id: selectedOrderable.id,
-                productCode: selectedOrderable.productCode,
-                fullProductName: selectedOrderable.fullProductName,
-                meta: {
-                    versionNumber: selectedOrderable.meta.versionNumber
+    const onProductAdded = (updatedOrder) => {
+        setOrders(prevOrders => {
+            const updatedOrders = prevOrders.map(order => {
+                if (order.id === updatedOrder.id) {
+                    return updatedOrder;
                 }
-            }
-        };
-
-        let orderNewLineItems = [...order.orderLineItems, newLineItem];
-
-        const updatedOrder = {
-            ...order,
-            orderLineItems: orderNewLineItems
-        };
-
-        setOrder(updatedOrder);
-        selectOrderable('');
-    };
-
-    const sendOrder = () => {
-        const validationErrors = validateOrder(order);
-
-        if (validationErrors.length) {
-            validationErrors.forEach(error => {
-                toast.error(error);
+                return order;
             });
-            setShowValidationErrors(true);
+            return updatedOrders;
+        });
+    }
+
+    const sendOrders = () => {
+        if (isOrderInvalid(orders, setShowValidationErrors, toast)) {
             return;
         }
 
         if (offlineService.isOffline()) {
-            dispatch(createOrder(order));
+            dispatch(createOrder(orders[currentTab]));
             notificationService.success("Offline order created successfully. It will be sent when you are online.");
             history.push('/');
         } else {
-            orderService.send(order)
-                .then(() => {
-                    notificationService.success('requisition.orderCreate.submitted');
-                    history.push('/orders/fulfillment');
-                });
+            const orderCreatePromisses = orders.map(order => orderService.send(order));
+            Promise.all(orderCreatePromisses).then(() => {
+                notificationService.success('requisition.orderCreate.submitted');
+                history.push('/orders/fulfillment');
+            });
         }
     };
 
-    const isProductAdded = selectedOrderable && _.find(order.orderLineItems, item => (item.orderable.id === selectedOrderable.id));
+    const updateOrders = () => {
+        if (isOrderInvalid(orders, setShowValidationErrors, toast)) {
+            return;
+        }
+
+        if (offlineService.isOffline()) {
+            dispatch(saveDraft(orders[currentTab]));
+            toast.success("Draft order saved offline");
+        } else {
+            setShowValidationErrors(false);
+            const updateOrdersPromises = orders.map(order => orderService.update(order));
+            Promise.all(updateOrdersPromises).then(() => {
+                toast.success("Orders saved successfully");
+            });
+        }
+    };
 
     return (
         <div className="page-container">
+            {
+                isSummaryModalOpen &&
+                <OrderCreateSummaryModal
+                    isOpen={isSummaryModalOpen}
+                    orders={orders}
+                    onSaveClick={sendOrders}
+                    onModalClose={() => setIsSummaryModalOpen(false)}
+                />
+            }
             <div className="page-header-responsive">
                 <h2>Create Order</h2>
             </div>
-            <div className="page-content">
-                <aside className="requisition-info">
-                    <ul>
-                        <li>
-                            <strong>Status</strong>
-                            { order.status }
-                        </li>
-                        <li>
-                            <strong>Date Created</strong>
-                            { formatDate(order.createdDate) }
-                        </li>
-                        <li>
-                            <strong>Program</strong>
-                            { _.get(order, ['program', 'name']) }
-                        </li>
-                        <li>
-                            <strong>Requesting Facility</strong>
-                            { _.get(order, ['requestingFacility', 'name']) }
-                        </li>
-                        <li>
-                            <strong>Supplying Facility</strong>
-                            { _.get(order, ['supplyingFacility', 'name']) }
-                        </li>
-                    </ul>
-                </aside>
-                <div className="order-create-table-container">
-                    <div className="order-create-table">
-                        <div className="order-create-table-header" >
-                            <SearchSelect
-                                options={orderableOptions}
-                                value={selectedOrderable}
-                                onChange={value => selectOrderable(value)}
-                                objectKey={'id'}
-                            >Product</SearchSelect>
-                            <Tippy
-                                content="This product was already added to the table"
-                                disabled={!isProductAdded}
-                            >
-                                <div>
-                                    <button
-                                        className={"add"}
-                                        onClick={addOrderable}
-                                        disabled={!selectedOrderable || isProductAdded}
-                                    >Add</button>
-                                </div>
-                            </Tippy>
-                        </div>
-                        <EditableTable
-                            columns={columns}
-                            data={order.orderLineItems || []}
-                            updateData={updateData}
-                            validateRow={validateRow}
-                            showValidationErrors={showValidationErrors}
-                        />
-                    </div>
+            {
+                orders.length > 0 &&
+                <div className="tabs-container">
+                    <TabNavigation
+                        config={
+                            {
+                                data: orders.map((order, index) => ({
+                                    header: order.facility.name,
+                                    key: order.id,
+                                    isActive: currentTab === index
+                                })),
+                                onTabChange: (index) => {
+                                    setCurrentTab(index);
+                                },
+                                isTabValidArray: !isReadOnly ? getIsOrderValidArray(orders) : undefined
+                            }
+                        }
+                    ></TabNavigation>
                 </div>
+            }
+            <div className="currentTab">
+                {(orders.length > 0) ? (
+                    <OrderCreateTab
+                        key={currentTab}
+                        passedOrder={orders[currentTab]}
+                        stockCardSummaryRepositoryImpl={stockCardSummaryRepositoryImpl}
+                        showValidationErrors={showValidationErrors}
+                        isTableReadOnly={isReadOnly}
+                        tabIndex={currentTab}
+                        cachedOrderableOptions={cachedOrderableOptions[currentTab]}
+                        cacheOrderableOptions={(orderableOptions, tabIndex) => {
+                            const updatedCachedOrderableOptions = cachedOrderableOptions;
+                            updatedCachedOrderableOptions[tabIndex] = orderableOptions;
+                            setCachedOrderableOptions(updatedCachedOrderableOptions);
+                        }}
+                        updateOrderArray={
+                            (updatedOrder) => {
+                                onProductAdded(updatedOrder);
+                            }
+                        } />
+                ) : (
+                    <p>Loading...</p>
+                )}
             </div>
             <div className="page-footer">
-                <button
-                    type="button"
-                    className="btn"
-                    disabled={!order.id}
-                    onClick={() => updateOrder()}
-                >Save Draft</button>
-                <button
-                    type="button"
-                    className="btn primary"
-                    disabled={!order.orderLineItems || !order.orderLineItems.length || !order.id}
-                    onClick={() => sendOrder()}
-                >Create Order</button>
+                {
+                    isReadOnly ||
+                    <>
+                        <button
+                            type="button"
+                            className="btn"
+                            disabled={saveDraftDisabled(orders)}
+                            onClick={() => updateOrders()}
+                        >Save Draft</button>
+                        <button
+                            type="button"
+                            className="btn primary"
+                            disabled={createOrderDisabled(orders)}
+                            onClick={() => setIsSummaryModalOpen(true)}
+                        >Create Order</button>
+                    </>
+                }
             </div>
         </div>
     );

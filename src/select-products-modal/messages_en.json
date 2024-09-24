@@ -1,0 +1,14 @@
+{
+    "selectProductsModal.addProducts": "Add Products",
+    "selectProductsModal.searchProduct": "Search Product",
+    "selectProductsModal.search": "Search",
+    "selectProductsModal.select": "Select",
+    "selectProductsModal.code": "Code",
+    "selectProductsModal.product": "Product",
+    "selectProductsModal.uoi": "Unit of Issue",
+    "selectProductsModal.cancel": "Cancel",
+    "selectProductsModal.addProducts.emptyList": "You have not selected any products.",
+    "selectProductsModal.productCode": "Product Code",
+    "selectProductsModal.productName": "Product Name",
+    "selectProductsModal.searchByCodeInfo": "Please type in a part of the product name or the first few letters of the product code."
+}
