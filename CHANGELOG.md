@@ -1,5 +1,12 @@
+7.0.13-SNAPSHOT / WIP
+==================
+
+Bug fixes:
+* [OLMIS-7992](https://openlmis.atlassian.net/browse/OLMIS-7992): Fix passing parameter to hasRoleWithRightForProgramAndSupervisoryNode function 
+
 7.0.12 / 2024-04-19
 ==================
+
 New functionalities that are backwards-compatible:
 * [OLMIS-7838](https://openlmis.atlassian.net/browse/OLMIS-7838): Move BUQ and TM Monthly functionalities from Tanzania to Core instance
 

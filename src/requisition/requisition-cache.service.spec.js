@@ -288,10 +288,9 @@ describe('requisitionCacheService', function() {
             });
 
             this.permissionService.hasRoleWithRightForProgramAndSupervisoryNode
-                .andCallFake(function(right, program, supervisoryNode) {
+                .andCallFake(function(right, requisition) {
                     return context.$q.resolve(!(right === context.REQUISITION_RIGHTS.REQUISITION_VIEW
-                        && program === context.batchRequisitionOne.program.id
-                        && supervisoryNode === context.batchRequisitionOne.supervisoryNode));
+                        && requisition === context.batchRequisitionOne));
                 });
 
             var result;
@@ -352,10 +351,9 @@ describe('requisitionCacheService', function() {
         it('should return requisition if user has not related right but has permission string', function() {
             var context = this;
             this.permissionService.hasRoleWithRightForProgramAndSupervisoryNode
-                .andCallFake(function(right, program, supervisoryNode) {
+                .andCallFake(function(right, requisition) {
                     return !(right === context.REQUISITION_RIGHTS.REQUISITION_VIEW &&
-                        program === context.batchRequisitionOne.program.id &&
-                        supervisoryNode === context.batchRequisitionOne.supervisoryNode);
+                        requisition === context.batchRequisitionOne);
                 });
 
             var result;

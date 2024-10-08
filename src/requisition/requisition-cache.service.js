@@ -212,8 +212,7 @@
         function hasRightForRequisition(requisition) {
             return permissionService.hasRoleWithRightForProgramAndSupervisoryNode(
                 REQUISITION_RIGHTS.REQUISITION_VIEW,
-                requisition.program.id,
-                requisition.supervisoryNode
+                requisition
             );
         }
 
