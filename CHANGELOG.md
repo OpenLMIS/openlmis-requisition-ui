@@ -1,5 +1,7 @@
 7.0.13-SNAPSHOT / WIP
 ==================
+New functionalities that are backwards-compatible:
+* [OLMIS-7987](https://openlmis.atlassian.net/browse/OLMIS-7987): Move Submit Requisitionless Orders functionalities from Angola to Core instance
 
 Bug fixes:
 * [OLMIS-7992](https://openlmis.atlassian.net/browse/OLMIS-7992): Fix passing parameter to hasRoleWithRightForProgramAndSupervisoryNode function 
