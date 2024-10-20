@@ -29,6 +29,7 @@
   "requisition.orderCreate.table.soh": "SOH",
   "requisition.orderCreate.table.quantity": "Quantity",
   "requisition.orderCreate.table.actions": "Actions",
+  "requisition.orderCreate.summary": "Orders Summary",
   "requisition.orderCreate.table.facility": "Facility",
   "requisition.orderCreate.table.addProduct": "Add",
   "requisition.orderCreate.table.productAlreadyAdded": "This product was already added to the table",

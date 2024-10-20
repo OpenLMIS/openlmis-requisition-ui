@@ -24,6 +24,7 @@ import { saveDraft, createOrder } from './reducers/orders.reducer';
 import { isOrderInvalid } from './order-create-validation-helper-functions';
 import OrderCreateSummaryModal from './order-create-summary-modal';
 import TabNavigation from '../react-components/tab-navigation/tab-navigation';
+import { ORDER_STATUS } from './order-create.constant';
 
 const OrderCreateTable = ({ isReadOnly }) => {
     const [orders, setOrders] = useState([]);
@@ -40,6 +41,8 @@ const OrderCreateTable = ({ isReadOnly }) => {
     const orderService = useMemo(() => getService('orderCreateService'), []);
     const notificationService = useMemo(() => getService('notificationService'), []);
     const offlineService = useMemo(() => getService('offlineService'), []);
+    const { confirmDestroy } = useMemo(() => getService('confirmService'), []);
+    const { formatMessage } = useMemo(() => getService('messageService'), []);
 
     const stockCardSummaryRepositoryImpl = useMemo(
         () => {
@@ -115,6 +118,65 @@ const OrderCreateTable = ({ isReadOnly }) => {
         }
     };
 
+    const onOrderDelete = (index) => {
+      confirmDestroy(
+        'requisition.orderCreate.delete.prompt',
+        'requisition.orderCreate.delete'
+      ).then(() => {
+        const orderToDelete = orders[index];
+
+        orderService
+          .delete([orderToDelete.id])
+          .then(() => {
+            const updatedOrderIds = orderIds
+              .split(',')
+              .filter((orderId) => orderId !== orderToDelete.id)
+              .join(',');
+
+            const updatedOrders = orders.filter((_, i) => i !== index);
+
+            notificationService.success(
+              'requisition.orderCreate.delete.success'
+            );
+            history.push(`/requisitions/orderCreate/${updatedOrderIds}`);
+            setOrders(updatedOrders);
+            setCurrentTab(0);
+          })
+          .catch((error) => {
+            notificationService.error('requisition.orderCreate.delete.error');
+            throw new Error(
+              formatMessage('requisition.orderCreate.delete.error'),
+              error
+            );
+          });
+      });
+    };
+
+      const onOrderBatchDelete = () => {
+        confirmDestroy(
+          'requisition.orderCreate.delete.prompt.batch',
+          'requisition.orderCreate.deleteBatch'
+        ).then(() => {
+          const orderIdsArray = orderIds.split(',');
+
+          orderService
+            .delete(orderIdsArray)
+            .then(() => {
+              notificationService.success(
+                'requisition.orderCreate.delete.success'
+              );
+              history.push('/requisitions/orderCreate');
+            })
+            .catch((error) => {
+              notificationService.error('requisition.orderCreate.delete.error');
+              throw new Error(
+                formatMessage('requisition.orderCreate.delete.error'),
+                error
+              );
+            });
+        });
+      };
+
     return (
         <div className="page-container">
             {
@@ -127,7 +189,7 @@ const OrderCreateTable = ({ isReadOnly }) => {
                 />
             }
             <div className="page-header-responsive">
-                <h2>Create Order</h2>
+                <h2>{ formatMessage('requisition.orderCreate') }</h2>
             </div>
             {
                 orders.length > 0 &&
@@ -138,11 +200,14 @@ const OrderCreateTable = ({ isReadOnly }) => {
                                 data: orders.map((order, index) => ({
                                     header: order.facility.name,
                                     key: order.id,
-                                    isActive: currentTab === index
+                                    isActive: currentTab === index,
+                                    isCreatingStatus: order.status === ORDER_STATUS.CREATING,
                                 })),
                                 onTabChange: (index) => {
                                     setCurrentTab(index);
                                 },
+                                onOrderDelete,
+                                formatMessage,
                                 isTabValidArray: !isReadOnly ? getIsOrderValidArray(orders) : undefined
                             }
                         }
@@ -170,7 +235,7 @@ const OrderCreateTable = ({ isReadOnly }) => {
                             }
                         } />
                 ) : (
-                    <p>Loading...</p>
+                    <p>{ formatMessage('requisition.orderCreate.loading') }...</p>
                 )}
             </div>
             <div className="page-footer">
@@ -179,16 +244,22 @@ const OrderCreateTable = ({ isReadOnly }) => {
                     <>
                         <button
                             type="button"
+                            className="btn danger"
+                            disabled={!orders.length || orders.length === 0}
+                            onClick={onOrderBatchDelete}
+                        >{formatMessage('requisition.orderCreate.deleteBatch')}</button>
+                        <button
+                            type="button"
                             className="btn"
                             disabled={saveDraftDisabled(orders)}
                             onClick={() => updateOrders()}
-                        >Save Draft</button>
+                        >{formatMessage('requisition.orderCreate.saveDraft')}</button>
                         <button
                             type="button"
                             className="btn primary"
                             disabled={createOrderDisabled(orders)}
                             onClick={() => setIsSummaryModalOpen(true)}
-                        >Create Order</button>
+                        >{formatMessage('requisition.orderCreate.create')}</button>
                     </>
                 }
             </div>

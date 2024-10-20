@@ -16,7 +16,7 @@ const OrderCreateSummaryModal = ({ isOpen, orders, onSaveClick, onModalClose }) 
             body={
                 <>
                     <div className="react-modal-header">
-                        <span className='modal-title'>Orders Summary</span>
+                        <span className='modal-title'>{ formatMessage('requisition.orderCreate.summary') }</span>
                     </div>
                     <div className="react-modal-body">
                         <TabNavigation
