@@ -36,9 +36,9 @@ const OrderCreateForm = () => {
 
     const ADMINISTRATION_RIGHTS = useMemo(() => getService('ADMINISTRATION_RIGHTS'), []);
     const programService = useMemo(() => getService('programService'), []);
+    const { formatMessage } = useMemo(() => getService('messageService'), []);
     const facilityService = useMemo(() => getService('facilityService'), []);
     const orderService = useMemo(() => getService('orderCreateService'), []);
-    const { formatMessage } = useMemo(() => getService('messageService'), []);
     const columns = useMemo(() => orderCreateFormTableColumns(formatMessage), []);
 
     const userId = useMemo(
@@ -100,7 +100,7 @@ const OrderCreateForm = () => {
 
     useEffect(
         () => {
-            facilityService.getUserFacilitiesForRight(userId, ADMINISTRATION_RIGHTS.ORDER_CREATE)
+            facilityService.getUserFacilitiesForRight(userId, ADMINISTRATION_RIGHTS.ORDER_CREATE, true)
                 .then((facilities) => {
                     setRequestingFacilityOptions(_.map(facilities, facility => ({ name: facility.name, value: facility.id })));
                 });
@@ -140,36 +140,54 @@ const OrderCreateForm = () => {
     return (
         <div className="page-container">
             <div className="page-header-responsive">
-                <h2>{ formatMessage('requisition.orderCreate.create') }</h2>
+                <h2> {formatMessage('requisition.orderCreate.create')} </h2>
             </div>
             <div className="page-content order-create-form">
                 <div className={'section'}>
-                    <div><strong className="is-required">{ formatMessage('requisition.orderCreate.program') }</strong></div>
+                    <div>
+                      <strong className='is-required'>
+                        {formatMessage('requisition.orderCreate.program')}
+                      </strong>
+                    </div>
                     <SearchSelect
                         options={programOptions}
                         value={selectedProgram}
                         onChange={value => setSelectedProgram(value)}
-                        placeholder={ formatMessage('requisition.orderCreate.program.placeholder')}
+                        placeholder={formatMessage('requisition.orderCreate.program.placeholder')}
                     />
                 </div>
                 <div className={'section'}>
-                    <div><strong className="is-required">{ formatMessage('requisition.orderCreate.reqFacility') }</strong></div>
+                    <div>
+                      <strong className='is-required'>
+                        {formatMessage('requisition.orderCreate.reqFacility')}
+                      </strong>
+                    </div>
                     <SearchSelect
                         options={requestingFacilityOptions}
                         value={selectedRequestingFacilities.at(-1)}
-                        onChange={value => setSelectedRequestingFacilities(prevState => [...prevState, value])}
-                        placeholder={ formatMessage('requisition.orderCreate.reqFacility.placeholder')}
+                        onChange={(value) => {
+                            setSelectedRequestingFacilities((prevState) => {
+                                if (!prevState.includes(value) && value) {
+                                    return [...prevState, value];
+                                }
+                                return prevState;
+                            });
+                        }}
+                        placeholder={formatMessage('requisition.orderCreate.reqFacility.placeholder')}
                     />
                     <EditableTable
                         additionalTableClass='facilities-table'
                         updateData={updateTableData}
                         columns={columns}
                         data={filteredRequestingFacilities || []}
-                        displayPagination={false}
                     />
                 </div>
                 <div className={'section'}>
-                    <div><strong className="is-required">{ formatMessage('requisition.orderCreate.supFacility') }</strong></div>
+                    <div>
+                      <strong className='is-required'>
+                        {formatMessage('requisition.orderCreate.supFacility')}
+                      </strong>
+                    </div>
                     <SearchSelect
                         options={supplyingFacilityOptions}
                         value={selectedSupplyingFacility}
@@ -186,7 +204,7 @@ const OrderCreateForm = () => {
                         disabled={!selectedProgram || !selectedRequestingFacilities || !selectedSupplyingFacility}
                         onClick={createOrders}
                     >
-                        { formatMessage('requisition.orderCreate.create') }
+                        {formatMessage('requisition.orderCreate.create')}
                     </button>
                 </div>
             </div>
