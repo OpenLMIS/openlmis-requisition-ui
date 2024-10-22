@@ -24,6 +24,7 @@ const OrderCreateTab = ({ passedOrder,
     const { formatMessage } = useMemo(() => getService('messageService'), []);
     const columns = useMemo(() => orderTableColumns(isTableReadOnly, formatMessage), []);
     const orderCreatePrintService = useMemo(() => getService('orderCreatePrintService'), []);
+    const loadingModalService = useMemo(() => getService('loadingModalService'), []);
 
     useMemo(() => {
         if (cachedOrderableOptions?.length) {
@@ -31,6 +32,7 @@ const OrderCreateTab = ({ passedOrder,
             return;
         }
 
+        loadingModalService.open();
         stockCardSummaryRepositoryImpl.query({
             programId: order.program.id,
             facilityId: order.requestingFacility.id
@@ -42,6 +44,9 @@ const OrderCreateTab = ({ passedOrder,
             }));
 
             setOrderableOptions(orderableOptionsValue);
+            loadingModalService.close();
+        }).catch(() => {
+            loadingModalService.close();
         });
     }, []);
 
