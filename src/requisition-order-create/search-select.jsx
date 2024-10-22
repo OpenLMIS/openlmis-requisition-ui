@@ -24,7 +24,7 @@ const filterOptions = options => {
 
         const lowercaseSearchValue = searchValue.toLowerCase();
 
-        return options.filter(option => option.name.toLowerCase().includes(lowercaseSearchValue));
+        return options.filter(option => option.name && option.name.toLowerCase().includes(lowercaseSearchValue));
     };
 };
 
@@ -44,16 +44,15 @@ const mapClassName = key => {
 };
 
 export const SearchSelect = ({
-                                 options,
-                                 onChange,
-                                 value,
-                                 placeholder = 'Select an option',
-                                 emptyMsg = 'Not found',
-                                 disabled = false,
-                                 objectKey = null,
-                             }) => {
-
-    const renderOption = (props, {name}, snapshot, className) => {
+    options,
+    onChange,
+    value,
+    placeholder = 'Select an option',
+    emptyMsg = 'Not found',
+    disabled = false,
+    objectKey = null,
+}) => {
+    const renderOption = (props, { name }, snapshot, className) => {
         return (
             <button {...props} className={className} type="button">
                 <span>{name}</span>
@@ -66,7 +65,7 @@ export const SearchSelect = ({
 
         return (
             <div className={'input-wrapper'}>
-                <input {...valueProps} className={className} value={inputVal}/>
+                <input {...valueProps} className={className} value={inputVal} />
                 <i
                     className="fa fa-times clear-icon"
                     aria-hidden="true"
@@ -102,7 +101,7 @@ export const SearchSelect = ({
             onChange={handleOnChange}
             options={
                 options.map(
-                    ({value, name}) => {
+                    ({ value, name }) => {
                         return {
                             name: name,
                             value: objectKey ? _.get(value, objectKey) : value
