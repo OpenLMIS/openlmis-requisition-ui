@@ -13,7 +13,7 @@ const OrderCreateSummaryModal = ({ isOpen, orders, onSaveClick, onModalClose }) 
     return (
         <Modal
             isOpen={isOpen}
-            body={
+            children={[
                 <>
                     <div className="react-modal-header">
                         <span className='modal-title'>{ formatMessage('requisition.orderCreate.summary') }</span>
@@ -58,7 +58,8 @@ const OrderCreateSummaryModal = ({ isOpen, orders, onSaveClick, onModalClose }) 
                             onClick={() => onSaveClick()}
                         >{ formatMessage('requisition.orderCreate') }</button>
                     </div>
-                </>}
+                </>
+            ]}
         >
         </Modal>
     );
