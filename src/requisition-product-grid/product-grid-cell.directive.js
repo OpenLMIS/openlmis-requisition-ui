@@ -42,7 +42,6 @@
 
     function productGridCell($templateRequest, $compile, requisitionValidator, TEMPLATE_COLUMNS, COLUMN_TYPES,
                              COLUMN_SOURCES) {
-
         return {
             restrict: 'A',
             link: link,
@@ -51,14 +50,17 @@
                 column: '=',
                 lineItem: '=',
                 userCanEdit: '=',
-                canApprove: '='
+                canApprove: '=',
+                program: '='
             }
         };
 
         function link(scope, element) {
             var requisition = scope.requisition,
                 column = scope.column,
-                lineItem = scope.lineItem;
+                lineItem = scope.lineItem,
+                program = scope.program,
+                TB_MONTHLY_PROGRAM = 'TB Monthly';
 
             scope.lineItem = lineItem;
             scope.column = column;
@@ -136,10 +138,9 @@
             }
 
             function canEditColumn(column) {
-
                 var TBMonthlyColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
 
-                if (column.name === 'totalReceivedQuantity') {
+                if (program.name === TB_MONTHLY_PROGRAM && column.name === 'totalReceivedQuantity') {
                     return true;
                 }
 
