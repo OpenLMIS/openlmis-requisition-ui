@@ -10,7 +10,8 @@
     "dev-ui": "file:///dev-ui"
   },
   "scripts": {
-    "postinstall": "cp -nr node_modules/dev-ui/node_modules ."
+    "postinstall": "cp -nr node_modules/dev-ui/node_modules .",
+    "dev": "grunt build --serve --openlmisServerURL=https://uat.openlmis.org/ --noTest"
   },
   "dependencies": {}
 }

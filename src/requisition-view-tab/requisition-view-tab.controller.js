@@ -32,14 +32,14 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving) {
+                               canUnskipRequisitionItemWhenApproving, program) {
         var vm = this;
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
@@ -145,6 +145,17 @@
          */
         vm.columns = undefined;
 
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-view-tab.controller:ViewTabController
+         * @name program
+         * @type {Object}
+         *
+         * @description
+         * Holds the current program
+         */
+        vm.program = undefined;
+
         function onInit() {
             angular.forEach(columns, function(column) {
                 angular.forEach(lineItems, function(lineItem) {
@@ -156,6 +167,7 @@
             vm.items = items;
             vm.requisition = requisition;
             vm.columns = columns;
+            vm.program = program;
             vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();

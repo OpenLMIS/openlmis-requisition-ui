@@ -16,7 +16,7 @@
 		<caption ng-if="!vm.items.length">{{vm.noProductsMessage | message}}</caption>
 		<thead>
 			<tr>
-				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'" 
+				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'"
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
 					popover-trigger-area="element">{{column.label}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
@@ -30,6 +30,7 @@
 					column="column"
 					line-item="lineItem"
 					user-can-edit="vm.userCanEditColumn(column)"
+					program="vm.program"
 					can-approve="vm.canApproveAndReject">
 				</td>
 				<td ng-if="vm.showDeleteColumn()">
