@@ -784,6 +784,7 @@ describe('ViewTabController', function() {
             canSubmit: this.canSubmit,
             canAuthorize: this.canAuthorize,
             fullSupply: this.fullSupply,
+            program: {},
             canApproveAndReject: this.canApproveAndReject,
             canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
         });

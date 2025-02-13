@@ -62,6 +62,10 @@ describe('ProductGridCell', function() {
         this.scope.requisition.template.patientsTabEnabled = false;
         this.scope.column = this.fullSupplyColumns[0];
         this.scope.lineItem = this.scope.requisition.requisitionLineItems[0];
+        this.scope.program = {
+            name: 'mock-program',
+            id: 'mock-id'
+        };
 
         spyOn(this.scope.lineItem, 'getFieldValue').andReturn('readOnlyFieldValue');
         spyOn(this.requisitionValidator, 'validateLineItem');
@@ -296,7 +300,8 @@ describe('ProductGridCell', function() {
 
     function getCompiledElement() {
         var rootElement = angular.element('<div><div product-grid-cell requisition="requisition" column="column"' +
-            ' line-item="lineItem" user-can-edit="userCanEdit" can-approve="canApprove"></div></div>');
+            ' line-item="lineItem" user-can-edit="userCanEdit" can-approve="canApprove" program="program">' +
+            '</div></div>');
         var compiledElement = this.$compile(rootElement)(this.scope);
         angular.element('body').append(compiledElement);
         this.scope.$digest();

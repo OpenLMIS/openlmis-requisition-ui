@@ -140,6 +140,8 @@
             function canEditColumn(column) {
                 var TBMonthlyColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
 
+                console.log(program);
+
                 if (program.name === TB_MONTHLY_PROGRAM && column.name === 'totalReceivedQuantity') {
                     return true;
                 }
