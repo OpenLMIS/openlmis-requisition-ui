@@ -2,6 +2,7 @@
 ==================
 Bug fixes:
 * [OLMIS-8042](https://openlmis.atlassian.net/browse/OLMIS-8042): Total received quantity column is readonly when requisition is from stock cards. For every program other than TB Monthly
+* [OLMIS-8074](https://openlmis.atlassian.net/browse/OLMIS-8074): Changed where the user is redirected after creating an order.
 
 7.0.13 / 2024-10-31
 ==================
