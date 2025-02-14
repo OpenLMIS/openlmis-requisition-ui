@@ -96,7 +96,7 @@ const OrderCreateTable = ({ isReadOnly }) => {
             const orderCreatePromisses = orders.map(order => orderService.send(order));
             Promise.all(orderCreatePromisses).then(() => {
                 notificationService.success('requisition.orderCreate.submitted');
-                history.push('/orders/fulfillment');
+                history.push('/requisitions/orderCreate');
             });
         }
     };
