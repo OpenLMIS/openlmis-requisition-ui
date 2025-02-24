@@ -37,11 +37,12 @@
         .directive('productGridCell', productGridCell);
 
     productGridCell.$inject = [
-        '$templateRequest', '$compile', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'COLUMN_TYPES', 'COLUMN_SOURCES'
+        '$templateRequest', '$compile', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'COLUMN_TYPES', 'COLUMN_SOURCES',
+        'TB_MONTHLY_PROGRAM'
     ];
 
     function productGridCell($templateRequest, $compile, requisitionValidator, TEMPLATE_COLUMNS, COLUMN_TYPES,
-                             COLUMN_SOURCES) {
+                             COLUMN_SOURCES, TB_MONTHLY_PROGRAM) {
         return {
             restrict: 'A',
             link: link,
@@ -59,8 +60,7 @@
             var requisition = scope.requisition,
                 column = scope.column,
                 lineItem = scope.lineItem,
-                program = scope.program,
-                TB_MONTHLY_PROGRAM = 'TB Monthly';
+                program = scope.program;
 
             scope.lineItem = lineItem;
             scope.column = column;
