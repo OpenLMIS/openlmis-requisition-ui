@@ -32,14 +32,14 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, program) {
+                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM) {
         var vm = this;
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
@@ -419,7 +419,7 @@
         }
 
         function userCanEditColumn(column) {
-            if (vm.monthlyTBColumns.includes(column.name)) {
+            if (program.name === TB_MONTHLY_PROGRAM && vm.monthlyTBColumns.includes(column.name)) {
                 return vm.canApproveAndReject;
             }
             return vm.userCanEdit;
