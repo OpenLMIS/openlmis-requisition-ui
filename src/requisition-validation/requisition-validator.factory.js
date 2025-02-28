@@ -255,8 +255,7 @@
         }
 
         function shouldSkipValidation(lineItem, column, requisition) {
-            if (lineItem[TEMPLATE_COLUMNS.SKIPPED] || (requisition.reportOnly &&
-                column.name === TEMPLATE_COLUMNS.STOCK_ON_HAND)) {
+            if (lineItem[TEMPLATE_COLUMNS.SKIPPED]) {
                 return true;
             }
 
