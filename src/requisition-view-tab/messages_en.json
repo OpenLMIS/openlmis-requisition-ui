@@ -25,5 +25,7 @@
     "requisitionPatientsViewTab.numberOfAdultOnMBRegimen.label": "Number of adults on MB regimen",
     "requisitionPatientsViewTab.numberOfAdultOnPBRegimen.label": "Number of adults on PB regimen",
     "requisitionPatientsViewTab.numberOfChildrenOnMBRegimen.label": "Number of children on MB regimen",
-    "requisitionPatientsViewTab.numberOfChildrenOnPBRegimen.label": "Number of children on PB regimen"
+    "requisitionPatientsViewTab.numberOfChildrenOnPBRegimen.label": "Number of children on PB regimen",
+    "requisitionViewTab.filterPlaceholder": "Filter by product name",
+    "requisitionViewTab.skippedItemsVisibility": "Show skipped items"
 }

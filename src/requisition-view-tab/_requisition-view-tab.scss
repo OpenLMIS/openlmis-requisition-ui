@@ -4,6 +4,20 @@
         flex-direction: row-reverse;
     }
 
+    .toolbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center !important;
+
+        .requisition-indicator {
+            margin-left: auto;
+        }
+    }
+
+    #skipped-line-items-visibility {
+        @include flex-layout(row, $align-items: center, $gap: .5rem);
+    }
+
     .hide-line-item {
     	@extend button.danger;
     	@include icon-only('remove');

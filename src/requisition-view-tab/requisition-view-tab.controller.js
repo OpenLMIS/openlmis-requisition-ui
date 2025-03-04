@@ -145,6 +145,12 @@
          */
         vm.columns = undefined;
 
+        vm.orderableFilterProperties = {
+            name: undefined
+        };
+
+        vm.filteredItems = undefined;
+
         /**
          * @ngdoc property
          * @propertyOf requisition-view-tab.controller:ViewTabController
@@ -165,6 +171,7 @@
 
             vm.lineItems = lineItems;
             vm.items = items;
+            vm.filteredItems = lineItems;
             vm.requisition = requisition;
             vm.columns = columns;
             vm.program = program;
@@ -424,6 +431,13 @@
             }
             return vm.userCanEdit;
         }
+
+        vm.filterByOrderableParams = function() {
+            vm.filteredItems = vm.lineItems.filter(function(item) {
+                return item.orderable.fullProductName.toLowerCase()
+                    .includes(vm.orderableFilterProperties.name.toLowerCase());
+            });
+        };
     }
 
 })();

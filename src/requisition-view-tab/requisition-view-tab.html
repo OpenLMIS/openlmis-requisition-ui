@@ -8,6 +8,14 @@
 	<span ng-if="vm.showAddFullSupplyProductControls">
 		{{ vm.skippedFullSupplyProductCountMessage() }}
 	</span>
+	<div class="productNameFilter">
+		<input type="text" placeholder="{{ 'requisitionViewTab.filterPlaceholder' | message}}"
+			ng-model="vm.orderableFilterProperties.name" ng-change="vm.filterByOrderableParams()">
+	</div>
+	<div id="skipped-line-items-visibility">
+		<label for="skippedItemsVisibility">{{:: 'requisitionViewTab.skippedItemsVisibility' | message  }}</label>
+		<input type="checkbox" name="skippedItemsVisibility" id="skippedItemsVisibility">
+	</div>
 	<button class="add" ng-if="vm.showAddFullSupplyProductsButton" ng-click="vm.addFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showAddNonFullSupplyProductsButton" ng-click="vm.addNonFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showUnskipFullSupplyProductsButton" ng-click="vm.unskipFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
@@ -44,7 +52,7 @@
 		</tbody>
 	</table>
 	<openlmis-pagination
-		list="vm.lineItems"
+		list="vm.filteredItems"
 		paged-list="vm.items"
 		pagination-id="vm.paginationId"
 		on-page-change="vm.cacheRequisition"/>
