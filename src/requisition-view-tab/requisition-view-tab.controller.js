@@ -32,14 +32,14 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM) {
+                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope) {
         var vm = this;
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
@@ -146,10 +146,14 @@
         vm.columns = undefined;
 
         vm.orderableFilterProperties = {
-            name: undefined
+            name: ''
         };
 
         vm.filteredItems = undefined;
+
+        vm.showSkippedLineItems = true;
+
+        vm.fullSupply = undefined;
 
         /**
          * @ngdoc property
@@ -180,9 +184,29 @@
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
             vm.showUnskipFullSupplyProductsButton = showUnskipFullSupplyProductsButton();
             vm.showSkipControls = showSkipControls();
+            vm.showOrderableFilter = showOrderableFilter();
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
+            vm.fullSupply = fullSupply;
+            registerSkippedItemsWatcher();
+        }
+
+        function registerSkippedItemsWatcher() {
+            $scope.$watchCollection(function() {
+                return vm.items ? vm.items.map(function(item) {
+                    return item.skipped;
+                }) : [];
+            }, function(newValues, oldValues) {
+                if (!angular.equals(newValues, oldValues) && !vm.showSkippedLineItems) {
+                    for (var i = 0; i < newValues.length; i++) {
+                        if (newValues[i] !== oldValues[i]) {
+                            vm.filterByOrderableParams();
+                            break;
+                        }
+                    }
+                }
+            });
         }
 
         /**
@@ -371,6 +395,11 @@
                 });
         }
 
+        function showOrderableFilter() {
+            return vm.userCanEdit &&
+                fullSupply;
+        }
+
         function showSkipControls() {
             return vm.userCanEdit &&
                 fullSupply &&
@@ -423,6 +452,7 @@
                     lineItem.skipped = true;
                 }
             });
+            vm.filterByOrderableParams();
         }
 
         function userCanEditColumn(column) {
@@ -432,11 +462,29 @@
             return vm.userCanEdit;
         }
 
-        vm.filterByOrderableParams = function() {
-            vm.filteredItems = vm.lineItems.filter(function(item) {
-                return item.orderable.fullProductName.toLowerCase()
-                    .includes(vm.orderableFilterProperties.name.toLowerCase());
+        function orderableHasMatchingName(orderableName, filterValue) {
+            return orderableName.toLowerCase().includes(filterValue.toLowerCase());
+        }
+
+        function getFilteredLineItems() {
+            return vm.lineItems.filter(function(item) {
+                return orderableHasMatchingName(item.orderable.fullProductName, vm.orderableFilterProperties.name)
+                    && (vm.showSkippedLineItems ? true : !item.skipped);
             });
+        }
+
+        vm.filterByOrderableParams = function() {
+            vm.filteredItems = getFilteredLineItems();
+        };
+
+        vm.skipAllFullSupplyLineItems = function() {
+            vm.requisition.skipAllFullSupplyLineItems();
+            vm.filterByOrderableParams();
+        };
+
+        vm.unskipAllFullSupplyLineItems = function() {
+            vm.requisition.unskipAllFullSupplyLineItems();
+            vm.filterByOrderableParams();
         };
     }
 
