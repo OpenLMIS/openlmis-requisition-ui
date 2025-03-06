@@ -24,11 +24,11 @@ describe('ViewTabController', function() {
             RequisitionColumnDataBuilder = $injector.get('RequisitionColumnDataBuilder');
             RequisitionLineItemDataBuilder = $injector.get('RequisitionLineItemDataBuilder');
             RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
-
             this.$controller = $injector.get('$controller');
             this.$rootScope = $injector.get('$rootScope');
             this.$q = $injector.get('$q');
             this.$state = $injector.get('$state');
+            this.$scope = $injector.get('$rootScope').$new();
             this.alertService = $injector.get('alertService');
             this.messageService = $injector.get('messageService');
             this.requisitionValidator = $injector.get('requisitionValidator');
@@ -785,6 +785,7 @@ describe('ViewTabController', function() {
             canAuthorize: this.canAuthorize,
             fullSupply: this.fullSupply,
             program: {},
+            $scope: this.$scope,
             canApproveAndReject: this.canApproveAndReject,
             canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
         });

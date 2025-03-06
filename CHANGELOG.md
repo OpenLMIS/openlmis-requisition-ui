@@ -5,6 +5,9 @@ Bug fixes:
 * [OPSD-38](https://openlmis.atlassian.net/browse/OPSD-38): Added back the validation for stock on hand column for report only requisition
 * [OLMIS-8074](https://openlmis.atlassian.net/browse/OLMIS-8074): Changed where the user is redirected after creating an order.
 
+New Functionalities:
+* [OPSD-39](https://openlmis.atlassian.net/browse/OPSD-39): enabled filtering and skipped items visibility toggling
+
 7.0.13 / 2024-10-31
 ==================
 
