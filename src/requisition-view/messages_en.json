@@ -54,7 +54,7 @@
   "requisitionView.submit.label": "Submit",
   "requisitionView.submitAndAuthorize.label": "Submit & Authorize",
   "requisitionView.submit.success": "Requisition has been submitted!",
-  "requisitionView.sync.failure": "Failed to synchronize requisition!",
+  "requisitionView.sync.failure": "Failed to synchronize requisition. Try clearing your browser's local storage.",
   "requisitionView.sync.label": "Save/Sync with Server",
   "requisitionView.sync.pending": "Syncing requisition with the server...",
   "requisitionView.sync.success": "Requisition has been synchronized!",

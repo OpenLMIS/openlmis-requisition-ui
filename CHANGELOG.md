@@ -8,6 +8,9 @@ Bug fixes:
 New Functionalities:
 * [OPSD-39](https://openlmis.atlassian.net/browse/OPSD-39): enabled filtering and skipped items visibility toggling
 
+Improvements:
+* [OLMIS-8133](https://openlmis.atlassian.net/browse/OLMIS-8133): Corrected message for requisitionView.sync.failure
+
 7.0.13 / 2024-10-31
 ==================
 
