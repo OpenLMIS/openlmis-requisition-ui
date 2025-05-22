@@ -152,6 +152,8 @@ describe('LossesAndAdjustmentsController', function() {
                         reason: reasonOne
                     }],
                     [reasonTwo],
+                    vm.lineItem,
+                    true,
                     'requisitionLossesAndAdjustments.lossesAndAdjustments',
                     'requisitionLossesAndAdjustments.addNewLossOrAdjustment',
                     vm.isDisabled,
