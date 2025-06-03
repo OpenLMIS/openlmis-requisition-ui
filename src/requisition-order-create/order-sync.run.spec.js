@@ -25,6 +25,10 @@ describe('synchronizeEvents', function() {
             $provide.service('offlineService', function() {
                 return offlineService;
             });
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function($injector) {
