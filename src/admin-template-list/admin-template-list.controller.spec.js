@@ -20,7 +20,12 @@ describe('TemplateListAdminController', function() {
         templateFacilityTypes, programTemplates;
 
     beforeEach(function() {
-        module('admin-template-list');
+        module('admin-template-list', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             $controller = $injector.get('$controller');

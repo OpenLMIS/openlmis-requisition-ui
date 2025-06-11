@@ -19,7 +19,12 @@ describe('ProgramAdministrationListController', function() {
         vm, programList;
 
     beforeEach(function() {
-        module('admin-program-list');
+        module('admin-program-list', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             $controller = $injector.get('$controller');

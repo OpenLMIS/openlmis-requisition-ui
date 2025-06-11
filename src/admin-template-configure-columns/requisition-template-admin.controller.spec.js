@@ -26,7 +26,12 @@ describe('RequisitionTemplateAdminController', function() {
         confirmService, requisitionTemplateService, TemplateColumnDataBuilder, TemplateDataBuilder;
 
     beforeEach(function() {
-        module('admin-template-configure-columns');
+        module('admin-template-configure-columns', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             q = $injector.get('$q');

@@ -17,7 +17,12 @@ describe('openlmis.requisitions.requisition state', function() {
 
     beforeEach(function() {
         module('openlmis-main-state');
-        module('requisition-view');
+        module('requisition-view', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('referencedata-facility-type-approved-product');
         module('referencedata-facility');
         module('referencedata-program');

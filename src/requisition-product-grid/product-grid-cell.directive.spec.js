@@ -33,6 +33,11 @@ describe('ProductGridCell', function() {
             $provide.value('openlmisCurrencyFilter', function(value) {
                 return '$' + value;
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function($injector) {

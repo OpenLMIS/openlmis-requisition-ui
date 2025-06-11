@@ -16,7 +16,12 @@
 describe('ViewTabController', function() {
 
     beforeEach(function() {
-        module('requisition-view-tab');
+        module('requisition-view-tab', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         var RequisitionLineItemDataBuilder, RequisitionDataBuilder, RequisitionColumnDataBuilder, OrderableDataBuilder;
         inject(function($injector) {

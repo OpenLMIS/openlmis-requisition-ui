@@ -21,7 +21,12 @@ describe('templateListFactory', function() {
         inactiveType;
 
     beforeEach(function() {
-        module('admin-template-list');
+        module('admin-template-list', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');

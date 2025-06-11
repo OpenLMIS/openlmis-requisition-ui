@@ -31,6 +31,11 @@ describe('requisitionValidator', function() {
             $provide.service('validationFactory', function() {
                 return validationFactory;
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function(_requisitionValidator_, _TEMPLATE_COLUMNS_, _COLUMN_SOURCES_,

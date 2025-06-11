@@ -47,6 +47,11 @@ describe('requisitionCacheService', function() {
                     return localStorageMap[resourceName];
                 };
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function($injector) {

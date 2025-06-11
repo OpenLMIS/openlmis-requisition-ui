@@ -19,7 +19,12 @@ describe('RequisitionColumn', function() {
         columnDef, requisition, RequisitionColumnDataBuilder;
 
     beforeEach(function() {
-        module('requisition-template');
+        module('requisition-template', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             RequisitionColumn = $injector.get('RequisitionColumn');

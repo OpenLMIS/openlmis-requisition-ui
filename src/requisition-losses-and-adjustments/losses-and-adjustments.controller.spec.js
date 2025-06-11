@@ -19,7 +19,12 @@ describe('LossesAndAdjustmentsController', function() {
         columns, reasonOne, reasonTwo;
 
     beforeEach(function() {
-        module('requisition-losses-and-adjustments');
+        module('requisition-losses-and-adjustments', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('requisition-view-tab');
 
         module(function($provide) {
