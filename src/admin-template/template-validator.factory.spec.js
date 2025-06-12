@@ -17,7 +17,12 @@ describe('templateValidator', function() {
     var templateValidator, template;
 
     beforeEach(function() {
-        module('admin-template');
+        module('admin-template', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             templateValidator = $injector.get('templateValidator');

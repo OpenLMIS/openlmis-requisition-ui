@@ -24,7 +24,12 @@ describe('calculationFactory', function() {
     beforeEach(function() {
         module('admin-template');
         module('stock-reason');
-        module('requisition-calculations');
+        module('requisition-calculations', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('referencedata-facility-type-approved-product');
         module('requisition-view-tab');
 

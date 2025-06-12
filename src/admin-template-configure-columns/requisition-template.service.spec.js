@@ -19,7 +19,12 @@ describe('requisitionTemplateService', function() {
         TemplateDataBuilder, ProgramDataBuilder, program1, program2;
 
     beforeEach(function() {
-        module('admin-template-configure-columns');
+        module('admin-template-configure-columns', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('referencedata-program');
 
         inject(function($injector) {

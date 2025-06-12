@@ -40,6 +40,11 @@ describe('periodService', function() {
             $provide.factory('alertService', function() {
                 return alertServiceMock;
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function(_$httpBackend_, _$rootScope_, _periodService_) {

@@ -22,7 +22,12 @@ describe('RequisitionApprovalListController', function() {
     var requisitions, programs;
 
     beforeEach(function() {
-        module('requisition-approval');
+        module('requisition-approval', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('requisition-view-tab');
 
         module(function($provide) {

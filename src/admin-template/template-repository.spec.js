@@ -30,6 +30,11 @@ describe('TemplateRepository', function() {
                     return templateResourceMock;
                 };
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function($injector) {

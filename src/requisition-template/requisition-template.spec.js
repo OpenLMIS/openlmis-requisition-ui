@@ -20,7 +20,12 @@ describe('RequisitionTemplate', function() {
 
     beforeEach(function() {
         module('requisition');
-        module('requisition-template');
+        module('requisition-template', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('requisition-view-tab');
 
         inject(function($injector) {

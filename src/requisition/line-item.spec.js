@@ -29,6 +29,11 @@ describe('LineItem', function() {
             $provide.factory('calculationFactory', function() {
                 return calculationFactory;
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         module('openlmis-templates', function($provide) {

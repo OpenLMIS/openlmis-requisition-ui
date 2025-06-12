@@ -16,7 +16,12 @@
 describe('openlmis.requisitions.requisition.nonFullSupply state', function() {
 
     beforeEach(function() {
-        module('requisition-view');
+        module('requisition-view', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('referencedata-facility-type-approved-product');
 
         inject(function($injector) {

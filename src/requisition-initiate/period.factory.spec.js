@@ -23,6 +23,10 @@ describe('periodFactory', function() {
             $provide.service('periodService', function() {
                 return periodServiceMock;
             });
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function(_$rootScope_, _$q_, _periodFactory_, _REQUISITION_STATUS_) {
