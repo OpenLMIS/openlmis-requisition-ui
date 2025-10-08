@@ -30,7 +30,7 @@
             label: 'requisition.orderCreate',
             isOffline: false,
             priority: 14,
-            showInNavigation: showRequisitionLessOrder,
+            showInNavigation: false, //Removing order create for Lesotho eLMIS
             views: {
                 '@': {
                     templateUrl: 'requisition-order-create/order-create.html'

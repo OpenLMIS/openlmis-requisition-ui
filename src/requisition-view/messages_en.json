@@ -64,5 +64,6 @@
     "requisitionView.rejection.reason.update" : "Update",
     "requisitionView.rejection.reason.warning.message" : "There is no reason",
     "requisitionView.rejection.reason.action" : "Action",
-    "requisitionView.rejection.reason.action.remove" : "Remove"
+    "requisitionView.rejection.reason.action.remove" : "Remove",
+    "requisitionView.redistribution.label": "Redistribute"
 }

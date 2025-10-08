@@ -63,5 +63,6 @@
 </section>
 <div class="openlmis-toolbar" ng-if="vm.requisitions.length">
 	<button class="primary" ng-click="vm.convertToOrder()">{{'requisitionConvertToOrder.convertToOrder.label' | message}}</button>
-	<button class="primary" ng-click="vm.releaseWithoutOrder()">{{'requisitionConvertToOrder.releaseWithoutOrder.label' | message}}</button>
+	<!-- Removing Release without converting to order for Lesotho eLMIS -->>
+	<!--<button class="primary" ng-click="vm.releaseWithoutOrder()">{{'requisitionConvertToOrder.releaseWithoutOrder.label' | message}}</button> -->
 </div>

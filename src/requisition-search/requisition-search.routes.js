@@ -50,6 +50,12 @@
                         }
                         return undefined;
                     });
+                },
+                homeFacility: function(facilityFactory, $stateParams) {
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
                 }
             }
         });

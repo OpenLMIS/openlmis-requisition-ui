@@ -36,6 +36,7 @@
         'requisition-validation',
         'requisition-status-messages',
         'requisition-view-tab',
+        'requisition-redistribution',
         'ui.router'
     ]);
 

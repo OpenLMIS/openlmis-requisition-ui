@@ -34,16 +34,16 @@
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
-        'rejectionReasonModalService', '$q'
+        'rejectionReasonModalService', '$q', 'homeFacility'
     ];
-
+       
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
                                        loadingModalService, alertService, notificationService, confirmService,
                                        offlineService, $window, requisitionUrlFactory, $filter, $scope,
                                        RequisitionWatcher, accessTokenFactory, messageService, stateTrackerService,
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
-                                       canApproveAndReject, canDelete, canSkip, canSync,
-                                       program, facility, processingPeriod, rejectionReasonModalService, $q) {
+                                       canApproveAndReject, canDelete, canSkip, canSync, program, facility, 
+                                       processingPeriod, rejectionReasonModalService, $q, homeFacility) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
@@ -229,7 +229,8 @@
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
         vm.close = close;
         vm.loadRejectionReasonModal = loadRejectionReasonModal;
-
+        vm.goToRedistribution = goToRedistribution;
+        
         /**
          * @ngdoc method
          * @methodOf requisition-view.controller:RequisitionViewController
@@ -251,6 +252,39 @@
             vm.displayRejectButton = canApproveAndReject && !vm.requisition.extraData.originalRequisition;
             vm.displaySkipButton = canSkip;
             vm.displaySyncButton = canSync;
+            vm.homeFacility = homeFacility;
+        }
+
+        function goToRedistribution(requisitionId) {
+            $state.go('openlmis.redistribution', {
+                rnr: requisitionId,
+                requisition: vm.requisition
+            });   
+
+        } 
+
+        vm.isEmergencyRequisition = function(){
+          
+            if(vm.requisition.emergency && (vm.homeFacility.type.code === "dist_store" || vm.homeFacility.type.code === "central_store") ){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        vm.inDHMTForApproval = function(){
+            if(vm.requisition.hasOwnProperty('supervisoryNode')){
+                if((vm.homeFacility.type.code === "dist_store" || vm.homeFacility.type.code === "central_store") && vm.requisition.status === "IN_APPROVAL"){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            else{
+                return true;
+            }
         }
 
         function setTypeAndClass() {
@@ -381,6 +415,7 @@
                     failWithMessage('requisitionView.rnrHasErrors')();
                 }
             });
+                
 
             function saveThenSubmit() {
                 var loadingPromise = loadingModalService.open();
@@ -484,21 +519,27 @@
          * Otherwise, a success notification modal will be shown.
          */
         function approveRnr() {
+            // Unskip skipped line items when approving
+            vm.requisition.requisitionLineItems.forEach(function (lineItem) {
+                if (lineItem.requestedQuantity > 0) {
+                    lineItem.skipped = "";
+                }
+            });
             confirmService.confirm(
                 'requisitionView.approve.confirm',
                 'requisitionView.approve.label'
-            ).then(function() {
+            ).then(function () {
                 if (requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();
-                    vm.requisition.$save().then(function() {
-                        vm.requisition.$approve().then(function() {
+                    vm.requisition.$save().then(function () {
+                        vm.requisition.$approve().then(function () {
                             watcher.disableWatcher();
-                            loadingPromise.then(function() {
+                            loadingPromise.then(function () {
                                 notificationService.success('requisitionView.approve.success');
                             });
                             stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
                         }, loadingModalService.close);
-                    }, function(response) {
+                    }, function (response) {
                         handleSaveError(response.status);
                     });
                 } else {

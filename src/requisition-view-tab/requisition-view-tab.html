@@ -1,12 +1,29 @@
 <div class="view-tab openlmis-table-container">
+	<form ng-submit="vm.search()" openlmis-table-filter>
+        <fieldset class="form-group">
+            <label for="searchFor">Keyword</label>
+            <input id="searchFor" type="text" ng-model="vm.searchKeyword" maxlength="50"/>
+            <input type="submit" value="Search"/>
+        </fieldset>
+    </form>
 	<h4 ng-show="vm.showSkipControls">{{'requisitionViewTab.skip' | message}}</h4>
 	<ul ng-show="vm.showSkipControls">
 		<li><a ng-click="vm.requisition.skipAllFullSupplyLineItems()">{{'requisitionViewTab.all' | message}}</a></li>
+		<!--<li><a ng-click="vm.skipCurrentPageFullSupplyLineItems()">{{'requisitionViewTab.page' | message}}</a></li>-->
 		<li><a ng-click="vm.requisition.unskipAllFullSupplyLineItems()">{{'requisitionViewTab.none' | message}}</a></li>
 	</ul>
 	<span ng-if="vm.showAddFullSupplyProductControls">
 		{{ vm.skippedFullSupplyProductCountMessage() }}
 	</span>
+	<div ng-show="vm.showSkipControls" id="skipped-line-items-visibility">
+		<label for="skippedItemsVisibility">Show skipped items</label>
+		<input
+			type="checkbox"
+			name="skippedItemsVisibility"
+			id="skippedItemsVisibility"
+			ng-model="vm.showSkippedLineItems"
+			ng-change="vm.filterByOrderableParams()">
+	</div>
 	<button class="add" ng-if="vm.showAddFullSupplyProductsButton" ng-click="vm.addFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showAddNonFullSupplyProductsButton" ng-click="vm.addNonFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showUnskipFullSupplyProductsButton" ng-click="vm.unskipFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
@@ -17,7 +34,7 @@
 			<tr>
 				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'" 
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
-					openlmis-popover-trigger-area="element">{{column.label}}</th>
+					popover-trigger-area="element">{{column.label}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
 			</tr>
 		</thead>
@@ -42,7 +59,7 @@
 		</tbody>
 	</table>
 	<openlmis-pagination
-		list="vm.lineItems"
+		list="vm.filteredItems"
 		paged-list="vm.items"
 		pagination-id="vm.paginationId"
 		on-page-change="vm.cacheRequisition"/>

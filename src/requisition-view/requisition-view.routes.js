@@ -75,6 +75,12 @@
                 },
                 canUnskipRequisitionItemWhenApproving: function(requisitionViewFactory, requisition) {
                     return requisitionViewFactory.canUnskipRequisitionItemWhenApproving(requisition);
+                },
+                homeFacility: function(facilityFactory, $stateParams) {
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
                 }
             }
         });

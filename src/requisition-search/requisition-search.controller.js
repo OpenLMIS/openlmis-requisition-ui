@@ -28,11 +28,11 @@
         .controller('RequisitionSearchController', RequisitionSearchController);
 
     RequisitionSearchController.$inject = [
-        '$state', '$filter', '$stateParams', 'facilities', 'offlineService', 'localStorageFactory', 'confirmService',
+        '$state', '$filter', '$stateParams', 'facilities', 'homeFacility', 'offlineService', 'localStorageFactory', 'confirmService',
         'requisitions', 'REQUISITION_STATUS'
     ];
 
-    function RequisitionSearchController($state, $filter, $stateParams, facilities, offlineService, localStorageFactory,
+    function RequisitionSearchController($state, $filter, $stateParams, facilities, homeFacility, offlineService, localStorageFactory,
                                          confirmService, requisitions, REQUISITION_STATUS) {
 
         var vm = this,
@@ -54,6 +54,17 @@
          * The list of all facilities available to the user.
          */
         vm.facilities = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-search.controller:RequisitionViewController
+         * @name  homeFacility 
+         * @type {Array}
+         *
+         * @description
+         * home facility of the user.
+         */
+        vm.homeFacility = undefined;
 
         /**
          * @ngdoc property
@@ -170,6 +181,12 @@
          */
         function onInit() {
             vm.requisitions = requisitions;
+            vm.homeFacility = homeFacility;
+            vm.requisitions.forEach(item => {
+                if(item.extraData.isRedistributed){
+                    item.status = 'REDISTRIBUTED';
+                }
+               });
             vm.facilities = facilities;
             vm.statuses = REQUISITION_STATUS.$toList();
 
@@ -267,7 +284,12 @@
             stateParams.initiatedDateFrom = vm.startDate ? $filter('isoDate')(vm.startDate) : null;
             stateParams.initiatedDateTo = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
             stateParams.offline = vm.offline;
-            stateParams.requisitionStatus = vm.selectedStatus;
+            if (vm.homeFacility.code === "NDSO") {
+                stateParams.requisitionStatus = "IN_APPROVAL";
+            }
+            else{
+                stateParams.requisitionStatus = vm.selectedStatus;
+            }
 
             $state.go('openlmis.requisitions.search', stateParams, {
                 reload: true

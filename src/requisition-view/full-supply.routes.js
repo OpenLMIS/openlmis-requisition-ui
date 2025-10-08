@@ -26,14 +26,14 @@
     function routes(selectProductsModalStateProvider) {
         selectProductsModalStateProvider
             .stateWithAddOrderablesChildState('openlmis.requisitions.requisition.fullSupply', {
-                url: '/fullSupply?fullSupplyListPage&fullSupplyListSize',
+                url: '/fullSupply?fullSupplyListPage&fullSupplyListSize&searchKeyword',
                 templateUrl: 'requisition-view-tab/requisition-view-tab.html',
                 controller: 'ViewTabController',
                 controllerAs: 'vm',
                 isOffline: true,
                 nonTrackable: true,
                 resolve: {
-                    lineItems: function($filter, requisition) {
+                    lineItems: function($filter, requisition, $stateParams) {
                         var filterObject = requisition.template.hideSkippedLineItems() ?
                             {
                                 skipped: '!true',
@@ -46,7 +46,13 @@
                                 }
                             };
                         var fullSupplyLineItems = $filter('filter')(requisition.requisitionLineItems, filterObject);
-
+                        
+                       
+                        // Filter by search keyword
+                        if ($stateParams.searchKeyword) {
+                            fullSupplyLineItems = $filter('filter')(fullSupplyLineItems, $stateParams.searchKeyword);
+                        }
+                        
                         return $filter('orderBy')(fullSupplyLineItems, [
                             '$program.orderableCategoryDisplayOrder',
                             '$program.orderableCategoryDisplayName',

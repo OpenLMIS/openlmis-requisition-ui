@@ -18,19 +18,36 @@
     'use strict';
 
     /**
-     * @module requisition-convert-to-order
+     * @module requisition-redistribution
      *
      * @description
-     * Responsible for requisition convert to order screen.
+     * Provides redistribution state and controller.
      */
-    angular.module('requisition-convert-to-order', [
-        'requisition',
-        'openlmis-date',
+    angular.module('requisition-redistribution', [
+        'ui.router',
+        'openlmis-config',
         'referencedata-facility',
-        'referencedata-program',
-        'openlmis-modal',
+        'ngResource',
+        'stockmanagement',
+        'openlmis-repository',
+        'openlmis-class-extender',
+        'referencedata-user',
+        'openlmis-urls',
         'openlmis-pagination',
-        'ui.router'
+        'requisition-view',
+        'requisition',
+        'requisition-summary',
+        'requisition-validation',
+        'requisition-status-messages',
+        'requisition-view-tab',
+        'openlmis-templates',
+        'openlmis-i18n',
+        'openlmis-state-tracker',
+        'openlmis-modal',
+        'openlmis-date',
+        'openlmis-invalid',
+        'openlmis-permissions',
+        'requisition-order-create'
     ]);
 
 })();

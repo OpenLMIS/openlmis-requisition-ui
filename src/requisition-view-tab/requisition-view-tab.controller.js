@@ -29,17 +29,17 @@
         .controller('ViewTabController', ViewTabController);
 
     ViewTabController.$inject = [
-        '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
+        '$filter', '$state', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility','$scope'
     ];
 
-    function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
+    function ViewTabController($filter, $state, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving) {
+                               canUnskipRequisitionItemWhenApproving, homeFacility, $scope) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -52,6 +52,9 @@
         vm.getDescriptionForColumn = getDescriptionForColumn;
         vm.skippedFullSupplyProductCountMessage = skippedFullSupplyProductCountMessage;
         vm.cacheRequisition = cacheRequisition;
+        vm.disabledRequisitionEdit = disabledRequisitionEdit;
+        vm.search = search;
+        vm.showSkippedLineItems = true;
 
         /**
          * @ngdoc property
@@ -63,6 +66,7 @@
          * Holds all requisition line items.
          */
         vm.lineItems = undefined;
+        vm.searchKeyword = undefined;
 
         /**
          * @ngdoc property
@@ -143,10 +147,15 @@
          */
         vm.columns = undefined;
 
+         vm.orderableFilterProperties = {
+            name: ''
+        };
+
         function onInit() {
             vm.lineItems = lineItems;
             vm.items = items;
             vm.requisition = requisition;
+            vm.homeFacility = homeFacility;
             vm.columns = columns;
             vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
@@ -156,6 +165,56 @@
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
+            vm.requisition = disabledRequisitionEdit();
+            registerSkippedItemsWatcher();
+        }
+
+        function registerSkippedItemsWatcher() {
+            $scope.$watchCollection(function() {
+                return vm.items ? vm.items.map(function(item) {
+                    return item.skipped;
+                }) : [];
+            }, function(newValues, oldValues) {
+                if (!angular.equals(newValues, oldValues) && !vm.showSkippedLineItems) {
+                    for (var i = 0; i < newValues.length; i++) {
+                        if (newValues[i] !== oldValues[i]) {
+                            vm.filterByOrderableParams();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        function search() {
+            console.log("Keyword", vm.searchKeyword);
+            $stateParams.searchKeyword = vm.searchKeyword;
+            $state.go('openlmis.requisitions.requisition.fullSupply', $stateParams, {
+                reload: true
+                //inherit: false,
+            });
+        }
+
+        // Allows requisition line items to be editable by skipping or unskipping line item
+        function disabledRequisitionEdit(){           
+            vm.requisition = requisition;
+            // Make all requisition line item skipped at Warehouses
+            if(vm.homeFacility.type.name === 'Warehouse'){
+                vm.requisition.requisitionLineItems.forEach(function(lineItem) {
+                        lineItem.skipped = true;
+                });            
+                return vm.requisition;
+            }
+            else if(vm.homeFacility !== 'Warehouse'){
+                //Unskip all skipped requisition line items where requested quantity is greater than zero. 
+                //This will allow them to be editable
+                vm.requisition.requisitionLineItems.forEach(function(lineItem) {
+                    if(lineItem.requestedQuantity > 0 ){
+                        lineItem.skipped = "";
+                    }                        
+                });
+                return vm.requisition;
+            }
         }
 
         /**
@@ -389,6 +448,20 @@
                 'requisitionViewTab.noFullSupplyProducts' :
                 'requisitionViewTab.noNonFullSupplyProducts';
         }
+
+        function orderableHasMatchingName(orderableName, filterValue) {
+            return orderableName.toLowerCase().includes(filterValue.toLowerCase());
+        }
+
+        function getFilteredLineItems() {
+            return vm.lineItems.filter(function(item) {
+                return (vm.showSkippedLineItems ? true : !item.skipped); 
+            });
+        }
+
+        vm.filterByOrderableParams = function() {
+            vm.filteredItems = getFilteredLineItems();
+        };
     }
 
 })();
