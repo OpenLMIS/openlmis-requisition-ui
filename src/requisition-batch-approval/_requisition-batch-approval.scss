@@ -20,7 +20,8 @@
     }
 
     h2 {
-        margin: 0px $space-size $space-size/2;
+        margin-bottom: $space-size/2;
+        @include margin-right($space-size);
         border-bottom: 1px $border-color solid;
     }
 

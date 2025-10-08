@@ -13,8 +13,12 @@
             {{vm.facility.operator.name}}
         </li>
         <li>
-            <strong>{{'requisitionView.region' | message}}</strong>
+            <strong>{{'requisitionView.district' | message}}</strong>
             {{vm.facility.geographicZone.name}}
+        </li>
+        <li>
+            <strong>{{'requisitionView.region' | message}}</strong>
+            {{vm.facility.geographicZone.parent.name}}
         </li>
         <li ng-if="requisition.facility.geographicZone.parent.name">
             <strong>{{'requisitionView.province' | message}}</strong>

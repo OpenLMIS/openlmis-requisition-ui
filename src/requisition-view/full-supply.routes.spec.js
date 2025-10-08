@@ -16,7 +16,12 @@
 describe('openlmis.requisitions.requisition.fullSupply state', function() {
 
     beforeEach(function() {
-        module('requisition-view');
+        module('requisition-view', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             this.UserDataBuilder = $injector.get('UserDataBuilder');
@@ -87,7 +92,7 @@ describe('openlmis.requisitions.requisition.fullSupply state', function() {
         ];
 
         this.columns = [
-            new this.RequisitionColumnDataBuilder().buildProductCodeColumn()
+            new this.RequisitionColumnDataBuilder().buildProductCodeColumn(this.requisition)
         ];
 
         spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));

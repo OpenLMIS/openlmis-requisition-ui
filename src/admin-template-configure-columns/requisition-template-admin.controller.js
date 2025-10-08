@@ -50,6 +50,7 @@
         vm.isAverageConsumption = isAverageConsumption;
         vm.isPackToShip = isPackToShip;
         vm.refreshAvailableTags = refreshAvailableTags;
+        vm.updateSourceForColumn = updateSourceForColumn;
 
         /**
          * @ngdoc property
@@ -266,6 +267,23 @@
                     return isNotSelected && vm.template.columnsMap[columnName].tag !== tag;
                 }, true);
             });
+        }
+
+        function updateSourceForColumn(column) {
+            if (column.name === TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH) {
+                var sources = column.columnDefinition.sources;
+
+                var hasUserInput = sources.indexOf(COLUMN_SOURCES.USER_INPUT) !== -1;
+                var hasCalculated = sources.indexOf(COLUMN_SOURCES.CALCULATED) !== -1;
+
+                if (hasUserInput && hasCalculated) {
+                    if (column.isDisplayed) {
+                        column.source = COLUMN_SOURCES.USER_INPUT;
+                    } else {
+                        column.source = COLUMN_SOURCES.CALCULATED;
+                    }
+                }
+            }
         }
     }
 })();

@@ -19,7 +19,13 @@ describe('RequisitionSummaryController', function() {
 
     beforeEach(function() {
 
-        module('requisition-summary');
+        module('requisition-summary', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
+        module('requisition-view-tab');
 
         lineItems = [
             createLineItem(false, true),

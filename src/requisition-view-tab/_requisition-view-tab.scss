@@ -1,12 +1,37 @@
 .view-tab {
+    $margin-value: 5px;
 
     .openlmis-table-controls {
         flex-direction: row-reverse;
     }
 
-    .hide-line-item {
-    	@extend button.danger;
-    	@include icon-only('remove');
+    .toolbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center !important;
+
+        .requisition-indicator {
+            margin-left: auto;
+        }
     }
 
+    #skipped-line-items-visibility {
+        @include flex-layout(row, $align-items: center, $gap: 0.5rem);
+        label {
+            margin: $margin-value 0 0 0;
+        }
+    }
+
+    #reqisition-skip-label {
+        margin-top: $margin-value;
+    }
+
+    #reqisition-skip-controls {
+        margin-top: $margin-value;
+    }
+
+    .hide-line-item {
+        @extend button.danger;
+        @include icon-only("remove");
+    }
 }

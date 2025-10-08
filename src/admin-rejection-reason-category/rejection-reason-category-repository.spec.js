@@ -30,6 +30,11 @@ describe('RejectionReasonCategoryRepository', function() {
                     return rejectionReasonCategoryResourceMock;
                 };
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function($injector) {

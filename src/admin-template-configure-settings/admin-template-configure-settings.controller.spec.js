@@ -20,7 +20,12 @@ describe('AdminTemplateConfigureSettingsController', function() {
         TemplateDataBuilder, districtHospital, healthCenter, districtStore, templateFacilityTypes;
 
     beforeEach(function() {
-        module('admin-template-configure-settings');
+        module('admin-template-configure-settings', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             $q = $injector.get('$q');

@@ -18,6 +18,8 @@ describe('requisitionService', function() {
     beforeEach(function() {
         module('requisition');
         module('referencedata-facility-type-approved-product');
+        module('requisition-view-tab');
+        module('requisition-template');
 
         var context = this;
         module(function($provide) {
@@ -47,6 +49,11 @@ describe('requisitionService', function() {
                         return context.statusMessagesStorage;
                     }
                 });
+            });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
             });
         });
 

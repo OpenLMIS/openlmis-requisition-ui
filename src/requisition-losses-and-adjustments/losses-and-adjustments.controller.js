@@ -102,6 +102,7 @@
             adjustmentsModalService.open(
                 getAdjustments(vm.lineItem.stockAdjustments),
                 filterAvailableReasons(reasons, getAdjustments(vm.lineItem.stockAdjustments)),
+                vm.lineItem, true,
                 'requisitionLossesAndAdjustments.lossesAndAdjustments',
                 'requisitionLossesAndAdjustments.addNewLossOrAdjustment',
                 vm.isDisabled,

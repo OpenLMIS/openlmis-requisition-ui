@@ -76,6 +76,9 @@
                     },
                     fullSupply: function() {
                         return true;
+                    },
+                    program: function(programService, requisition) {
+                        return programService.get(requisition.program.id);
                     }
                 }
             });

@@ -19,7 +19,13 @@ describe('LossesAndAdjustmentsController', function() {
         columns, reasonOne, reasonTwo;
 
     beforeEach(function() {
-        module('requisition-losses-and-adjustments');
+        module('requisition-losses-and-adjustments', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
+        module('requisition-view-tab');
 
         module(function($provide) {
             requisitionValidatorMock = jasmine.createSpyObj('requisitionValidator', ['validateLineItem']);
@@ -151,6 +157,8 @@ describe('LossesAndAdjustmentsController', function() {
                         reason: reasonOne
                     }],
                     [reasonTwo],
+                    vm.lineItem,
+                    true,
                     'requisitionLossesAndAdjustments.lossesAndAdjustments',
                     'requisitionLossesAndAdjustments.addNewLossOrAdjustment',
                     vm.isDisabled,

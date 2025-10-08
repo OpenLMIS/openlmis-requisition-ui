@@ -32,29 +32,31 @@
         '$filter', '$state', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility','$scope'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope', 'homeFacility','$scope'
     ];
 
     function ViewTabController($filter, $state, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, homeFacility, $scope) {
+                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope, homeFacility, $scope) {
         var vm = this;
-
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
         vm.addFullSupplyProducts = addFullSupplyProducts;
         vm.addNonFullSupplyProducts = addNonFullSupplyProducts;
         vm.unskipFullSupplyProducts = unskipFullSupplyProducts;
         vm.showDeleteColumn = showDeleteColumn;
+        vm.skipCurrentPageFullSupplyLineItems = skipCurrentPageFullSupplyLineItems;
         vm.isLineItemValid = requisitionValidator.isLineItemValid;
         vm.getDescriptionForColumn = getDescriptionForColumn;
         vm.skippedFullSupplyProductCountMessage = skippedFullSupplyProductCountMessage;
         vm.cacheRequisition = cacheRequisition;
+        vm.userCanEditColumn = userCanEditColumn;
+        vm.monthlyTBColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
         vm.disabledRequisitionEdit = disabledRequisitionEdit;
         vm.search = search;
-        vm.showSkippedLineItems = true;
+        // vm.showSkippedLineItems = true;
 
         /**
          * @ngdoc property
@@ -147,21 +149,47 @@
          */
         vm.columns = undefined;
 
-         vm.orderableFilterProperties = {
+        vm.orderableFilterProperties = {
             name: ''
         };
 
+        vm.filteredItems = undefined;
+
+        vm.showSkippedLineItems = true;
+
+        vm.fullSupply = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-view-tab.controller:ViewTabController
+         * @name program
+         * @type {Object}
+         *
+         * @description
+         * Holds the current program
+         */
+        vm.program = undefined;
+
         function onInit() {
+            angular.forEach(columns, function(column) {
+                angular.forEach(lineItems, function(lineItem) {
+                    lineItem.updateFieldValue(column, requisition);
+                });
+            });
+
             vm.lineItems = lineItems;
             vm.items = items;
+            vm.filteredItems = lineItems;
             vm.requisition = requisition;
             vm.homeFacility = homeFacility;
             vm.columns = columns;
+            vm.program = program;
             vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
             vm.showUnskipFullSupplyProductsButton = showUnskipFullSupplyProductsButton();
             vm.showSkipControls = showSkipControls();
+            vm.showOrderableFilter = showOrderableFilter();
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
@@ -257,7 +285,7 @@
          *
          * @description
          * Caches given requisition in the local storage.
-         * 
+         *
          * @return {Promise} the promise resolved after adding requisition to the local storage
          */
         function cacheRequisition() {
@@ -340,7 +368,7 @@
          * from full supply requisition.
          */
         function skippedFullSupplyProductCountMessage() {
-            return  messageService.get('requisitionViewTab.fullSupplyProductsSkipped', {
+            return messageService.get('requisitionViewTab.fullSupplyProductsSkipped', {
                 skippedProductCount: getCountOfSkippedFullSupplyProducts()
             });
         }
@@ -376,8 +404,8 @@
 
         function refreshLineItems() {
             var filterObject = (fullSupply &&
-                                    vm.requisition.template.hasSkipColumn() &&
-                                    vm.requisition.template.hideSkippedLineItems()) ?
+                vm.requisition.template.hasSkipColumn() &&
+                vm.requisition.template.hideSkippedLineItems()) ?
                 {
                     skipped: '!true',
                     $program: {
@@ -401,6 +429,11 @@
                     vm.lineItems = lineItems;
                     vm.items = items;
                 });
+        }
+
+        function showOrderableFilter() {
+            return vm.userCanEdit &&
+                fullSupply;
         }
 
         function showSkipControls() {
@@ -449,18 +482,45 @@
                 'requisitionViewTab.noNonFullSupplyProducts';
         }
 
+        function skipCurrentPageFullSupplyLineItems() {
+            vm.items.forEach(function(lineItem) {
+                if (lineItem.canBeSkipped(requisition)) {
+                    lineItem.skipped = true;
+                }
+            });
+            vm.filterByOrderableParams();
+        }
+
+        function userCanEditColumn(column) {
+            if (program.name === TB_MONTHLY_PROGRAM && vm.monthlyTBColumns.includes(column.name)) {
+                return vm.canApproveAndReject;
+            }
+            return vm.userCanEdit;
+        }
+
         function orderableHasMatchingName(orderableName, filterValue) {
             return orderableName.toLowerCase().includes(filterValue.toLowerCase());
         }
 
         function getFilteredLineItems() {
             return vm.lineItems.filter(function(item) {
-                return (vm.showSkippedLineItems ? true : !item.skipped); 
+                return orderableHasMatchingName(item.orderable.fullProductName, vm.orderableFilterProperties.name)
+                    && (vm.showSkippedLineItems ? true : !item.skipped);
             });
         }
 
         vm.filterByOrderableParams = function() {
             vm.filteredItems = getFilteredLineItems();
+        };
+
+        vm.skipAllFullSupplyLineItems = function() {
+            vm.requisition.skipAllFullSupplyLineItems();
+            vm.filterByOrderableParams();
+        };
+
+        vm.unskipAllFullSupplyLineItems = function() {
+            vm.requisition.unskipAllFullSupplyLineItems();
+            vm.filterByOrderableParams();
         };
     }
 

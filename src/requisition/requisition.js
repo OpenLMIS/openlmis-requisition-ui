@@ -845,7 +845,11 @@
 
         function transformLineItem(lineItem, columns) {
             angular.forEach(columns, function(column) {
-                if (!column.$display || column.source === COLUMN_SOURCES.CALCULATED) {
+                // TZUP-598 START HERE
+                if (column.name === 'numberOfPatientsOnTreatmentNextMonth') {
+                    return lineItem[column.name];
+                    // TZUP-598 END HERE
+                } else if (!column.$display || column.source === COLUMN_SOURCES.CALCULATED) {
                     lineItem[column.name] = null;
                 }
             });

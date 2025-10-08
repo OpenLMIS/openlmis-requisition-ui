@@ -56,6 +56,14 @@
             CALCULATED_ORDER_QUANTITY_ISA: 'calculatedOrderQuantityIsa',
             ADDITIONAL_QUANTITY_REQUIRED: 'additionalQuantityRequired',
             IDEAL_STOCK_AMOUNT: 'idealStockAmount',
+            NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH: 'numberOfPatientsOnTreatmentNextMonth',
+            PROGRAM_ORDERABLES_DOSES_PER_PATIENT: 'dosesPerPatient',
+            TOTAL_REQUIREMENT: 'totalRequirement',
+            TOTAL_QUANTITY_NEEDED_BY_HF: 'totalQuantityNeededByHf',
+            QUANTITY_TO_ISSUE: 'quantityToIssue',
+            QUANTITY_TO_ISSUE_TO_UNIT: 'convertedQuantityToIssue',
+            REMARKS_FOR_TB_DISPENSED_QUANTITY: 'remarksForTBDispensedQuantity',
+            getTbMonthlyColumns: getTbMonthlyColumns,
             getStockBasedColumns: getStockBasedColumns
         };
 
@@ -68,6 +76,14 @@
                 this.TOTAL_RECEIVED_QUANTITY,
                 this.TOTAL_STOCKOUT_DAYS,
                 this.AVERAGE_CONSUMPTION
+            ];
+        }
+
+        function getTbMonthlyColumns() {
+            return [
+                this.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH,
+                this.TOTAL_RECEIVED_QUANTITY,
+                this.REMARKS
             ];
         }
     }

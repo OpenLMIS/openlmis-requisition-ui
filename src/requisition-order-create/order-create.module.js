@@ -17,7 +17,8 @@
     'use strict';
 
     angular.module('requisition-order-create', [
-        'stock-card-summary'
+        'stock-card-summary',
+        'openlmis-quantity-unit-toggle'
     ]);
 
 })();

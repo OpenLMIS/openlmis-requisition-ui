@@ -1,22 +1,19 @@
 <div class="view-tab openlmis-table-container">
-	<form ng-submit="vm.search()" openlmis-table-filter>
-        <fieldset class="form-group">
-            <label for="searchFor">Keyword</label>
-            <input id="searchFor" type="text" ng-model="vm.searchKeyword" maxlength="50"/>
-            <input type="submit" value="Search"/>
-        </fieldset>
-    </form>
-	<h4 ng-show="vm.showSkipControls">{{'requisitionViewTab.skip' | message}}</h4>
-	<ul ng-show="vm.showSkipControls">
-		<li><a ng-click="vm.requisition.skipAllFullSupplyLineItems()">{{'requisitionViewTab.all' | message}}</a></li>
-		<!--<li><a ng-click="vm.skipCurrentPageFullSupplyLineItems()">{{'requisitionViewTab.page' | message}}</a></li>-->
-		<li><a ng-click="vm.requisition.unskipAllFullSupplyLineItems()">{{'requisitionViewTab.none' | message}}</a></li>
+	<h4 ng-show="vm.showSkipControls" id="reqisition-skip-label">{{'requisitionViewTab.skip' | message}}</h4>
+	<ul ng-show="vm.showSkipControls" id="reqisition-skip-controls">
+		<li><a ng-click="vm.skipAllFullSupplyLineItems()">{{'requisitionViewTab.all' | message}}</a></li>
+		<li><a ng-click="vm.skipCurrentPageFullSupplyLineItems()">{{'requisitionViewTab.page' | message}}</a></li>
+		<li><a ng-click="vm.unskipAllFullSupplyLineItems()">{{'requisitionViewTab.none' | message}}</a></li>
 	</ul>
 	<span ng-if="vm.showAddFullSupplyProductControls">
 		{{ vm.skippedFullSupplyProductCountMessage() }}
 	</span>
+	<div ng-show="vm.showOrderableFilter" class="productNameFilter">
+		<input type="text" placeholder="{{ 'requisitionViewTab.filterPlaceholder' | message}}"
+			ng-model="vm.orderableFilterProperties.name" ng-change="vm.filterByOrderableParams()">
+	</div>
 	<div ng-show="vm.showSkipControls" id="skipped-line-items-visibility">
-		<label for="skippedItemsVisibility">Show skipped items</label>
+		<label for="skippedItemsVisibility">{{:: 'requisitionViewTab.skippedItemsVisibility' | message  }}</label>
 		<input
 			type="checkbox"
 			name="skippedItemsVisibility"
@@ -32,7 +29,7 @@
 		<caption ng-if="!vm.items.length">{{vm.noProductsMessage | message}}</caption>
 		<thead>
 			<tr>
-				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'" 
+				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'"
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
 					popover-trigger-area="element">{{column.label}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
@@ -45,7 +42,8 @@
 					requisition="vm.requisition"
 					column="column"
 					line-item="lineItem"
-					user-can-edit="vm.userCanEdit"
+					user-can-edit="vm.userCanEditColumn(column)"
+					program="vm.program"
 					can-approve="vm.canApproveAndReject">
 				</td>
 				<td ng-if="vm.showDeleteColumn()">

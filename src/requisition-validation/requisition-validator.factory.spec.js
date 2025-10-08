@@ -19,6 +19,7 @@ describe('requisitionValidator', function() {
         lineItems, column, columns, requisition;
 
     beforeEach(function() {
+        module('requisition-view-tab');
         module('requisition-validation', function($provide) {
             var methods = [
                 'stockOnHand',
@@ -29,6 +30,11 @@ describe('requisitionValidator', function() {
 
             $provide.service('validationFactory', function() {
                 return validationFactory;
+            });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
             });
         });
 

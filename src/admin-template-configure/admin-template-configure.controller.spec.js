@@ -16,7 +16,12 @@
 describe('AdminTemplateConfigureController', function() {
 
     beforeEach(function() {
-        module('admin-template-configure');
+        module('admin-template-configure', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('admin-template-configure-columns');
 
         var ProgramDataBuilder, TemplateDataBuilder;

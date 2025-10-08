@@ -1,3 +1,47 @@
+7.0.15-SNAPSHOT / WIP
+==================
+
+7.0.14 / 2025-03-31
+==================
+Bug fixes:
+* [OLMIS-8042](https://openlmis.atlassian.net/browse/OLMIS-8042): Total received quantity column is readonly when requisition is from stock cards For every program other than TB Monthly
+* [OPSD-38](https://openlmis.atlassian.net/browse/OPSD-38): Added back the validation for stock on hand column for report only requisition
+* [OLMIS-8074](https://openlmis.atlassian.net/browse/OLMIS-8074): Changed where the user is redirected after creating an order.
+
+New Functionalities:
+* [OPSD-39](https://openlmis.atlassian.net/browse/OPSD-39): enabled filtering and skipped items visibility toggling
+
+Improvements:
+* [OLMIS-8133](https://openlmis.atlassian.net/browse/OLMIS-8133): Corrected message for requisitionView.sync.failure
+
+7.0.13 / 2024-10-31
+==================
+
+New functionalities
+* [OLMIS-7838](https://openlmis.atlassian.net/browse/OLMIS-7838): Moved BUQ and TM Monthly functionalities from Tanzania to Core instance
+
+New functionalities that are backwards-compatible:
+* [OLMIS-7987](https://openlmis.atlassian.net/browse/OLMIS-7987): Move Submit Requisitionless Orders functionalities from Angola to Core instance
+
+Bug fixes:
+* [OLMIS-7992](https://openlmis.atlassian.net/browse/OLMIS-7992): Fix passing parameter to hasRoleWithRightForProgramAndSupervisoryNode function
+* [OLMIS-7921](https://openlmis.atlassian.net/browse/OLMIS-7921): Fixed difference between requisition form and it's printout
+
+Improvements:
+* [OIS-24](https://openlmis.atlassian.net/browse/OIS-24): Adjusted all components styles to support RTL
+
+7.0.12 / 2024-04-19
+==================
+
+New functionalities that are backwards-compatible:
+* [OLMIS-7838](https://openlmis.atlassian.net/browse/OLMIS-7838): Move BUQ and TM Monthly functionalities from Tanzania to Core instance
+
+7.0.11 / 2023-11-07
+==================
+
+Bug fixes:
+* [OLMIS-7802](https://openlmis.atlassian.net/browse/OLMIS-7802): Fix issue related to second approve
+
 7.0.10 / 2023-06-26
 ==================
 

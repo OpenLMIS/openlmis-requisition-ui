@@ -18,7 +18,12 @@ describe('categoryFactory', function() {
     var categoryFactory, products;
 
     beforeEach(function() {
-        module('requisition-view-tab');
+        module('requisition-view-tab', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             categoryFactory = $injector.get('categoryFactory');

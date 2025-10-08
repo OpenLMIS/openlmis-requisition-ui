@@ -18,7 +18,12 @@ describe('TemplateColumn', function() {
     var templateColumn, templateColumnJson, TemplateColumn, TEMPLATE_COLUMNS;
 
     beforeEach(function() {
-        module('admin-template');
+        module('admin-template', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             TemplateColumn = $injector.get('TemplateColumn');

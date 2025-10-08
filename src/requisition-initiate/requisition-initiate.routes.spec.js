@@ -20,7 +20,12 @@ describe('openlmis.requisitions.initRnr state', function() {
 
     beforeEach(function() {
         module('referencedata-period');
-        module('requisition-initiate');
+        module('requisition-initiate', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             $q = $injector.get('$q');

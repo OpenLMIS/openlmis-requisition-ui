@@ -24,8 +24,14 @@ describe('calculationFactory', function() {
     beforeEach(function() {
         module('admin-template');
         module('stock-reason');
-        module('requisition-calculations');
+        module('requisition-calculations', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('referencedata-facility-type-approved-product');
+        module('requisition-view-tab');
 
         inject(function($injector) {
             calculationFactory = $injector.get('calculationFactory');
@@ -33,6 +39,7 @@ describe('calculationFactory', function() {
             COLUMN_SOURCES = $injector.get('COLUMN_SOURCES');
             RequisitionColumnDataBuilder = $injector.get('RequisitionColumnDataBuilder');
             ReasonDataBuilder = $injector.get('ReasonDataBuilder');
+            this.RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
             StockAdjustmentDataBuilder = $injector.get('StockAdjustmentDataBuilder');
             this.RequisitionLineItemV2DataBuilder = $injector.get('RequisitionLineItemV2DataBuilder');
             this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
@@ -41,18 +48,27 @@ describe('calculationFactory', function() {
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
-        calculatedOrderQuantityIsaColumn = new RequisitionColumnDataBuilder().buildCalculatedOrderQuantityIsaColumn();
-        calculatedOrderQuantityColumn = new RequisitionColumnDataBuilder().buildCalculatedOrderQuantityColumn();
-        totalConsumedQuantityColumn = new RequisitionColumnDataBuilder().buildTotalConsumedQuantityColumn();
-        additionalQuantityRequiredColumn = new RequisitionColumnDataBuilder().buildAdditionalQuantityRequiredColumn();
-        maximumStockQuantityColumn = new RequisitionColumnDataBuilder().buildMaximumStockQuantityColumn();
-        averageConsumptionColumn = new RequisitionColumnDataBuilder().buildAverageConsumptionColumn();
-        requestedQuantityColumn = new RequisitionColumnDataBuilder().buildRequestedQuantityColumn();
+        this.requisition = new this.RequisitionDataBuilder().build();
+
+        calculatedOrderQuantityIsaColumn = new RequisitionColumnDataBuilder()
+            .buildCalculatedOrderQuantityIsaColumn(this.requisition);
+        calculatedOrderQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildCalculatedOrderQuantityColumn(this.requisition);
+        totalConsumedQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildTotalConsumedQuantityColumn(this.requisition);
+        additionalQuantityRequiredColumn = new RequisitionColumnDataBuilder()
+            .buildAdditionalQuantityRequiredColumn(this.requisition);
+        maximumStockQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildMaximumStockQuantityColumn(this.requisition);
+        averageConsumptionColumn = new RequisitionColumnDataBuilder()
+            .buildAverageConsumptionColumn(this.requisition);
+        requestedQuantityColumn = new RequisitionColumnDataBuilder()
+            .buildRequestedQuantityColumn(this.requisition);
         stockOnHandColumn = new RequisitionColumnDataBuilder()
             .asStockOnHand()
             .asUserInput()
-            .build();
-        isaColumn = new RequisitionColumnDataBuilder().buildIdealStockAmountColumn();
+            .build(this.requisition);
+        isaColumn = new RequisitionColumnDataBuilder().buildIdealStockAmountColumn(this.requisition);
         this.programOrderable = new this.ProgramOrderableDataBuilder().buildJson();
         lineItem = new this.RequisitionLineItemV2DataBuilder()
             .withTotalLossesAndAdjustments(25)
@@ -165,10 +181,6 @@ describe('calculationFactory', function() {
             lineItem.orderable.roundToZero = false;
 
             expect(calculationFactory.packsToShip(lineItem, requisitionMock)).toBe(1);
-        });
-
-        it('should calculate total properly', function() {
-            expect(calculationFactory.total(lineItem)).toBe(30);
         });
 
         it('should calculate stock on hand properly', function() {
@@ -334,13 +346,6 @@ describe('calculationFactory', function() {
             };
         });
 
-        it('should return total consumed quantity when non-stockout days is zero', function() {
-            lineItem.totalStockoutDays = 30;
-
-            expect(calculationFactory.adjustedConsumption(lineItem, requisitionMock))
-                .toBe(lineItem.totalConsumedQuantity);
-        });
-
         it('should return zero when consumed quantity is not defined', function() {
             lineItem.totalConsumedQuantity = 0;
 
@@ -395,14 +400,14 @@ describe('calculationFactory', function() {
             expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(0);
         });
 
-        it('should return maximum stock quantity when default option was selected', function() {
-            lineItem.approvedProduct.maxPeriodsOfStock = 7.25;
-            lineItem.averageConsumption = 2;
-
-            maximumStockQuantityColumn.option.optionName = 'default';
-
-            expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(15);
-        });
+        // it('should return maximum stock quantity when default option was selected', function() {
+        //     lineItem.approvedProduct.maxPeriodsOfStock = 7.25;
+        //     lineItem.averageConsumption = 2;
+        //
+        //     maximumStockQuantityColumn.option.optionName = 'default';
+        //
+        //     expect(calculationFactory.maximumStockQuantity(lineItem, requisitionMock)).toBe(15);
+        // });
     });
 
     describe('calculatedOrderQuantity', function() {

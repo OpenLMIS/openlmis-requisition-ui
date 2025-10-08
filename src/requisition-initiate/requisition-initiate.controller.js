@@ -144,7 +144,7 @@
                 .then(function() {
                     requisitionService.initiate(vm.facility.id, vm.program.id, selectedPeriod.id, vm.emergency, key)
                         .then(function(data) {
-                            goToInitiatedRequisition(data);
+                            goToRequisition(data);
                         })
                         .catch(function() {
                             notificationService.error('requisitionInitiate.couldNotInitiateRequisition');
@@ -185,19 +185,29 @@
          * @description
          * Directs a user to the requisition view data for a specific period
          *
-         * @param {Object} id A requisition id
+         * @param {Object} requisition A requisition
          */
-        function goToRequisition(id) {
-            $state.go('openlmis.requisitions.requisition.fullSupply', {
-                rnr: id
-            });
+        function goToRequisition(requisition) {
+            if (typeof requisition === 'object') {
+                redirectRequisition(requisition);
+            } else {
+                requisitionService.get(requisition).then(function(requisitionDetails) {
+                    redirectRequisition(requisitionDetails);
+                });
+            }
         }
-
-        function goToInitiatedRequisition(requisition) {
-            $state.go('openlmis.requisitions.requisition.fullSupply', {
-                rnr: requisition.id,
-                requisition: requisition
-            });
+        function redirectRequisition(requisition) {
+            if (requisition.template.patientsTabEnabled) {
+                $state.go('openlmis.requisitions.requisition.patients', {
+                    rnr: requisition.id,
+                    requisition: requisition
+                });
+            } else {
+                $state.go('openlmis.requisitions.requisition.fullSupply', {
+                    rnr: requisition.id,
+                    requisition: requisition
+                });
+            }
         }
     }
 })();

@@ -3,8 +3,8 @@
     <aside>
         <label>
             <input type="checkbox" id="enableStockOnHand"
-                ng-model="vm.template.populateStockOnHandFromStockCards"
-                ng-change="vm.template.changePopulateStockOnHandFromStockCards()"/>
+                   ng-model="vm.template.populateStockOnHandFromStockCards"
+                   ng-change="vm.template.changePopulateStockOnHandFromStockCards()"/>
             {{'adminProgramTemplate.enableStockOnHand.label' | message}}
         </label>
         <p>{{'adminProgramTemplate.enableStockOnHand.description' | message}}</p>
@@ -12,15 +12,15 @@
     <div class="openlmis-table-container">
         <table class="openlmis-table">
             <thead>
-                <tr>
-                    <th></th>
-                    <th>{{'adminProgramTemplate.display' | message}}</th>
-                    <th></th>
-                    <th>{{'adminProgramTemplate.label' | message}}</th>
-                    <th>{{'adminProgramTemplate.definition' | message}}</th>
-                    <th>{{'adminProgramTemplate.source' | message}}</th>
-                    <th>{{'adminProgramTemplate.additionalOptions' | message}}</th>
-                </tr>
+            <tr>
+                <th></th>
+                <th>{{'adminProgramTemplate.display' | message}}</th>
+                <th></th>
+                <th>{{'adminProgramTemplate.label' | message}}</th>
+                <th>{{'adminProgramTemplate.definition' | message}}</th>
+                <th>{{'adminProgramTemplate.source' | message}}</th>
+                <th>{{'adminProgramTemplate.additionalOptions' | message}}</th>
+            </tr>
             </thead>
             <tbody dnd-list="vm.template.columnsMap" dnd-drop="vm.dropCallback(event, index, item)">
                 <tr ng-repeat="column in vm.template.columnsMap | orderObjectBy:'displayOrder'" dnd-draggable="column" dnd-disable-if="!column.columnDefinition.canChangeOrder" dnd-effect-allowed="move">
@@ -30,7 +30,7 @@
                             <div ng-if="column.columnDefinition.canChangeOrder" dnd-handle class="handle">:::</div>
                         </td>
                         <td>
-                            <input type="checkbox" ng-model="column.isDisplayed" ng-disabled="column.columnDefinition.isDisplayRequired">
+                            <input type="checkbox" ng-model="column.isDisplayed" ng-disabled="column.columnDefinition.isDisplayRequired" ng-change="vm.updateSourceForColumn(column)">
                         </td>
                         <td>
                             <div class="circle">

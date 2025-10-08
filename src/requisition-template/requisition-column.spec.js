@@ -19,7 +19,12 @@ describe('RequisitionColumn', function() {
         columnDef, requisition, RequisitionColumnDataBuilder;
 
     beforeEach(function() {
-        module('requisition-template');
+        module('requisition-template', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             RequisitionColumn = $injector.get('RequisitionColumn');
@@ -42,6 +47,9 @@ describe('RequisitionColumn', function() {
         };
         requisition = {
             status: REQUISITION_STATUS.SUBMITTED,
+            template: {
+                patientsTabEnabled: false
+            },
             $isAfterAuthorize: function() {
                 return false;
             }
@@ -144,7 +152,7 @@ describe('RequisitionColumn', function() {
     describe('isSkipColumn', function() {
 
         it('should return true if column is Skip column', function() {
-            var column = new RequisitionColumnDataBuilder().buildSkipColumn();
+            var column = new RequisitionColumnDataBuilder().buildSkipColumn(false, requisition);
 
             var result = column.isSkipColumn();
 
@@ -152,7 +160,7 @@ describe('RequisitionColumn', function() {
         });
 
         it('should return false if column is any other column', function() {
-            var column = new RequisitionColumnDataBuilder().buildProductCodeColumn();
+            var column = new RequisitionColumnDataBuilder().buildProductCodeColumn(requisition);
 
             var result = column.isSkipColumn();
 

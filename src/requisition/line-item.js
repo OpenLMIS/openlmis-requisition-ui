@@ -28,9 +28,9 @@
         .module('requisition')
         .factory('LineItem', lineItem);
 
-    lineItem.$inject = ['calculationFactory', 'COLUMN_SOURCES', 'COLUMN_TYPES'];
+    lineItem.$inject = ['calculationFactory', 'COLUMN_SOURCES', 'COLUMN_TYPES', 'NOT_AVAILABLE'];
 
-    function lineItem(calculationFactory, COLUMN_SOURCES, COLUMN_TYPES) {
+    function lineItem(calculationFactory, COLUMN_SOURCES, COLUMN_TYPES, NOT_AVAILABLE) {
 
         LineItem.prototype.getFieldValue = getFieldValue;
         LineItem.prototype.updateFieldValue = updateFieldValue;
@@ -73,8 +73,15 @@
             if (name === 'pricePerPack') {
                 name = '$program.pricePerPack';
             }
+            if (name === 'dosesPerPatient') {
+                name = '$program.dosesPerPatient';
+            }
             angular.forEach(name.split('.'), function(property) {
-                value = value[property];
+                if (property === 'dosesPerPatient' && (value[property] === undefined || value[property] === null)) {
+                    value = NOT_AVAILABLE;
+                } else {
+                    value = value[property];
+                }
             });
             return value;
         }

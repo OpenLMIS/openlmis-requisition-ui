@@ -16,7 +16,12 @@
 describe('Template', function() {
 
     beforeEach(function() {
-        module('admin-template');
+        module('admin-template', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         this.originalIncludes = Array.prototype.includes;
         Array.prototype.includes = function(entry) {

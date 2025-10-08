@@ -16,7 +16,12 @@
 describe('ViewTabController', function() {
 
     beforeEach(function() {
-        module('requisition-view-tab');
+        module('requisition-view-tab', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         var RequisitionLineItemDataBuilder, RequisitionDataBuilder, RequisitionColumnDataBuilder, OrderableDataBuilder;
         inject(function($injector) {
@@ -24,11 +29,11 @@ describe('ViewTabController', function() {
             RequisitionColumnDataBuilder = $injector.get('RequisitionColumnDataBuilder');
             RequisitionLineItemDataBuilder = $injector.get('RequisitionLineItemDataBuilder');
             RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
-
             this.$controller = $injector.get('$controller');
             this.$rootScope = $injector.get('$rootScope');
             this.$q = $injector.get('$q');
             this.$state = $injector.get('$state');
+            this.$scope = $injector.get('$rootScope').$new();
             this.alertService = $injector.get('alertService');
             this.messageService = $injector.get('messageService');
             this.requisitionValidator = $injector.get('requisitionValidator');
@@ -96,10 +101,10 @@ describe('ViewTabController', function() {
         ];
 
         this.totalLossesAndAdjustmentsColumn = new RequisitionColumnDataBuilder()
-            .buildTotalLossesAndAdjustmentsColumn();
+            .buildTotalLossesAndAdjustmentsColumn(this.requisition);
 
         this.columns = [
-            new RequisitionColumnDataBuilder().buildSkipColumn()
+            new RequisitionColumnDataBuilder().buildSkipColumn(false, this.requisition)
         ];
 
         this.fullSupply = false;
@@ -784,6 +789,8 @@ describe('ViewTabController', function() {
             canSubmit: this.canSubmit,
             canAuthorize: this.canAuthorize,
             fullSupply: this.fullSupply,
+            program: {},
+            $scope: this.$scope,
             canApproveAndReject: this.canApproveAndReject,
             canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
         });

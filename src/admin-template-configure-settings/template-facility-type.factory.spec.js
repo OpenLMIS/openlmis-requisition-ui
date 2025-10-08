@@ -19,7 +19,12 @@ describe('templateFacilityTypeFactory', function() {
         healthCenter, districtStore, templateFacilityTypeFactory, facilityTypes, result;
 
     beforeEach(function() {
-        module('admin-template-configure-settings');
+        module('admin-template-configure-settings', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             TemplateDataBuilder = $injector.get('TemplateDataBuilder');

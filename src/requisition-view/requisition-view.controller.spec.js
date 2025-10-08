@@ -23,6 +23,11 @@ describe('RequisitionViewController', function() {
             $provide.factory('RequisitionStockCountDateModal', function() {
                 return context.RequisitionStockCountDateModalMock;
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
         module('referencedata-facility-type-approved-product');
         module('referencedata-facility');

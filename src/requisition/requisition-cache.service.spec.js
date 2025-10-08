@@ -35,6 +35,8 @@ describe('requisitionCacheService', function() {
             userPrograms: this.userProgramsStorage,
             facilities: this.facilitiesStorage
         };
+
+        module('requisition-view-tab');
         module('requisition', function($provide) {
             $provide.service('offlineService', function() {
                 return function() {};
@@ -44,6 +46,11 @@ describe('requisitionCacheService', function() {
                 return function(resourceName) {
                     return localStorageMap[resourceName];
                 };
+            });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
             });
         });
 
@@ -286,10 +293,9 @@ describe('requisitionCacheService', function() {
             });
 
             this.permissionService.hasRoleWithRightForProgramAndSupervisoryNode
-                .andCallFake(function(right, program, supervisoryNode) {
+                .andCallFake(function(right, requisition) {
                     return context.$q.resolve(!(right === context.REQUISITION_RIGHTS.REQUISITION_VIEW
-                        && program === context.batchRequisitionOne.program.id
-                        && supervisoryNode === context.batchRequisitionOne.supervisoryNode));
+                        && requisition === context.batchRequisitionOne));
                 });
 
             var result;
@@ -350,10 +356,9 @@ describe('requisitionCacheService', function() {
         it('should return requisition if user has not related right but has permission string', function() {
             var context = this;
             this.permissionService.hasRoleWithRightForProgramAndSupervisoryNode
-                .andCallFake(function(right, program, supervisoryNode) {
+                .andCallFake(function(right, requisition) {
                     return !(right === context.REQUISITION_RIGHTS.REQUISITION_VIEW &&
-                        program === context.batchRequisitionOne.program.id &&
-                        supervisoryNode === context.batchRequisitionOne.supervisoryNode);
+                        requisition === context.batchRequisitionOne);
                 });
 
             var result;

@@ -7,7 +7,7 @@
         content: '\f044';
         font-family: 'FontAwesome';
         font-weight: normal;
-        margin-right: auto;
+        @include margin-right(auto);
     }
 
     &:hover {

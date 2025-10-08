@@ -32,6 +32,11 @@ describe('TemplateAddService', function() {
                     return templateRepositoryMock;
                 };
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function($injector) {

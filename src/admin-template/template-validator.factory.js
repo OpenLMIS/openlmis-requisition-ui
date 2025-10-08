@@ -198,45 +198,51 @@
         }
 
         function validateUserInput(column, template) {
-            if (!column.isDisplayed
-                && column.source === COLUMN_SOURCES.USER_INPUT
-                && column.columnDefinition.sources.length > 1
-                && !template.requisitionReportOnly) {
-                return messageService.get('adminProgramTemplate.shouldBeDisplayed') +
-                    messageService.get('adminProgramTemplate.isUserInput');
+            if (!template.patientsTabEnabled) {
+                if (!column.isDisplayed
+                    && column.source === COLUMN_SOURCES.USER_INPUT
+                    && column.columnDefinition.sources.length > 1
+                    && !template.requisitionReportOnly) {
+                    return messageService.get('adminProgramTemplate.shouldBeDisplayed') +
+                        messageService.get('adminProgramTemplate.isUserInput');
+                }
             }
         }
 
         function validateTotalStockoutDays(column, template) {
-            if (!column.isDisplayed) {
-                var nColumn = template.columnsMap.adjustedConsumption;
-                if (nColumn.isDisplayed && nColumn.source === COLUMN_SOURCES.CALCULATED) {
-                    return messageService.get('adminProgramTemplate.shouldBeDisplayedIfOtherIsCalculated', {
-                        column: nColumn.label
-                    });
-                }
+            if (!template.patientsTabEnabled) {
+                if (!column.isDisplayed) {
+                    var nColumn = template.columnsMap.adjustedConsumption;
+                    if (nColumn.isDisplayed && nColumn.source === COLUMN_SOURCES.CALCULATED) {
+                        return messageService.get('adminProgramTemplate.shouldBeDisplayedIfOtherIsCalculated', {
+                            column: nColumn.label
+                        });
+                    }
 
-                var pColumn = template.columnsMap.averageConsumption;
-                if (pColumn.isDisplayed && pColumn.source === COLUMN_SOURCES.CALCULATED) {
-                    return messageService.get('adminProgramTemplate.shouldBeDisplayedIfOtherIsCalculated', {
-                        column: pColumn.label
-                    });
+                    var pColumn = template.columnsMap.averageConsumption;
+                    if (pColumn.isDisplayed && pColumn.source === COLUMN_SOURCES.CALCULATED) {
+                        return messageService.get('adminProgramTemplate.shouldBeDisplayedIfOtherIsCalculated', {
+                            column: pColumn.label
+                        });
+                    }
                 }
             }
         }
 
         function validateCalculatedOrderQuantity(column, template) {
-            var requestedQuantityColumn = template.columnsMap[TEMPLATE_COLUMNS.REQUESTED_QUANTITY];
-            var requestedQuantityExplanationColumn =
-                template.columnsMap[TEMPLATE_COLUMNS.REQUESTED_QUANTITY_EXPLANATION];
+            if (!template.patientsTabEnabled) {
+                var requestedQuantityColumn = template.columnsMap[TEMPLATE_COLUMNS.REQUESTED_QUANTITY];
+                var requestedQuantityExplanationColumn =
+                    template.columnsMap[TEMPLATE_COLUMNS.REQUESTED_QUANTITY_EXPLANATION];
 
-            if (!column.isDisplayed && (!requestedQuantityColumn.isDisplayed ||
-                !requestedQuantityExplanationColumn.isDisplayed) && !template.requisitionReportOnly) {
-                return messageService.get('adminProgramTemplate.shouldDisplayRequestedQuantity', {
-                    calculatedOrderQuantity: column.label,
-                    requestedQuantity: requestedQuantityColumn.label,
-                    requestedQuantityExplanation: requestedQuantityExplanationColumn.label
-                });
+                if (!column.isDisplayed && (!requestedQuantityColumn.isDisplayed ||
+                    !requestedQuantityExplanationColumn.isDisplayed) && !template.requisitionReportOnly) {
+                    return messageService.get('adminProgramTemplate.shouldDisplayRequestedQuantity', {
+                        calculatedOrderQuantity: column.label,
+                        requestedQuantity: requestedQuantityColumn.label,
+                        requestedQuantityExplanation: requestedQuantityExplanationColumn.label
+                    });
+                }
             }
         }
 

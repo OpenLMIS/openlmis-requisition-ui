@@ -19,7 +19,12 @@ describe('requisitionInitiateFactory', function() {
         REQUISITION_RIGHTS, FacilityDataBuilder, ProgramDataBuilder, facility, program;
 
     beforeEach(function() {
-        module('requisition-initiate');
+        module('requisition-initiate', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
 
         inject(function($injector) {
             requisitionInitiateFactory = $injector.get('requisitionInitiateFactory');

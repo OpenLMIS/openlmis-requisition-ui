@@ -16,6 +16,7 @@
     "adminTemplateConfigureSettings.rejectionReasonWindow.title": "Active Rejection Reason",
     "adminTemplateConfigureSettings.rejectionReasonWindow.info": "This determines whether or not a window to select a rejection reason will display",
     "adminTemplateConfigureSettings.requisitionReportOnly.title": "Requisition Report Only",
-    "adminTemplateConfigureSettings.requisitionReportOnly.info": "Determines whether the requisition template can be configured as report only or not"
-
+    "adminTemplateConfigureSettings.requisitionReportOnly.info": "Determines whether the requisition template can be configured as report only or not",
+    "adminTemplateConfigureSettings.patientsTabEnabled.title": "Enable Patient(s) Tab",
+    "adminTemplateConfigureSettings.patientsTabEnabled.info": "This determines whether the Patient(s) tab and specific columns for priority drugs and medical supplies are active or not"
 }

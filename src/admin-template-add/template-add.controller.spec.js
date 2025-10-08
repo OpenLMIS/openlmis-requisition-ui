@@ -21,7 +21,12 @@ describe('TemplateAddController', function() {
         programTemplates, programTwo, calculatedOrderQuantityIsaColumn, skippedColumn, filteredProgramTemplates;
 
     beforeEach(function() {
-        module('admin-template-add');
+        module('admin-template-add', function($provide) {
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
+        });
         module('referencedata-facility-type');
         module('requisition-template');
 

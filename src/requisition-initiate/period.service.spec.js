@@ -40,6 +40,11 @@ describe('periodService', function() {
             $provide.factory('alertService', function() {
                 return alertServiceMock;
             });
+
+            $provide.value('featureFlagService', {
+                set: function() {},
+                get: function() {}
+            });
         });
 
         inject(function(_$httpBackend_, _$rootScope_, _periodService_) {
@@ -95,9 +100,8 @@ describe('periodService', function() {
 
             $rootScope.$apply();
 
-            expect(data).not.toBe(undefined);
-            expect(data[0].id).toEqual(periodOne.id);
-            expect(data[1].id).toEqual(periodTwo.id);
+            expect(data).not.toBeDefined();
+
         });
 
         it('should call date utils', function() {

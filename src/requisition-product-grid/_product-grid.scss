@@ -17,7 +17,7 @@
 
 	button.add-product {
 		@include button($green);
-		float: right;
+		@include float(right);
 	}
 
 	button.hide-line-item {
@@ -32,6 +32,6 @@
 
 .requisition-product-grid-cell {
 	&.has-popover {
-		padding-right: 2em !important;
+		@include padding-right(2em);
 	}
 }
