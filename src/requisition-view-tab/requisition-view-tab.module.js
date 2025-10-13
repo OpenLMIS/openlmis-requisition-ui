@@ -34,6 +34,7 @@
         'requisition-validation',
         'requisition-product-grid',
         'openlmis-array-decorator',
+        'openlmis-quantity-unit-toggle',
         'ui.router',
         'select-products-modal'
     ]);

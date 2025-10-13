@@ -54,6 +54,7 @@
         vm.cacheRequisition = cacheRequisition;
         vm.userCanEditColumn = userCanEditColumn;
         vm.monthlyTBColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
+        vm.getLabelForColumn = getLabelForColumn;
 
         /**
          * @ngdoc property
@@ -168,7 +169,17 @@
 
         function onInit() {
             angular.forEach(columns, function(column) {
+                if (column.isQuantityColumn()) {
+                    column.isQuantity = true;
+                    column.requisition = requisition;
+                }
                 angular.forEach(lineItems, function(lineItem) {
+                    if (column.isQuantityColumn()) {
+                        if (!lineItem.quantities) {
+                            lineItem.quantities = {};
+                        }
+                        lineItem.quantities[column.name] = {};
+                    }
                     lineItem.updateFieldValue(column, requisition);
                 });
             });
@@ -255,6 +266,16 @@
         function cacheRequisition() {
             requisitionCacheService.cacheRequisition(vm.requisition);
             return $q.resolve();
+        }
+
+        function getLabelForColumn(column) {
+            if (column.isQuantity) {
+                var columnLabelSuffix = requisition.showInDoses()
+                    ? messageService.get('requisitionViewTab.DosesSuffix')
+                    : messageService.get('requisitionViewTab.PacksSuffix');
+                return column.label + columnLabelSuffix;
+            }
+            return column.label;
         }
 
         /**

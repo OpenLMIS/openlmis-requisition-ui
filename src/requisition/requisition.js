@@ -31,12 +31,14 @@
     requisitionFactory.$inject = [
         '$q', '$resource', 'requisitionUrlFactory', 'RequisitionTemplate', 'LineItem', 'REQUISITION_STATUS',
         'COLUMN_SOURCES', 'localStorageFactory', 'dateUtils', '$filter', 'TEMPLATE_COLUMNS', 'authorizationService',
-        'REQUISITION_RIGHTS', 'UuidGenerator', 'requisitionCacheService'
+        'REQUISITION_RIGHTS', 'UuidGenerator', 'requisitionCacheService', 'localStorageService', 'QUANTITY_UNIT',
+        'quantityUnitCalculateService'
     ];
 
     function requisitionFactory($q, $resource, requisitionUrlFactory, RequisitionTemplate, LineItem, REQUISITION_STATUS,
                                 COLUMN_SOURCES, localStorageFactory, dateUtils, $filter, TEMPLATE_COLUMNS,
-                                authorizationService, REQUISITION_RIGHTS, UuidGenerator, requisitionCacheService) {
+                                authorizationService, REQUISITION_RIGHTS, UuidGenerator, requisitionCacheService,
+                                localStorageService, QUANTITY_UNIT, quantityUnitCalculateService) {
 
         var offlineRequisitions = localStorageFactory('requisitions'),
             resource = $resource(requisitionUrlFactory('/api/v2/requisitions/:id'), {}, {
@@ -123,6 +125,7 @@
         Requisition.prototype.deleteLineItem = deleteLineItem;
         Requisition.prototype.unskipFullSupplyProducts = unskipFullSupplyProducts;
         Requisition.prototype.unskipRequisitionWhenApproving = unskipRequisitionWhenApproving;
+        Requisition.prototype.recalculateQuantity = recalculateQuantity;
 
         return Requisition;
 
@@ -155,6 +158,14 @@
 
             if (!this.idempotencyKey) {
                 generateIdempotencyKey(this);
+            }
+
+            this.showInDoses = showInDoses;
+            var cachedQuantityUnit = localStorageService.get('quantityUnit');
+            if (cachedQuantityUnit === null) {
+                this.quantityUnit = QUANTITY_UNIT.$getDefaultQuantityUnit();
+            } else {
+                this.quantityUnit = cachedQuantityUnit;
             }
         }
 
@@ -505,6 +516,14 @@
             return hasRight(REQUISITION_RIGHTS.REQUISITION_DELETE, requisition)
                 && hasRight(REQUISITION_RIGHTS.REQUISITION_AUTHORIZE, requisition)
                 && requisition.$isSubmitted();
+        }
+
+        function showInDoses() {
+            return this.quantityUnit === QUANTITY_UNIT.DOSES;
+        }
+
+        function recalculateQuantity(quantity, netContent) {
+            return quantityUnitCalculateService.recalculateSOHQuantity(quantity, netContent, this.showInDoses());
         }
 
         /**

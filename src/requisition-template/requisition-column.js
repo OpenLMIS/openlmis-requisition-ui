@@ -143,6 +143,8 @@
 
         RequisitionColumn.prototype.isSkipColumn = isSkipColumn;
 
+        RequisitionColumn.prototype.isQuantityColumn = isQuantityColumn;
+
         return RequisitionColumn;
 
         /**
@@ -213,6 +215,10 @@
          */
         function isSkipColumn() {
             return this.name === TEMPLATE_COLUMNS.SKIPPED;
+        }
+
+        function isQuantityColumn() {
+            return this.columnDefinition.columnType === 'NUMERIC';
         }
     }
 })();

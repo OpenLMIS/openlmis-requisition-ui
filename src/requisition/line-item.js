@@ -33,6 +33,7 @@
     function lineItem(calculationFactory, COLUMN_SOURCES, COLUMN_TYPES, NOT_AVAILABLE) {
 
         LineItem.prototype.getFieldValue = getFieldValue;
+        LineItem.prototype.getFieldValueCheckQuantity = getFieldValueCheckQuantity;
         LineItem.prototype.updateFieldValue = updateFieldValue;
         LineItem.prototype.updateDependentFields = updateDependentFields;
         LineItem.prototype.canBeSkipped = canBeSkipped;
@@ -84,6 +85,17 @@
                 }
             });
             return value;
+        }
+
+        function getFieldValueCheckQuantity(column) {
+            if (column.isQuantity) {
+                var value = this.getFieldValue(column.name);
+                if (value !== undefined) {
+                    return column.requisition.recalculateQuantity(value, this.orderable.netContent);
+                }
+                return value;
+            }
+            return this.getFieldValue(column.name);
         }
 
         /**
