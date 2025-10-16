@@ -218,7 +218,11 @@
         }
 
         function isQuantityColumn() {
-            return this.columnDefinition.columnType === 'NUMERIC';
+            var quantityColumnNames = ['beginningBalance', 'totalReceivedQuantity',
+                'totalConsumedQuantity', 'stockOnHand', 'approvedQuantity',
+                'maximumStockQuantity', 'averageConsumption', 'adjustedConsumption',
+                'requestedQuantity', 'calculatedOrderQuantity'];
+            return quantityColumnNames.includes(this.name);
         }
     }
 })();

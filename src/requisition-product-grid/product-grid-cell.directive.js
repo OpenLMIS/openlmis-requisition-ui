@@ -115,7 +115,6 @@
             function update() {
                 lineItem[column.name] = lineItem.quantities[column.name].quantity;
                 lineItem.updateDependentFields(column, requisition);
-                console.log(lineItem);
                 validate();
             }
 
