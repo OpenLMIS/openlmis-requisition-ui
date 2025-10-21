@@ -27,5 +27,8 @@
     "requisitionPatientsViewTab.numberOfChildrenOnMBRegimen.label": "Number of children on MB regimen",
     "requisitionPatientsViewTab.numberOfChildrenOnPBRegimen.label": "Number of children on PB regimen",
     "requisitionViewTab.filterPlaceholder": "Filter by product name",
-    "requisitionViewTab.skippedItemsVisibility": "Show skipped items"
+    "requisitionViewTab.skippedItemsVisibility": "Show skipped items",
+
+    "requisitionViewTab.DosesSuffix": " (in Doses)",
+    "requisitionViewTab.PacksSuffix": " (in Packs)"
 }

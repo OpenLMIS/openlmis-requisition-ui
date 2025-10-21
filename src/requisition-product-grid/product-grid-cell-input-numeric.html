@@ -1,4 +1,6 @@
-<input positive-integer
-	ng-model="lineItem[column.name]"
-	ng-disabled="lineItem.skipped"
-	ng-change="update()"/>
+<openlmis-quantity-unit-input
+    show-in-doses="showInDoses()"
+    item="lineItem.quantities[column.name]"
+    net-content="lineItem.orderable.netContent"
+    on-change-quantity="update()"
+    input-class="{'error': lineItem.quantityInvalid}"/>

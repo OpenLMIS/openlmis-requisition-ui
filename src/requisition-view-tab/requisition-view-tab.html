@@ -25,13 +25,16 @@
 	<button class="add" ng-if="vm.showAddNonFullSupplyProductsButton" ng-click="vm.addNonFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showUnskipFullSupplyProductsButton" ng-click="vm.unskipFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<saving-indicator ng-show="vm.requisition.$isEditable" class="requisition-indicator" object="vm.requisition.requisitionLineItems"/>
+
+    <quantity-unit-toggle class="is-primary" quantity-unit="vm.requisition.quantityUnit"></quantity-unit-toggle>
+
 	<table>
 		<caption ng-if="!vm.items.length">{{vm.noProductsMessage | message}}</caption>
 		<thead>
 			<tr>
 				<th class="col-{{column.name}}" ng-repeat="column in vm.columns | orderBy : 'displayOrder'"
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
-					popover-trigger-area="element">{{column.label}}</th>
+					popover-trigger-area="element">{{vm.getLabelForColumn(column)}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
 			</tr>
 		</thead>

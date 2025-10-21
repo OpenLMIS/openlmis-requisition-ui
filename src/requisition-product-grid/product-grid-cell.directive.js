@@ -68,6 +68,7 @@
             scope.update = update;
             scope.isReadOnly = isReadOnly(requisition, column);
             scope.canSkip = canSkip;
+            scope.showInDoses = showInDoses;
 
             if (!scope.isReadOnly) {
                 setupValueWatcher(scope);
@@ -112,6 +113,7 @@
             }
 
             function update() {
+                lineItem[column.name] = lineItem.quantities[column.name].quantity;
                 lineItem.updateDependentFields(column, requisition);
                 validate();
             }
@@ -123,6 +125,11 @@
                     requisition
                 );
             }
+
+            function showInDoses() {
+                return requisition.showInDoses();
+            }
+
             function isReadOnly(requisition, column) {
                 if (requisition.$isApproved() || requisition.$isReleased()) {
                     return true;

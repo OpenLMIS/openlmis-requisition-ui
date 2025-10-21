@@ -143,6 +143,8 @@
 
         RequisitionColumn.prototype.isSkipColumn = isSkipColumn;
 
+        RequisitionColumn.prototype.isQuantityColumn = isQuantityColumn;
+
         return RequisitionColumn;
 
         /**
@@ -213,6 +215,14 @@
          */
         function isSkipColumn() {
             return this.name === TEMPLATE_COLUMNS.SKIPPED;
+        }
+
+        function isQuantityColumn() {
+            var quantityColumnNames = ['beginningBalance', 'totalReceivedQuantity',
+                'totalConsumedQuantity', 'stockOnHand', 'approvedQuantity',
+                'maximumStockQuantity', 'averageConsumption', 'adjustedConsumption',
+                'requestedQuantity', 'calculatedOrderQuantity'];
+            return quantityColumnNames.includes(this.name);
         }
     }
 })();
