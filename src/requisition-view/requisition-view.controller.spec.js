@@ -255,7 +255,8 @@ describe('RequisitionViewController', function() {
             this.initController();
 
             expect(this.vm.getPrintUrl())
-                .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print'));
+                .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print?showInDoses='
+                    + this.requisition.showInDoses()));
         });
 
     });
@@ -656,7 +657,8 @@ describe('RequisitionViewController', function() {
             this.$rootScope.$apply();
 
             expect(this.accessTokenFactory.addAccessToken)
-                .toHaveBeenCalledWith(this.requisitionUrlFactory('api/requisitions/requisition-id-1/print'));
+                .toHaveBeenCalledWith(this.requisitionUrlFactory('api/requisitions/requisition-id-1/print?showInDoses='
+                    + this.requisition.showInDoses()));
         });
 
         it('should not open report when sync failed', function() {
