@@ -146,8 +146,8 @@
                 error = error || validateCalculation(calculationFactory[name], lineItem, name);
             }
 
-            if (validateNumeric(lineItem, column)) {
-                error = error || messageService.get('requisitionValidation.numberTooLarge');
+            if (!error) {
+                error = validateNumeric(lineItem, column);
             }
 
             return !(lineItem.$errors[name] = error);
@@ -266,8 +266,22 @@
             return column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS || !column.$display;
         }
 
+        function validateQuantityRequired(lineItem, column) {
+            if (column.isQuantity && column.isNumericInput) {
+                return !(lineItem.quantities[column.name] && lineItem.quantities[column.name].quantity > 0);
+            }
+            return false;
+        }
+
         function validateNumeric(lineItem, column) {
-            return column.$type === COLUMN_TYPES.NUMERIC && lineItem[column.name] > MAX_INTEGER_VALUE;
+            if (column.$type === COLUMN_TYPES.NUMERIC) {
+                if (lineItem[column.name] > MAX_INTEGER_VALUE) {
+                    return messageService.get('requisitionValidation.numberTooLarge');
+                } else if (validateQuantityRequired(lineItem, column)) {
+                    return messageService.get('requisitionValidation.required');
+                }
+            }
+            return false;
         }
 
         function validateTbMonthly(requisition, column) {

@@ -89,6 +89,7 @@
                     templateUrl = 'requisition-product-grid/product-grid-cell-total-losses-and-adjustments.html';
                 } else if (column.$type === COLUMN_TYPES.NUMERIC && !scope.isReadOnly) {
                     templateUrl = 'requisition-product-grid/product-grid-cell-input-numeric.html';
+                    column.isNumericInput = true;
                 } else if (!scope.isReadOnly) {
                     templateUrl = 'requisition-product-grid/product-grid-cell-input-text.html';
                 } else if (column.$type === COLUMN_TYPES.CURRENCY) {
