@@ -121,18 +121,22 @@ describe('ProductGridCell', function() {
 
         this.directiveElem = this.getCompiledElement();
 
-        expect(this.directiveElem.html()).toContain('input');
-        expect(this.directiveElem.html()).toContain('positive-integer');
+        expect(this.directiveElem.html()).toContain('openlmis-quantity-unit-input');
     });
 
     it('should validate full supply line item columns after updating fields', function() {
         this.scope.requisition.template.getColumns.andReturn(this.fullSupplyColumns);
         this.scope.userCanEdit = true;
         this.scope.requisition.$isInitiated.andReturn(true);
-        var element = this.getCompiledElement(),
-            input = element.find('input');
 
-        input.controller('ngModel').$setViewValue('1000');
+        var element = this.getCompiledElement();
+        var isolatedScope = element.find('td').scope();
+
+        this.scope.lineItem.quantities = {};
+        this.scope.lineItem.quantities[this.scope.column.name] = {
+            quantity: 1000
+        };
+        isolatedScope.update();
         this.scope.$apply();
 
         expect(this.requisitionValidator.validateLineItem).toHaveBeenCalledWith(
@@ -172,12 +176,18 @@ describe('ProductGridCell', function() {
         this.scope.userCanEdit = true;
         this.scope.requisition.template.getColumns.andReturn(this.nonFullSupplyColumns);
         this.scope.requisition.$isInitiated.andReturn(true);
-        var element = this.getCompiledElement(),
-            input = element.find('input');
 
+        var element = this.getCompiledElement();
+
+        var directiveScope = element.find('td').scope();
         this.scope.lineItem.$program.fullSupply = false;
 
-        input.controller('ngModel').$setViewValue('1000');
+        this.scope.lineItem.quantities = {};
+        this.scope.lineItem.quantities[this.scope.column.name] = {
+            quantity: 1000
+        };
+
+        directiveScope.update();
         this.scope.$apply();
 
         expect(this.requisitionValidator.validateLineItem).toHaveBeenCalledWith(
