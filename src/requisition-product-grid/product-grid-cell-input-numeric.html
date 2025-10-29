@@ -5,6 +5,7 @@
        ng-change="update()"/>
 <openlmis-quantity-unit-input
     ng-if="column.isQuantityColumn()"
+    disabled="lineItem.skipped"
     show-in-doses="showInDoses()"
     item="lineItem.quantities[column.name]"
     net-content="lineItem.orderable.netContent"
