@@ -31,6 +31,8 @@
 }
 
 .requisition-product-grid-cell {
+	white-space: nowrap;
+
 	&.has-popover {
 		@include padding-right(2em);
 	}
