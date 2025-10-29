@@ -173,15 +173,6 @@
                     column.isQuantity = true;
                     column.requisition = requisition;
                 }
-                angular.forEach(lineItems, function(lineItem) {
-                    if (column.isQuantityColumn()) {
-                        if (!lineItem.quantities) {
-                            lineItem.quantities = {};
-                        }
-                        lineItem.quantities[column.name] = {};
-                    }
-                    lineItem.updateFieldValue(column, requisition);
-                });
             });
 
             vm.lineItems = lineItems;
@@ -403,6 +394,18 @@
                 };
 
             var lineItems = $filter('filter')(vm.requisition.requisitionLineItems, filterObject);
+            angular.forEach(lineItems, function(lineItem) {
+                angular.forEach(columns, function(column) {
+                    if (column.isQuantityColumn()) {
+                        if (!lineItem.quantities) {
+                            lineItem.quantities = {};
+                        }
+                        if (!lineItem.quantities[column.name]) {
+                            lineItem.quantities[column.name] = {};
+                        }
+                    }
+                });
+            });
 
             paginationService
                 .registerList(
