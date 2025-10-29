@@ -99,10 +99,11 @@
          * Opens Total Losses and Adjustments modal.
          */
         function showModal() {
+            var showInDoses = $scope.requisition.showInDoses ? $scope.requisition.showInDoses() : true;
             adjustmentsModalService.open(
                 getAdjustments(vm.lineItem.stockAdjustments),
                 filterAvailableReasons(reasons, getAdjustments(vm.lineItem.stockAdjustments)),
-                vm.lineItem, true,
+                vm.lineItem, showInDoses,
                 'requisitionLossesAndAdjustments.lossesAndAdjustments',
                 'requisitionLossesAndAdjustments.addNewLossOrAdjustment',
                 vm.isDisabled,
