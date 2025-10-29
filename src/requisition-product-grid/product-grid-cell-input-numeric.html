@@ -1,4 +1,10 @@
+<input positive-integer
+       ng-if="!column.isQuantityColumn()"
+       ng-model="lineItem[column.name]"
+       ng-disabled="lineItem.skipped"
+       ng-change="update()"/>
 <openlmis-quantity-unit-input
+    ng-if="column.isQuantityColumn()"
     show-in-doses="showInDoses()"
     item="lineItem.quantities[column.name]"
     net-content="lineItem.orderable.netContent"

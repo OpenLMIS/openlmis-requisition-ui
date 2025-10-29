@@ -221,7 +221,8 @@
             var quantityColumnNames = ['beginningBalance', 'totalReceivedQuantity',
                 'totalConsumedQuantity', 'stockOnHand', 'approvedQuantity',
                 'maximumStockQuantity', 'averageConsumption', 'adjustedConsumption',
-                'requestedQuantity', 'calculatedOrderQuantity'];
+                'requestedQuantity', 'calculatedOrderQuantity', 'totalRequirement',
+                'totalQuantityNeededByHf', 'quantityToIssue'];
             return quantityColumnNames.includes(this.name);
         }
     }
