@@ -268,7 +268,7 @@
 
         function validateQuantityRequired(lineItem, column) {
             if (column.isQuantity && column.isNumericInput) {
-                return !(lineItem.quantities[column.name] && lineItem.quantities[column.name].quantity > 0);
+                return !(lineItem.quantities[column.name] && lineItem.quantities[column.name].quantity >= 0);
             }
             return false;
         }
