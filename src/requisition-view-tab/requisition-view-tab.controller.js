@@ -179,6 +179,9 @@
                             lineItem.quantities = {};
                         }
                         lineItem.quantities[column.name] = {};
+                        if (lineItem[column.name]) {
+                            lineItem.quantities[column.name].quantity = lineItem[column.name];
+                        }
                     }
                     lineItem.updateFieldValue(column, requisition);
                 });
