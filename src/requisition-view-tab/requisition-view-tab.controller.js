@@ -32,14 +32,16 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope',
+        'quantityUnitCalculateService'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope) {
+                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope,
+                               quantityUnitCalculateService) {
         var vm = this;
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
@@ -181,6 +183,9 @@
                         lineItem.quantities[column.name] = {};
                         if (lineItem[column.name]) {
                             lineItem.quantities[column.name].quantity = lineItem[column.name];
+                            lineItem.quantities[column.name] = quantityUnitCalculateService.
+                                recalculateInputQuantity(lineItem.quantities[column.name],
+                                    lineItem.orderable.netContent, true);
                         }
                     }
                     lineItem.updateFieldValue(column, requisition);
