@@ -91,7 +91,7 @@
             if (column.isQuantity) {
                 var value = this.getFieldValue(column.name);
                 if (value !== undefined) {
-                    return column.requisition.recalculateQuantity(value, this.orderable.netContent);
+                    return column.recalculateQuantity(value, this.orderable.netContent);
                 }
                 return value;
             }

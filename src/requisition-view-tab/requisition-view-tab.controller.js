@@ -171,8 +171,17 @@
             angular.forEach(columns, function(column) {
                 if (column.isQuantityColumn()) {
                     column.isQuantity = true;
-                    column.requisition = requisition;
+                    column.recalculateQuantity = requisition.recalculateQuantity.bind(requisition);
                 }
+                angular.forEach(lineItems, function(lineItem) {
+                    if (column.isQuantityColumn()) {
+                        if (!lineItem.quantities) {
+                            lineItem.quantities = {};
+                        }
+                        lineItem.quantities[column.name] = {};
+                    }
+                    lineItem.updateFieldValue(column, requisition);
+                });
             });
 
             vm.lineItems = lineItems;
