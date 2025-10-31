@@ -32,14 +32,16 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope',
+        'quantityUnitCalculateService'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope) {
+                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope,
+                               quantityUnitCalculateService) {
         var vm = this;
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
@@ -171,7 +173,7 @@
             angular.forEach(columns, function(column) {
                 if (column.isQuantityColumn()) {
                     column.isQuantity = true;
-                    column.requisition = requisition;
+                    column.recalculateQuantity = requisition.recalculateQuantity.bind(requisition);
                 }
                 angular.forEach(lineItems, function(lineItem) {
                     if (column.isQuantityColumn()) {
@@ -179,6 +181,12 @@
                             lineItem.quantities = {};
                         }
                         lineItem.quantities[column.name] = {};
+                        if (lineItem[column.name]) {
+                            lineItem.quantities[column.name].quantity = lineItem[column.name];
+                            lineItem.quantities[column.name] = quantityUnitCalculateService.
+                                recalculateInputQuantity(lineItem.quantities[column.name],
+                                    lineItem.orderable.netContent, true);
+                        }
                     }
                     lineItem.updateFieldValue(column, requisition);
                 });
@@ -403,6 +411,18 @@
                 };
 
             var lineItems = $filter('filter')(vm.requisition.requisitionLineItems, filterObject);
+            angular.forEach(lineItems, function(lineItem) {
+                angular.forEach(columns, function(column) {
+                    if (column.isQuantityColumn()) {
+                        if (!lineItem.quantities) {
+                            lineItem.quantities = {};
+                        }
+                        if (!lineItem.quantities[column.name]) {
+                            lineItem.quantities[column.name] = {};
+                        }
+                    }
+                });
+            });
 
             paginationService
                 .registerList(
