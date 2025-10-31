@@ -30,12 +30,12 @@
 
     lossesAndAdjustmentsController.$inject = [
         '$scope', '$filter', 'requisitionValidator', 'calculationFactory',
-        'adjustmentsModalService'
+        'adjustmentsModalService', 'quantityUnitCalculateService'
     ];
 
     function lossesAndAdjustmentsController($scope, $filter,
                                             requisitionValidator, calculationFactory,
-                                            adjustmentsModalService) {
+                                            adjustmentsModalService, quantityUnitCalculateService) {
 
         var vm = this,
             reasons;
@@ -53,6 +53,8 @@
          * Line item to display the calculated value of total losses and adjustments.
          */
         vm.lineItem = undefined;
+
+        vm.getDisplayedQuantity = getDisplayedQuantity;
 
         /**
          * @ngdoc method
@@ -109,9 +111,12 @@
                 vm.isDisabled,
                 {
                     'requisitionLossesAndAdjustments.total': function(adjustments) {
-                        return calculationFactory.totalLossesAndAdjustments(
-                            getSimpleAdjustments(adjustments),
-                            $scope.requisition.stockAdjustmentReasons
+                        return quantityUnitCalculateService.recalculateSOHQuantity(
+                            calculationFactory.totalLossesAndAdjustments(
+                                getSimpleAdjustments(adjustments),
+                                $scope.requisition.stockAdjustmentReasons
+                            ), vm.lineItem.orderable.netContent,
+                            $scope.requisition.showInDoses()
                         );
                     }
                 },
@@ -163,6 +168,13 @@
             });
 
             return simpleAdjustments;
+        }
+
+        function getDisplayedQuantity() {
+            return quantityUnitCalculateService.recalculateSOHQuantity(
+                vm.lineItem.totalLossesAndAdjustments, vm.lineItem.orderable.netContent,
+                $scope.requisition.showInDoses()
+            );
         }
     }
 
