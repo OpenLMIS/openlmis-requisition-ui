@@ -7,7 +7,9 @@ import getService from '../react-components/utils/angular-utils';
 
 const OrderCreateSummaryModal = ({ isOpen, orders, onSaveClick, onModalClose }) => {
     const { formatMessage } = useMemo(() => getService('messageService'), []);
-    const columns = useMemo(() => orderTableColumns(true, formatMessage), []);
+    const quantityUnitCalculateService = useMemo(() => getService('quantityUnitCalculateService'), []);
+    const columns = useMemo(() => orderTableColumns(true, formatMessage, true, null,
+        quantityUnitCalculateService), []);
     const [currentTab, setCurrentTab] = useState(0);
 
     return (
