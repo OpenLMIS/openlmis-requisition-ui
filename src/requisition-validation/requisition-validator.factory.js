@@ -130,6 +130,10 @@
             var name = column.name,
                 error;
 
+            if (column.name === 'totalConsumedQuantity') {
+                console.log('tcq');
+            }
+
             if (shouldSkipValidation(lineItem, column, requisition)) {
                 return true;
             }
@@ -267,7 +271,7 @@
         }
 
         function validateQuantityRequired(lineItem, column) {
-            if (column.isQuantity && column.isNumericInput) {
+            if (column.isQuantity && column.isNumericInput && !column.source === COLUMN_SOURCES.STOCK_CARDS) {
                 return !(lineItem.quantities[column.name] && lineItem.quantities[column.name].quantity >= 0);
             }
             return false;

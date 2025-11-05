@@ -84,6 +84,9 @@
                     value = value[property];
                 }
             });
+            if (!value) {
+                value = 0;
+            }
             return value;
         }
 

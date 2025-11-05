@@ -87,8 +87,7 @@
                 } else if (column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS &&
                     !requisition.template.populateStockOnHandFromStockCards) {
                     templateUrl = 'requisition-product-grid/product-grid-cell-total-losses-and-adjustments.html';
-                } else if (column.$type === COLUMN_TYPES.NUMERIC && !scope.isReadOnly
-                    && column.source !== COLUMN_SOURCES.STOCK_CARDS) {
+                } else if (column.$type === COLUMN_TYPES.NUMERIC && !scope.isReadOnly) {
                     templateUrl = 'requisition-product-grid/product-grid-cell-input-numeric.html';
                     column.isNumericInput = true;
                 } else if (!scope.isReadOnly) {
@@ -134,6 +133,9 @@
 
             function isReadOnly(requisition, column) {
                 if (requisition.$isApproved() || requisition.$isReleased()) {
+                    return true;
+                }
+                if (column.source === COLUMN_SOURCES.STOCK_CARDS) {
                     return true;
                 }
                 if (scope.canApprove && isApprovalColumn(requisition, column)) {
