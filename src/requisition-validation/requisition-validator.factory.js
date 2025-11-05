@@ -130,10 +130,6 @@
             var name = column.name,
                 error;
 
-            if (column.name === 'totalConsumedQuantity') {
-                console.log('tcq');
-            }
-
             if (shouldSkipValidation(lineItem, column, requisition)) {
                 return true;
             }

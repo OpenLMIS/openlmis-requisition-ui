@@ -222,7 +222,7 @@
                 'totalConsumedQuantity', 'stockOnHand', 'approvedQuantity',
                 'maximumStockQuantity', 'averageConsumption', 'adjustedConsumption',
                 'requestedQuantity', 'calculatedOrderQuantity', 'totalRequirement',
-                'totalQuantityNeededByHf', 'quantityToIssue'];
+                'totalQuantityNeededByHf', 'quantityToIssue', 'totalLossesAndAdjustments'];
             return quantityColumnNames.includes(this.name);
         }
     }
