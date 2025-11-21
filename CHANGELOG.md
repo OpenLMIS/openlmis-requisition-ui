@@ -1,5 +1,9 @@
-7.0.15-SNAPSHOT / WIP
+Upcoming Version (WIP)
 ==================
+* [OE-98](https://openlmis.atlassian.net/browse/OE-98): Add packs quantities to Physical Inventory
+* [OE-111](https://openlmis.atlassian.net/browse/OE-111): Add packs quantities to Create Orders
+* [OE-113](https://openlmis.atlassian.net/browse/OE-113): Add packs quantities to Create/Authorize
+* [OE-115](https://openlmis.atlassian.net/browse/OE-115): Add packs quantities to Approve
 
 7.0.14 / 2025-03-31
 ==================
