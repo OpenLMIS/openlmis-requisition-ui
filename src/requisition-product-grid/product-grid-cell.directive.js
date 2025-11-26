@@ -114,7 +114,9 @@
             }
 
             function update() {
-                lineItem[column.name] = lineItem.quantities[column.name].quantity;
+                if (lineItem.quantities[column.name]) {
+                    lineItem[column.name] = lineItem.quantities[column.name].quantity;
+                }
                 lineItem.updateDependentFields(column, requisition);
                 validate();
             }
