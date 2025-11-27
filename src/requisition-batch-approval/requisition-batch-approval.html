@@ -8,7 +8,7 @@
     </p>
     <form id="batch-approval-form" ng-submit="vm.approve()">
         <saving-indicator class="requisition-indicator" object="vm.requisitions"/>
-        <div class="openlmis-table-pane">
+        <div class="openlmis-table-container">
             <table>
                 <thead>
                     <tr>
@@ -22,7 +22,7 @@
                                        'is-hidden': !(requisition)}">
                             {{requisition.facilityName}} - {{requisition.periodName}}
                         </th>
-                        <th class="col-sticky col-sticky-right" colspan="2">{{'requisitionBatchApproval.totalForAllFacilities' | message}}</th>
+                        <th colspan="2">{{'requisitionBatchApproval.totalForAllFacilities' | message}}</th>
                     </tr>
                     <tr>
                         <th class="col-sticky" >{{'requisitionBatchApproval.code' | message}}</th>
@@ -35,8 +35,8 @@
                             ng-class="{'requisition-error': requisition.$error}">
                             {{'requisitionBatchApproval.cost' | message}}
                         </th>
-                        <th class="col-sticky col-sticky-right" >{{'requisitionBatchApproval.quantity' | message}}</th>
-                        <th class="col-sticky col-sticky-right" >{{'requisitionBatchApproval.cost' | message}}</th>
+                        <th>{{'requisitionBatchApproval.quantity' | message}}</th>
+                        <th>{{'requisitionBatchApproval.cost' | message}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,8 +57,8 @@
                         <td class="numeric" ng-repeat-end>
                             {{vm.lineItems[requisition.id][product.productId].totalCost | openlmisCurrency}}
                         </td>
-                        <td class="total-cell numeric col-sticky col-sticky-right"> {{product.totalQuantity}} </td>
-                        <td class="total-cell numeric col-sticky col-sticky-right"> {{product.totalCost | openlmisCurrency}} </td>
+                        <td class="total-cell numeric"> {{product.totalQuantity}} </td>
+                        <td class="total-cell numeric"> {{product.totalCost | openlmisCurrency}} </td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -70,8 +70,8 @@
                         <th class="numeric" ng-repeat-end>
                             {{requisition.$totalCost | openlmisCurrency}}
                         </th>
-                        <th class="col-sticky col-sticky-right"></th>
-                        <th class="col-sticky col-sticky-right numeric"> {{vm.totalCost | openlmisCurrency}}</th>
+                        <th></th>
+                        <th class="numeric"> {{vm.totalCost | openlmisCurrency}}</th>
                     </tr>
                 </tfoot>
             </table>

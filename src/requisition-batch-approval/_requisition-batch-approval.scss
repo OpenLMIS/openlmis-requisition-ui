@@ -27,14 +27,8 @@
 
     #batch-approval-form {
         display: flex;
-        flex-direction: column;
-        flex-grow: 1;
 
         margin:0px 20px;
-
-        > * {
-            flex: 0 0 auto;
-        }
 
         > .openlmis-table-pane {
             flex-grow: 1;
@@ -42,7 +36,6 @@
     }
 
     .openlmis-toolbar {
-        position: static;
         margin: 0px;
         padding: $space-size/2 $space-size;
     }
