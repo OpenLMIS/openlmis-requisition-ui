@@ -556,11 +556,6 @@ path-to-regexp@^1.7.0:
   dependencies:
     isarray "0.0.1"
 
-perfect-scrollbar@^0.6.16:
-  version "0.6.16"
-  resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-0.6.16.tgz#b1d61a5245cf3962bb9a8407a3fc669d923212fc"
-  integrity sha1-sdYaUkXPOWK7moQHo/xmnZIyEvw=
-
 pouchdb-abstract-mapreduce@7.3.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/pouchdb-abstract-mapreduce/-/pouchdb-abstract-mapreduce-7.3.0.tgz#cc178cb5d07f73b7c3f0f47a7f963defd4872b1c"
