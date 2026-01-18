@@ -94,20 +94,25 @@
         
         
         //Select facilities in the same district as requesting facility as well as all DHMT facilities
-        function filterFacilities(){
-           
-           console.log(vm.facility);
+       function filterFacilities() {
+
             var supplierFacilities = getSupplyingFacilities(vm.hospitals, vm.healthCenters, vm.dhmts);
-            console.log(supplierFacilities);
-            if(vm.facility.type.code === 'dist_store'){
-                const zoneId = vm.facility.geographicZone.id;
-                return supplierFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.type.code === 'dist_store');
+
+            const zoneId = vm.facility.type.code === 'dist_store' ? vm.facility.geographicZone.id
+                : vm.facility.geographicZone.parent?.id;
+
+
+            if (vm.facility.type.code === 'dist_store') {
+                return supplierFacilities.filter(item => 
+                    item.type.code === 'dist_store' || item.geographicZone?.parent?.id === zoneId
+                );
             }
-           else {
-            const zoneId = vm.facility.geographicZone.parent.id;
-            return supplierFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.type.code === 'dist_store');
-           }
+            return supplierFacilities.filter(item => 
+                (item.type.code === 'dist_store' && item.geographicZone?.id === zoneId) ||
+                    (item.geographicZone?.parent?.id === zoneId)
+            );
         }
+
 
         //Compute the total approved quantity for the requisition
         vm.getApprovedQuantity = function(){
@@ -191,14 +196,14 @@
                 .then((fetchedOrder) => {
                     requestedItems.forEach((lineItem) => {
                         let packs = calculatePacksToShip(lineItem);
-                        console.log(packs);
+                       
                         fetchedOrder.orderLineItems.push({                                    
                             orderable: lineItem.orderable,
                             orderedQuantity: packs, //lineItem.packsToShip,
                             soh: 45
                         });
                     }); 
-                    console.log(fetchedOrder);                 
+                                  
                     return orderCreateService.send(fetchedOrder);
                 })
                 .then(() => {
