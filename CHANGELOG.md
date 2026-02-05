@@ -1,5 +1,7 @@
-Upcoming Version (WIP)
-==================
+7.0.16 / 2026-02-05
+=================
+Improvements:
+* Localization & translations update (FR, ES, PT)
 
 7.0.15 / 2025-11-27
 ==================
