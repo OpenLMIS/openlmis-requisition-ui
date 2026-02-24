@@ -65,6 +65,16 @@
             var periodGridLineItems = [];
 
             angular.forEach(periods, function(period, id) {
+                // Compare with the first period in the list
+                const start1 = new Date(period.startDate);
+                const end1 = new Date(period.endDate);
+                const start2 = new Date(periods[0].startDate);
+                const end2 = new Date(periods[0].endDate);
+
+                // Always show proceed button for periods with the same start and end date as the first period
+                if(start1.getTime() === start2.getTime() && end1.getTime() === end2.getTime()) {
+                    period.alsoShowProceed = true;
+                }
                 periodGridLineItems.push(createPeriodGridItem(period, emergency, id));
             });
 
@@ -77,8 +87,9 @@
                 startDate: period.startDate,
                 endDate: period.endDate,
                 rnrStatus: messageService.get(getRnrStatus(period, emergency, id)),
-                activeForRnr: (emergency || id === 0),
-                rnrId: (period.requisitionId) ? period.requisitionId : null
+                activeForRnr: (emergency || id === 0 || period.alsoShowProceed),
+                rnrId: (period.requisitionId) ? period.requisitionId : null,
+                id: period.id
             };
         }
 
@@ -102,7 +113,7 @@
             return period.requisitionStatus ?
                 period.requisitionStatus :
                 (
-                    (emergency || id === 0) ?
+                    (emergency || id === 0 || period.alsoShowProceed) ?
                         'requisitionInitiate.notYetStarted' :
                         'requisitionInitiate.previousPending'
                 );
