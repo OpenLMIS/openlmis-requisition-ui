@@ -140,8 +140,9 @@
             function canEditColumn(column) {
                 var TBMonthlyColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
 
-                if (program.name === TB_MONTHLY_PROGRAM && column.name === TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY) {
-                    return true;
+                // Total received quantity should never be editable
+                if (column.name === TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY) {
+                    return false;
                 }
 
                 return (column.source === COLUMN_SOURCES.USER_INPUT ||
