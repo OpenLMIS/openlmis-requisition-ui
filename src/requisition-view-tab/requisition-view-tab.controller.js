@@ -184,7 +184,7 @@
             vm.homeFacility = homeFacility;
             vm.columns = columns;
             vm.program = program;
-            vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
+            vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving || canApproveAndReject;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
             vm.showUnskipFullSupplyProductsButton = showUnskipFullSupplyProductsButton();
@@ -432,16 +432,30 @@
         }
 
         function showOrderableFilter() {
-            return vm.userCanEdit &&
-                fullSupply;
-        }
+    var isAuthorizedOrApproving = requisition.$isAuthorized() || 
+        requisition.$isInApproval();
+
+    if (isAuthorizedOrApproving) {
+        return fullSupply;
+    }
+
+    return (vm.userCanEdit || canApproveAndReject) &&
+        fullSupply;
+}
 
         function showSkipControls() {
-            return vm.userCanEdit &&
-                fullSupply &&
-                !requisition.emergency &&
-                requisition.template.hasSkipColumn();
-        }
+    var isAuthorizedOrApproving = requisition.$isAuthorized() || 
+        requisition.$isInApproval();
+
+    if (isAuthorizedOrApproving) {
+        return fullSupply && requisition.template.hasSkipColumn();
+    }
+
+    return (vm.userCanEdit || canApproveAndReject) &&
+        fullSupply &&
+        !requisition.emergency &&
+        requisition.template.hasSkipColumn();
+}
 
         function showAddFullSupplyProductsButton() {
             return vm.userCanEdit && fullSupply && requisition.emergency;

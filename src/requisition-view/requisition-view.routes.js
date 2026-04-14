@@ -61,9 +61,9 @@
                 canAuthorize: function(requisitionViewFactory, user, requisition) {
                     return requisitionViewFactory.canAuthorize(user.id, requisition);
                 },
-                canApproveAndReject: function(requisitionViewFactory, user, requisition) {
-                    return requisitionViewFactory.canApproveAndReject(user, requisition);
-                },
+                canApproveAndReject: function(requisitionViewFactory, user, requisition, homeFacility) {
+    return requisitionViewFactory.canApproveAndReject(user, requisition, homeFacility);
+},
                 canDelete: function(requisitionViewFactory, user, requisition) {
                     return requisitionViewFactory.canDelete(user.id, requisition);
                 },
