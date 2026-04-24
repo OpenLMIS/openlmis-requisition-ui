@@ -27,8 +27,8 @@
             <th>{{'requisitionApproval.program' | message}}</th>
             <th>{{'requisitionApproval.facility' | message}}</th>
             <th>{{'requisitionApproval.period' | message}}</th>
-            <th>{{'requisitionApproval.startDate' | message}}</th>
-            <th>{{'requisitionApproval.endDate' | message}}</th>
+           <!--<th>{{'requisitionApproval.startDate' | message}}</th>
+            <th>{{'requisitionApproval.endDate' | message}}</th> -->
             <th>{{'requisitionApproval.dateSubmitted' | message}}</th>
             <th>{{'requisitionApproval.dateAuthorized' | message}}</th>
             <th>{{'requisitionApproval.emergency' | message}}</th>
@@ -44,8 +44,8 @@
             <td>{{requisition.program.name}}</td>
             <td>{{requisition.facility.code}} - {{requisition.facility.name}}</td>
             <td>{{requisition.processingPeriod.name}}</td>
-            <td>{{requisition.processingPeriod.startDate | openlmisDate}}</td>
-            <td>{{requisition.processingPeriod.endDate | openlmisDate}}</td>
+           <!--<td>{{requisition.processingPeriod.startDate | openlmisDate}}</td>
+            <td>{{requisition.processingPeriod.endDate | openlmisDate}}</td> -->
 
             <td ng-if="!requisition.extraData.originalRequisition">{{requisition.statusChanges.SUBMITTED.changeDate | openlmisDate}}</td>
             <td ng-if="requisition.extraData.originalRequisition">{{ 'requisitionApproval.notApplicable' | message }}</td>
