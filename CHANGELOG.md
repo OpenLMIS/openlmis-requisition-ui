@@ -1,5 +1,7 @@
 Upcoming Version (WIP)
 ==================
+Bug fixes:
+* [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191): Remarks column editable and size adjustable dynamically.
 
 7.0.16 / 2026-02-05
 =================

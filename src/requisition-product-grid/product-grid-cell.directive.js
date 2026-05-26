@@ -190,8 +190,10 @@
 
         function isApprovalColumn(requisition, column) {
             var approvalColumns = requisition.template.patientsTabEnabled ?
-                [TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY, TEMPLATE_COLUMNS.REMARKS] :
+                [TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY] :
                 [TEMPLATE_COLUMNS.APPROVED_QUANTITY];
+
+            approvalColumns.push(TEMPLATE_COLUMNS.REMARKS);
 
             return approvalColumns.indexOf(column.name) !== -1;
         }
