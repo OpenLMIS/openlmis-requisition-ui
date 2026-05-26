@@ -1,5 +1,7 @@
 Upcoming Version (WIP)
 ==================
+Bug fixes:
+* [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Requested quantity explanation column adjusts width with input.
 
 7.0.16 / 2026-02-05
 =================
