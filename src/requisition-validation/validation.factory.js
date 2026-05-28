@@ -94,12 +94,16 @@
                 calculatedOrderQuantityIsaColumn = requisition.template
                     .getColumn(TEMPLATE_COLUMNS.CALCULATED_ORDER_QUANTITY_ISA),
                 requestedQuantityExplanation = lineItem.requestedQuantityExplanation,
-                requestedQuantity = lineItem.requestedQuantity;
+                requestedQuantity = lineItem.requestedQuantity,
+                calculatedValue = isDisplayed(calculatedOrderQuantityColumn)
+                    ? lineItem.calculatedOrderQuantity
+                    : lineItem.calculatedOrderQuantityIsa;
 
             if (!lineItem.isNonFullSupply() &&
                 isDisplayed(requestedQuantityColumn) &&
                 (isDisplayed(calculatedOrderQuantityColumn) || isDisplayed(calculatedOrderQuantityIsaColumn)) &&
                 isFilled(requestedQuantity) &&
+                requestedQuantity !== calculatedValue &&
                 !requestedQuantityExplanation) {
                 return messageService.get('requisitionValidation.required');
             }
