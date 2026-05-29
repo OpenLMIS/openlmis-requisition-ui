@@ -2,6 +2,7 @@ Upcoming Version (WIP)
 ==================
 Bug fixes:
 * [OLMIS-8154](https://openlmis.atlassian.net/browse/OLMIS-8154): Explanation no longer required when requested equals calculated.
+* [OLMIS-8128](https://openlmis.atlassian.net/browse/OLMIS-8128): TB Monthly patients tab no longer shows validation highlights after a page refresh
 
 7.0.16 / 2026-02-05
 =================
