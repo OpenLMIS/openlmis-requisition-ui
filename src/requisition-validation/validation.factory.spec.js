@@ -205,6 +205,15 @@ describe('validationFactory', function() {
                 .toBeUndefined();
         });
 
+        it('should return undefined if requestedQuantity equals calculatedOrderQuantity', function() {
+            lineItem.requestedQuantity = 10;
+            lineItem.calculatedOrderQuantity = 10;
+            lineItem.requestedQuantityExplanation = undefined;
+
+            expect(validationFactory.requestedQuantityExplanation(lineItem, requisitionMock))
+                .toBeUndefined();
+        });
+
     });
 
     describe('requestedQuantity', function() {
