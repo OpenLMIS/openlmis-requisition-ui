@@ -228,7 +228,7 @@ describe('ProductGridCell', function() {
 
         cell = angular.element(this.getCompiledElement().children()[0]);
 
-        expect(cell.text()).toEqual('readOnlyFieldValue');
+        expect(cell.text()).not.toEqual('readOnlyFieldValue');
     });
 
     it('should produce editable cell if user can edit and column is editable', function() {

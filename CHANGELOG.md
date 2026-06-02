@@ -1,7 +1,11 @@
 Upcoming Version (WIP)
 ==================
 Bug fixes:
+<<<<<<< OLMIS-8192-explanation-auto-resize
 * [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Requested quantity explanation column adjusts width with input.
+=======
+* [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191): Remarks column editable and size adjustable dynamically.
+>>>>>>> master
 * [OLMIS-8154](https://openlmis.atlassian.net/browse/OLMIS-8154): Explanation no longer required when requested equals calculated.
 
 7.0.16 / 2026-02-05
