@@ -277,9 +277,7 @@ describe('ProductGridCell', function() {
             this.scope.canApprove = false;
             this.scope.column = this.buildCColumn();
 
-            var cell = angular.element(this.getCompiledElement().children()[0]);
-
-            expect(cell.text()).toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text()).toEqual('readOnlyFieldValue');
             expect(this.getCompiledElement().find('input').length).toEqual(0);
         });
 
@@ -289,9 +287,8 @@ describe('ProductGridCell', function() {
             this.scope.program.name = 'TB Monthly';
             this.scope.column = this.buildCColumn();
 
-            var cell = angular.element(this.getCompiledElement().children()[0]);
-
-            expect(cell.text()).toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .toEqual('readOnlyFieldValue');
         });
 
         it('should be editable for an approver when patients tab is enabled', function() {
@@ -299,9 +296,8 @@ describe('ProductGridCell', function() {
             this.scope.requisition.template.patientsTabEnabled = true;
             this.scope.column = this.buildCColumn();
 
-            var cell = angular.element(this.getCompiledElement().children()[0]);
-
-            expect(cell.text()).not.toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
         });
 
         it('should stay read only for an approver when patients tab is disabled', function() {
@@ -309,9 +305,8 @@ describe('ProductGridCell', function() {
             this.scope.requisition.template.patientsTabEnabled = false;
             this.scope.column = this.buildCColumn();
 
-            var cell = angular.element(this.getCompiledElement().children()[0]);
-
-            expect(cell.text()).toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .toEqual('readOnlyFieldValue');
         });
     });
 
@@ -325,9 +320,8 @@ describe('ProductGridCell', function() {
             this.scope.column = new this.RequisitionColumnDataBuilder()
                 .buildApprovedQuantityColumn(this.scope.requisition);
 
-            var cell = angular.element(this.getCompiledElement().children()[0]);
-
-            expect(cell.text()).not.toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
         });
 
         it('should keep Remarks editable for an approver in both template kinds', function() {
@@ -335,15 +329,15 @@ describe('ProductGridCell', function() {
 
             this.scope.requisition.template.patientsTabEnabled = false;
             this.scope.column = new this.RequisitionColumnDataBuilder().buildRemarksColumn(this.scope.requisition);
-            var nonPatientsTabCell = angular.element(this.getCompiledElement().children()[0]);
 
-            expect(nonPatientsTabCell.text()).not.toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
 
             this.scope.requisition.template.patientsTabEnabled = true;
             this.scope.column = new this.RequisitionColumnDataBuilder().buildRemarksColumn(this.scope.requisition);
-            var patientsTabCell = angular.element(this.getCompiledElement().children()[0]);
 
-            expect(patientsTabCell.text()).not.toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
         });
 
         it('should keep Total Received Quantity editable in a TB Monthly program', function() {
@@ -356,9 +350,8 @@ describe('ProductGridCell', function() {
             this.scope.column.columnDefinition.columnType = this.COLUMN_TYPES.NUMERIC;
             this.scope.column.$type = this.COLUMN_TYPES.NUMERIC;
 
-            var cell = angular.element(this.getCompiledElement().children()[0]);
-
-            expect(cell.text()).not.toEqual('readOnlyFieldValue');
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
         });
     });
 

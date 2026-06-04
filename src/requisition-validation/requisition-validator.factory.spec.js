@@ -222,9 +222,7 @@ describe('requisitionValidator', function() {
             column.name = TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH;
             requisition.template.patientsTabEnabled = false;
 
-            var result = validator.validateLineItemField(lineItem, column, requisition);
-
-            expect(result).toBe(true);
+            expect(validator.validateLineItemField(lineItem, column, requisition)).toBe(true);
         });
 
         it('should still require No of Patients next month (C) at approval in patients tab (OLMIS-8123)', function() {
@@ -234,9 +232,7 @@ describe('requisitionValidator', function() {
             requisition.template.patientsTabEnabled = true;
             requisition.status = 'AUTHORIZED';
 
-            var result = validator.validateLineItemField(lineItem, column, requisition);
-
-            expect(result).toBe(false);
+            expect(validator.validateLineItemField(lineItem, column, requisition)).toBe(false);
         });
 
         it('should not validate hidden fields', function() {
