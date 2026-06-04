@@ -157,6 +157,12 @@
                     return true;
                 }
 
+                // No of Patients on Treatment next month (C) is fillable only on the approval
+                // stage by district-level users (TZUP-432), never via the standard edit path.
+                if (column.name === TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH) {
+                    return false;
+                }
+
                 return (column.source === COLUMN_SOURCES.USER_INPUT ||
                     TBMonthlyColumns.includes(column.name)) && scope.userCanEdit;
             }
@@ -190,7 +196,8 @@
 
         function isApprovalColumn(requisition, column) {
             var approvalColumns = requisition.template.patientsTabEnabled ?
-                [TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY] :
+                [TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY,
+                    TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH] :
                 [TEMPLATE_COLUMNS.APPROVED_QUANTITY];
 
             approvalColumns.push(TEMPLATE_COLUMNS.REMARKS);

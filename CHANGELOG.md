@@ -7,6 +7,7 @@ Bug fixes:
 * [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191): Remarks column editable and size adjustable dynamically.
 >>>>>>> master
 * [OLMIS-8154](https://openlmis.atlassian.net/browse/OLMIS-8154): Explanation no longer required when requested equals calculated.
+* [OLMIS-8123](https://openlmis.atlassian.net/browse/OLMIS-8123): No of Patients on Treatment next month (C) column is no longer editable outside the approval stage.
 
 7.0.16 / 2026-02-05
 =================

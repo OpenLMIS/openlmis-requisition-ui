@@ -216,6 +216,29 @@ describe('requisitionValidator', function() {
             expect(result).toBe(false);
         });
 
+        it('should not require No of Patients next month (C) when patients tab disabled (OLMIS-8123)', function() {
+            lineItem[TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH] = undefined;
+            column.$required = true;
+            column.name = TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH;
+            requisition.template.patientsTabEnabled = false;
+
+            var result = validator.validateLineItemField(lineItem, column, requisition);
+
+            expect(result).toBe(true);
+        });
+
+        it('should still require No of Patients next month (C) at approval in patients tab (OLMIS-8123)', function() {
+            lineItem[TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH] = undefined;
+            column.$required = true;
+            column.name = TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH;
+            requisition.template.patientsTabEnabled = true;
+            requisition.status = 'AUTHORIZED';
+
+            var result = validator.validateLineItemField(lineItem, column, requisition);
+
+            expect(result).toBe(false);
+        });
+
         it('should not validate hidden fields', function() {
             lineItem['requiredButNotSet'] = undefined;
             column.$required = true;
