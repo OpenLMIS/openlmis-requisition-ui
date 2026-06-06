@@ -130,29 +130,29 @@ describe('validateRequisition directive', function() {
     describe('on blur (OLMIS-8127)', function() {
 
         it('should mark requisition invalid when blank field loses focus', function() {
-            var input = div.find('div:nth-child(1) input');
-
-            input.val('');
-            input.triggerHandler('change');
+            div.find('div:nth-child(1) input').val('');
+            div.find('div:nth-child(1) input').triggerHandler('change');
             $scope.$apply();
 
-            input.triggerHandler('blur');
+            div.find('div:nth-child(1) input').triggerHandler('blur');
 
-            input.parent().trigger('openlmisInvalid.show');
+            div.find('div:nth-child(1) input')
+                .parent()
+                .trigger('openlmisInvalid.show');
 
             expect($scope.requisition.$error).not.toBeUndefined();
         });
 
         it('should not mark requisition invalid on blur when field is filled', function() {
-            var input = div.find('div:nth-child(1) input');
-
-            input.val(5);
-            input.triggerHandler('change');
+            div.find('div:nth-child(1) input').val(5);
+            div.find('div:nth-child(1) input').triggerHandler('change');
             $scope.$apply();
 
-            input.triggerHandler('blur');
+            div.find('div:nth-child(1) input').triggerHandler('blur');
 
-            input.parent().trigger('openlmisInvalid.show');
+            div.find('div:nth-child(1) input')
+                .parent()
+                .trigger('openlmisInvalid.show');
 
             expect($scope.requisition.$error).toBeUndefined();
         });
