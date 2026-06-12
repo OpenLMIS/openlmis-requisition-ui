@@ -84,6 +84,7 @@
             convertedQuantityToIssue: calculateQuantityToIssueToUnit,
             stockOnHand: calculateStockOnHand,
             totalLossesAndAdjustments: calculateTotalLossesAndAdjustments,
+            total: calculateTotal,
             packsToShip: calculatePacksToShip,
             totalCost: calculateTotalCost,
             adjustedConsumption: calculateAdjustedConsumption,
@@ -262,13 +263,15 @@
         /**
          * @ngdoc method
          * @methodOf requisition-calculations.calculationFactory
-         * @name total
+         * @name convertedQuantityToIssue
          *
          * @description
-         * Calculates the value of the Total column based on the given line item.
+         * Calculates the value of the Converted Quantity to Issue column by converting the
+         * Quantity to Issue into packs based on the orderable's pack size.
          *
-         * @param  {Object} lineItem the line item to calculate the value from
-         * @return {Number}          the calculated Total value
+         * @param  {Object} lineItem    the line item to calculate the value from
+         * @param  {Object} requisition the requisition
+         * @return {Number}             the calculated Converted Quantity to Issue value
          */
         function calculateQuantityToIssueToUnit(lineItem, requisition) {
             var dosesProvided = checkIfDosesProvided(lineItem, requisition);
@@ -285,6 +288,21 @@
             }
 
             return Math.floor(quantityToIssue / parseIntWithBaseTen(packSize));
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-calculations.calculationFactory
+         * @name total
+         *
+         * @description
+         * Calculates the value of the Total column based on the given line item.
+         *
+         * @param  {Object} lineItem the line item to calculate the value from
+         * @return {Number}          the calculated Total value
+         */
+        function calculateTotal(lineItem) {
+            return getItem(lineItem, A) + getItem(lineItem, B);
         }
 
         /**
