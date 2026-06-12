@@ -18,9 +18,7 @@ const orderTableDefaultColumns = (
       accessor: 'orderable.fullProductName',
     },
     {
-      Header: showInDoses
-        ? formatMessage('requisition.orderCreate.table.soh.doses')
-        : formatMessage('requisition.orderCreate.table.soh.packs'),
+      Header: formatMessage('requisition.orderCreate.table.soh'),
       accessor: 'soh',
       Cell: (props) => {
         const sohQuantity = props.value;
@@ -37,9 +35,7 @@ const orderTableDefaultColumns = (
       },
     },
     {
-      Header: showInDoses
-        ? formatMessage('requisition.orderCreate.table.quantity.doses')
-        : formatMessage('requisition.orderCreate.table.quantity.packs'),
+      Header: formatMessage('requisition.orderCreate.table.quantity'),
       accessor: 'orderedQuantity',
       Cell: (props) => {
         const { row } = props;
@@ -93,9 +89,7 @@ const orderReadonlyTableColumns = (
     accessor: 'orderable.fullProductName',
   },
   {
-    Header: showInDoses
-      ? formatMessage('requisition.orderCreate.table.soh.doses')
-      : formatMessage('requisition.orderCreate.table.soh.packs'),
+    Header: formatMessage('requisition.orderCreate.table.soh'),
     accessor: 'soh',
     Cell: (props) => {
       const sohQuantity = props.value;
@@ -112,9 +106,7 @@ const orderReadonlyTableColumns = (
     },
   },
   {
-    Header: showInDoses
-      ? formatMessage('requisition.orderCreate.table.quantity.doses')
-      : formatMessage('requisition.orderCreate.table.quantity.packs'),
+    Header: formatMessage('requisition.orderCreate.table.quantity'),
     accessor: 'orderedQuantity',
     Cell: (props) => {
       const { row } = props;
