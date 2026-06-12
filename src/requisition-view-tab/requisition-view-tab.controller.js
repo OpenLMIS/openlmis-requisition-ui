@@ -181,7 +181,7 @@
                             lineItem.quantities = {};
                         }
                         lineItem.quantities[column.name] = {};
-                        if (lineItem[column.name]) {
+                        if (lineItem[column.name] !== null && lineItem[column.name] !== undefined) {
                             lineItem.quantities[column.name].quantity = lineItem[column.name];
                             lineItem.quantities[column.name] = quantityUnitCalculateService.
                                 recalculateInputQuantity(lineItem.quantities[column.name],

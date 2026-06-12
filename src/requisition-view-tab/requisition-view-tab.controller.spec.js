@@ -21,6 +21,12 @@ describe('ViewTabController', function() {
                 set: function() {},
                 get: function() {}
             });
+            $provide.value('quantityUnitCalculateService', {
+                recalculateInputQuantity: jasmine.createSpy('recalculateInputQuantity')
+                    .andCallFake(function(item) {
+                        return item;
+                    })
+            });
         });
 
         var RequisitionLineItemDataBuilder, RequisitionDataBuilder, RequisitionColumnDataBuilder, OrderableDataBuilder;
@@ -450,6 +456,44 @@ describe('ViewTabController', function() {
                 this.initController();
 
                 expect(this.vm.showSkipControls).toBe(false);
+            });
+
+        });
+
+        describe('quantities initialization', function() {
+
+            it('should populate quantities with zero value from line item', function() {
+                var RequisitionColumnDataBuilder;
+                inject(function($injector) {
+                    RequisitionColumnDataBuilder = $injector.get('RequisitionColumnDataBuilder');
+                });
+
+                var column = new RequisitionColumnDataBuilder()
+                    .buildRequestedQuantityColumn(this.requisition);
+                var lineItem = {
+                    requestedQuantity: 0,
+                    orderable: {
+                        netContent: 10
+                    },
+                    updateFieldValue: jasmine.createSpy('updateFieldValue')
+                };
+
+                this.vm = this.$controller('ViewTabController', {
+                    lineItems: [lineItem],
+                    items: [lineItem],
+                    columns: [column],
+                    requisition: this.requisition,
+                    canSubmit: this.canSubmit,
+                    canAuthorize: this.canAuthorize,
+                    fullSupply: this.fullSupply,
+                    program: {},
+                    $scope: this.$scope,
+                    canApproveAndReject: this.canApproveAndReject,
+                    canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
+                });
+                this.vm.$onInit();
+
+                expect(lineItem.quantities['requestedQuantity'].quantity).toBe(0);
             });
 
         });
