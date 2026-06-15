@@ -11,8 +11,6 @@ import { validateOrderItem } from './order-create-validation-helper-functions';
 import { orderTableColumns } from './order-create.constant';
 import { SearchSelect } from './search-select';
 
-const QUANTITY_UNIT_KEY = 'quantityUnit';
-
 const OrderCreateTab = ({
   passedOrder,
   updateOrderArray,
@@ -23,10 +21,6 @@ const OrderCreateTab = ({
   cacheOrderableOptions,
   cachedOrderableOptions,
 }) => {
-  const localStorageService = useMemo(
-    () => getService('localStorageService'),
-    []
-  );
   const { formatMessage } = useMemo(() => getService('messageService'), []);
   const orderCreatePrintService = useMemo(
     () => getService('orderCreatePrintService'),
@@ -37,18 +31,15 @@ const OrderCreateTab = ({
     []
   );
   const QUANTITY_UNIT = useMemo(() => getService('QUANTITY_UNIT'), []);
-  const featureFlagService = useMemo(
-    () => getService('featureFlagService'),
-    []
-  );
-  const DEFAULT_QUANTITY_UNIT_FEATURE_FLAG = useMemo(
-    () => getService('DEFAULT_QUANTITY_UNIT_FEATURE_FLAG'),
+  const quantityUnitConfigService = useMemo(
+    () => getService('quantityUnitConfigService'),
     []
   );
   const quantityUnitCalculateService = useMemo(
     () => getService('quantityUnitCalculateService'),
     []
   );
+  const $rootScope = useMemo(() => getService('$rootScope'), []);
 
   const [order, setOrder] = useState({ orderLineItems: [], ...passedOrder });
   const [selectedOrderable, setSelectedOrderable] = useState('');
@@ -63,40 +54,19 @@ const OrderCreateTab = ({
   );
 
   useEffect(() => {
-    const getDefaultUnit = () => {
-      if (featureFlagService && DEFAULT_QUANTITY_UNIT_FEATURE_FLAG) {
-        const flagValue = featureFlagService.get(
-          DEFAULT_QUANTITY_UNIT_FEATURE_FLAG
-        );
-        if (
-          flagValue === QUANTITY_UNIT.PACKS ||
-          flagValue === QUANTITY_UNIT.DOSES
-        ) {
-          return flagValue;
-        }
-      }
-
-      return QUANTITY_UNIT.DOSES;
-    };
-
-    const cachedUnit = localStorageService.get(QUANTITY_UNIT_KEY);
-    const initialUnit = cachedUnit || getDefaultUnit();
-
-    if (!cachedUnit) {
-      localStorageService.add(QUANTITY_UNIT_KEY, initialUnit);
-    }
-    setCurrentQuantityUnit(initialUnit);
-  }, [
-    localStorageService,
-    QUANTITY_UNIT,
-    featureFlagService,
-    DEFAULT_QUANTITY_UNIT_FEATURE_FLAG,
-  ]);
+    setCurrentQuantityUnit(quantityUnitConfigService.getEffectiveUnit());
+  }, [quantityUnitConfigService]);
 
   const handleQuantityUnitChange = useCallback(
     (newUnit) => {
-      localStorageService.add(QUANTITY_UNIT_KEY, newUnit);
+      quantityUnitConfigService.setSelectedUnit(newUnit);
       setCurrentQuantityUnit(newUnit);
+
+      // Persist the user's choice server-side so it survives logout, mirroring the AngularJS
+      // toggle. Emitted inside a digest so the post-login-action listener's async save runs.
+      $rootScope.$applyAsync(function() {
+        $rootScope.$emit('openlmis.quantityUnit.selected', newUnit);
+      });
 
       // Recalculate all existing order items for the new unit
       const recalculatedOrderItems = order.orderLineItems.map((item) => {
@@ -114,11 +84,12 @@ const OrderCreateTab = ({
       updateOrderArray(updatedOrder);
     },
     [
-      localStorageService,
+      quantityUnitConfigService,
       order,
       quantityUnitCalculateService,
       showInDoses,
       updateOrderArray,
+      $rootScope,
     ]
   );
 
