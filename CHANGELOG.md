@@ -1,6 +1,9 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
 
+Bug fixes:
+* [OLMIS-8177](https://openlmis.atlassian.net/browse/OLMIS-8177): Removed a dead validation class binding from the requisition product grid packs/doses quantity input.
+
 7.0.17 / 2026-06-09
 ==================
 Bug fixes:
