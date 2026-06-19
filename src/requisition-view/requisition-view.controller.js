@@ -237,6 +237,7 @@
         vm.skipRnr = skipRnr;
         vm.isOffline = offlineService.isOffline;
         vm.getPrintUrl = getPrintUrl;
+        vm.getApproveButtonLabel = getApproveButtonLabel;
         vm.isFullSupplyTabValid = isFullSupplyTabValid;
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
         vm.close = close;
@@ -297,6 +298,21 @@
             else{
                 return true;
             }
+        }
+
+        function getApproveButtonLabel() {
+            return isWarehouseFacility(vm.homeFacility) ?
+                'requisitionView.acknowledge.label' :
+                'requisitionView.approve.label';
+        }
+
+        function isWarehouseFacility(facility) {
+            var type = facility && facility.type,
+                code = type && type.code ? type.code.toLowerCase() : undefined,
+                name = type && type.name ? type.name.toLowerCase() : undefined;
+
+            return code === 'warehouse' ||
+                name === 'warehouse';
         }
 
         function setTypeAndClass() {
@@ -548,7 +564,7 @@
             });
             confirmService.confirm(
                 'requisitionView.approve.confirm',
-                'requisitionView.approve.label'
+                getApproveButtonLabel()
             ).then(function () {
                 if (requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();

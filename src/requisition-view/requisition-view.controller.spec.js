@@ -78,6 +78,12 @@ describe('RequisitionViewController', function() {
             .build();
 
         this.facility = new this.FacilityDataBuilder().build();
+        this.homeFacility = {
+            type: {
+                code: 'health_center',
+                name: 'Health Center'
+            }
+        };
         this.period = new this.PeriodDataBuilder().build();
         this.requisition = new RequisitionDataBuilder()
             .withProgram(this.program)
@@ -217,6 +223,20 @@ describe('RequisitionViewController', function() {
 
             expect(this.vm.displayRejectButton).toEqual(false);
         });
+
+        it('should use approve label for non warehouse facility', function() {
+            this.initController();
+
+            expect(this.vm.getApproveButtonLabel()).toBe('requisitionView.approve.label');
+        });
+
+        it('should use acknowledge label for warehouse facility', function() {
+            this.homeFacility.type.code = 'warehouse';
+            this.initController();
+
+            expect(this.vm.getApproveButtonLabel()).toBe('requisitionView.acknowledge.label');
+        });
+
     });
 
     describe('skipRnr', function() {
@@ -580,6 +600,19 @@ describe('RequisitionViewController', function() {
 
             expect(this.RequisitionWatcher.prototype.disableWatcher).toHaveBeenCalled();
         });
+
+        it('should use acknowledge label in confirmation for warehouse facility', function() {
+            this.homeFacility.type.code = 'warehouse';
+            this.initController();
+
+            this.vm.approveRnr();
+            this.$rootScope.$apply();
+
+            expect(this.confirmService.confirm).toHaveBeenCalledWith(
+                'requisitionView.approve.confirm',
+                'requisitionView.acknowledge.label'
+            );
+        });
     });
 
     describe('rejectRnr', function() {
@@ -797,7 +830,8 @@ describe('RequisitionViewController', function() {
             canApproveAndReject: this.canApproveAndReject,
             canDelete: this.canDelete,
             canSkip: this.canSkip,
-            canSync: this.canSync
+            canSync: this.canSync,
+            homeFacility: this.homeFacility
         });
         this.vm.$onInit();
     }
