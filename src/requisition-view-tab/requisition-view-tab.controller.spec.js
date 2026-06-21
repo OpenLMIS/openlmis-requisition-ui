@@ -463,15 +463,9 @@ describe('ViewTabController', function() {
         describe('quantities initialization', function() {
 
             it('should populate quantities with zero value from line item', function() {
-                var RequisitionColumnDataBuilder;
-                inject(function($injector) {
-                    RequisitionColumnDataBuilder = $injector.get('RequisitionColumnDataBuilder');
-                });
-
-                var column = new RequisitionColumnDataBuilder()
-                    .buildRequestedQuantityColumn(this.requisition);
+                var column = this.totalLossesAndAdjustmentsColumn;
                 var lineItem = {
-                    requestedQuantity: 0,
+                    totalLossesAndAdjustments: 0,
                     orderable: {
                         netContent: 10
                     },
@@ -493,7 +487,7 @@ describe('ViewTabController', function() {
                 });
                 this.vm.$onInit();
 
-                expect(lineItem.quantities['requestedQuantity'].quantity).toBe(0);
+                expect(lineItem.quantities['totalLossesAndAdjustments'].quantity).toBe(0);
             });
 
         });
