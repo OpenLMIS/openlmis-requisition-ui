@@ -73,6 +73,10 @@
                 TEMPLATE_COLUMNS.STOCK_ON_HAND,
                 TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS
             ],
+            total: [
+                TEMPLATE_COLUMNS.BEGINNING_BALANCE,
+                TEMPLATE_COLUMNS.TOTAL_RECEIVED_QUANTITY
+            ],
             convertedQuantityToIssue: [
                 TEMPLATE_COLUMNS.BEGINNING_BALANCE,
                 TEMPLATE_COLUMNS.QUANTITY_TO_ISSUE

@@ -183,6 +183,10 @@ describe('calculationFactory', function() {
             expect(calculationFactory.packsToShip(lineItem, requisitionMock)).toBe(1);
         });
 
+        it('should calculate total properly', function() {
+            expect(calculationFactory.total(lineItem)).toBe(30);
+        });
+
         it('should calculate stock on hand properly', function() {
             expect(calculationFactory.stockOnHand(lineItem)).toBe(40);
         });
