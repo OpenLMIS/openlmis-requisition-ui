@@ -1,5 +1,6 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
+* [OLMIS-8207](https://openlmis.atlassian.net/browse/OLMIS-8207): Display saved zero values in requisition quantity fields.
 
 7.0.17 / 2026-06-09
 ==================
