@@ -56,6 +56,8 @@ describe('Requisition', function() {
             this.requisitionCacheService = $injector.get('requisitionCacheService');
             this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
             this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
+            this.quantityUnitConfigService = $injector.get('quantityUnitConfigService');
         });
 
         this.program = new this.ProgramDataBuilder().build();
@@ -1325,5 +1327,25 @@ describe('Requisition', function() {
             name: 'Column' + suffix
         };
     }
+
+    describe('quantityUnit initialization', function() {
+
+        it('should set quantityUnit to the effective unit (PACKS) resolved by the config service', function() {
+            spyOn(this.quantityUnitConfigService, 'getEffectiveUnit').andReturn(this.QUANTITY_UNIT.PACKS);
+
+            var requisition = new this.Requisition(this.sourceRequisition);
+
+            expect(requisition.quantityUnit).toEqual(this.QUANTITY_UNIT.PACKS);
+        });
+
+        it('should set quantityUnit to the effective unit (DOSES) resolved by the config service', function() {
+            spyOn(this.quantityUnitConfigService, 'getEffectiveUnit').andReturn(this.QUANTITY_UNIT.DOSES);
+
+            var requisition = new this.Requisition(this.sourceRequisition);
+
+            expect(requisition.quantityUnit).toEqual(this.QUANTITY_UNIT.DOSES);
+        });
+
+    });
 
 });
