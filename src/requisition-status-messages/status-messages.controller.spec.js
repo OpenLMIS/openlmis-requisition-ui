@@ -50,6 +50,89 @@ describe('StatusMessagesController', function() {
         it('should expose requisition', function() {
             expect(vm.requisition).toBe(requisition);
         });
+
+        it('should not hide comments if home facility is not a warehouse', inject(function($controller) {
+            scope.homeFacility = {
+                type: {
+                    code: 'hospital',
+                    name: 'Hospital'
+                }
+            };
+
+            vm = $controller('StatusMessagesController', {
+                $scope: scope
+            });
+
+            expect(vm.hideCommentsForWarehouse).toBe(false);
+        }));
+
+        it('should hide comments if home facility type code is warehouse', inject(function($controller) {
+            scope.homeFacility = {
+                type: {
+                    code: 'warehouse',
+                    name: 'Store'
+                }
+            };
+
+            vm = $controller('StatusMessagesController', {
+                $scope: scope
+            });
+
+            expect(vm.hideCommentsForWarehouse).toBe(true);
+        }));
+
+        it('should hide comments if home facility type name is warehouse', inject(function($controller) {
+            scope.homeFacility = {
+                type: {
+                    code: 'store',
+                    name: 'warehouse'
+                }
+            };
+
+            vm = $controller('StatusMessagesController', {
+                $scope: scope
+            });
+
+            expect(vm.hideCommentsForWarehouse).toBe(true);
+        }));
+
+        it('should detect warehouse facility case-insensitively', inject(function($controller) {
+            scope.homeFacility = {
+                type: {
+                    code: 'WAREHOUSE',
+                    name: 'Store'
+                }
+            };
+
+            vm = $controller('StatusMessagesController', {
+                $scope: scope
+            });
+
+            expect(vm.hideCommentsForWarehouse).toBe(true);
+        }));
+
+        it('should update comment visibility when home facility changes', inject(function($controller) {
+            scope.homeFacility = {
+                type: {
+                    code: 'hospital',
+                    name: 'Hospital'
+                }
+            };
+
+            vm = $controller('StatusMessagesController', {
+                $scope: scope
+            });
+
+            scope.homeFacility = {
+                type: {
+                    code: 'warehouse',
+                    name: 'Store'
+                }
+            };
+            rootScope.$apply();
+
+            expect(vm.hideCommentsForWarehouse).toBe(true);
+        }));
     });
 
     describe('displayAddComment', function() {

@@ -31,15 +31,17 @@
     ViewTabController.$inject = [
         '$filter', '$state', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
-        'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', 'homeFacility','$scope'
+        'OpenlmisArrayDecorator', 'canApproveAndReject', '$stateParams',
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM',
+        'homeFacility', '$scope', 'paginationFactory', 'PAGE_SIZE'
     ];
 
     function ViewTabController($filter, $state, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
-                               TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
-                               paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, homeFacility, $scope) {
+                               TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject,
+                               $stateParams, requisitionCacheService,
+                               canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, homeFacility, $scope,
+                               paginationFactory, PAGE_SIZE) {
         var vm = this;
         vm.$onInit = onInit;
         vm.deleteLineItem = deleteLineItem;
@@ -54,7 +56,6 @@
         vm.cacheRequisition = cacheRequisition;
         vm.userCanEditColumn = userCanEditColumn;
         vm.monthlyTBColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
-        vm.disabledRequisitionEdit = disabledRequisitionEdit;
         vm.search = search;
         // vm.showSkippedLineItems = true;
 
@@ -137,6 +138,7 @@
          * status and user rights and requisition template configuration.
          */
         vm.showAddFullSupplyProductControls = undefined;
+        vm.showSkippedLineItemsVisibility = undefined;
 
         /**
          * @ngdoc property
@@ -159,6 +161,9 @@
 
         vm.fullSupply = undefined;
 
+        vm.isWarehouseView = false;
+        vm.canEditApprovalColumns = false;
+
         /**
          * @ngdoc property
          * @propertyOf requisition-view-tab.controller:ViewTabController
@@ -177,23 +182,27 @@
                 });
             });
 
-            vm.lineItems = lineItems;
-            vm.items = items;
-            vm.filteredItems = lineItems;
             vm.requisition = requisition;
             vm.homeFacility = homeFacility;
+            vm.isWarehouseView = isWarehouseFacility(vm.homeFacility);
+            autoSkipBlankWarehouseLineItems();
+            vm.showSkippedLineItems = !vm.isWarehouseView;
+            vm.lineItems = vm.isWarehouseView ? getLineItemsForCurrentTab() : lineItems;
             vm.columns = columns;
             vm.program = program;
-            vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving || canApproveAndReject;
+            vm.userCanEdit = !vm.isWarehouseView &&
+                (canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving || canApproveAndReject);
+            vm.canEditApprovalColumns = !vm.isWarehouseView && canApproveAndReject;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
             vm.showUnskipFullSupplyProductsButton = showUnskipFullSupplyProductsButton();
             vm.showSkipControls = showSkipControls();
+            vm.showSkippedLineItemsVisibility = showSkippedLineItemsVisibility();
             vm.showOrderableFilter = showOrderableFilter();
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
-            vm.requisition = disabledRequisitionEdit();
+            vm.filterByOrderableParams();
             registerSkippedItemsWatcher();
         }
 
@@ -221,28 +230,6 @@
                 reload: true
                 //inherit: false,
             });
-        }
-
-        // Allows requisition line items to be editable by skipping or unskipping line item
-        function disabledRequisitionEdit(){           
-            vm.requisition = requisition;
-            // Make all requisition line item skipped at Warehouses
-            if(vm.homeFacility.type.name === 'Warehouse'){
-                vm.requisition.requisitionLineItems.forEach(function(lineItem) {
-                        lineItem.skipped = true;
-                });            
-                return vm.requisition;
-            }
-            else if(vm.homeFacility !== 'Warehouse'){
-                //Unskip all skipped requisition line items where requested quantity is greater than zero. 
-                //This will allow them to be editable
-                vm.requisition.requisitionLineItems.forEach(function(lineItem) {
-                    if(lineItem.requestedQuantity > 0 ){
-                        lineItem.skipped = "";
-                    }                        
-                });
-                return vm.requisition;
-            }
         }
 
         /**
@@ -418,44 +405,44 @@
                 };
 
             var lineItems = $filter('filter')(vm.requisition.requisitionLineItems, filterObject);
-
-            paginationService
-                .registerList(
-                    requisitionValidator.isLineItemValid, $stateParams, function() {
-                        return lineItems;
-                    }
-                )
-                .then(function(items) {
-                    vm.lineItems = lineItems;
-                    vm.items = items;
-                });
+            vm.lineItems = lineItems;
+            vm.filterByOrderableParams();
         }
 
         function showOrderableFilter() {
-    var isAuthorizedOrApproving = requisition.$isAuthorized() || 
-        requisition.$isInApproval();
+            var isAuthorizedOrApproving = requisition.$isAuthorized() ||
+                requisition.$isInApproval();
 
-    if (isAuthorizedOrApproving) {
-        return fullSupply;
-    }
+            if (isAuthorizedOrApproving) {
+                return fullSupply;
+            }
 
-    return (vm.userCanEdit || canApproveAndReject) &&
-        fullSupply;
-}
+            return (vm.userCanEdit || canApproveAndReject) &&
+                fullSupply;
+        }
 
         function showSkipControls() {
-    var isAuthorizedOrApproving = requisition.$isAuthorized() || 
-        requisition.$isInApproval();
+            if (vm.isWarehouseView) {
+                return false;
+            }
 
-    if (isAuthorizedOrApproving) {
-        return fullSupply && requisition.template.hasSkipColumn();
-    }
+            var isAuthorizedOrApproving = requisition.$isAuthorized() ||
+                requisition.$isInApproval();
 
-    return (vm.userCanEdit || canApproveAndReject) &&
-        fullSupply &&
-        !requisition.emergency &&
-        requisition.template.hasSkipColumn();
-}
+            if (isAuthorizedOrApproving) {
+                return fullSupply && requisition.template.hasSkipColumn();
+            }
+
+            return (vm.userCanEdit || canApproveAndReject) &&
+                fullSupply &&
+                !requisition.emergency &&
+                requisition.template.hasSkipColumn();
+        }
+
+        function showSkippedLineItemsVisibility() {
+            return vm.showSkipControls ||
+                (vm.isWarehouseView && fullSupply && requisition.template.hasSkipColumn());
+        }
 
         function showAddFullSupplyProductsButton() {
             return vm.userCanEdit && fullSupply && requisition.emergency;
@@ -497,6 +484,10 @@
         }
 
         function skipCurrentPageFullSupplyLineItems() {
+            if (vm.isWarehouseView) {
+                return;
+            }
+
             vm.items.forEach(function(lineItem) {
                 if (lineItem.canBeSkipped(requisition)) {
                     lineItem.skipped = true;
@@ -506,10 +497,70 @@
         }
 
         function userCanEditColumn(column) {
+            if (vm.isWarehouseView) {
+                return false;
+            }
+
             if (program.name === TB_MONTHLY_PROGRAM && vm.monthlyTBColumns.includes(column.name)) {
                 return vm.canApproveAndReject;
             }
             return vm.userCanEdit;
+        }
+
+        function isWarehouseFacility(facility) {
+            var type = facility && facility.type,
+                code = type && type.code ? type.code.toLowerCase() : undefined,
+                name = type && type.name ? type.name.toLowerCase() : undefined;
+
+            return code === 'warehouse' || name === 'warehouse';
+        }
+
+        function autoSkipBlankWarehouseLineItems() {
+            if (!vm.isWarehouseView) {
+                return;
+            }
+
+            vm.requisition.requisitionLineItems.forEach(function(lineItem) {
+                if (hasNonNegativeQuantity(lineItem)) {
+                    lineItem.skipped = false;
+                } else {
+                    lineItem.skipped = true;
+                }
+            });
+        }
+
+        function hasNonNegativeQuantity(lineItem) {
+            return isNonNegativeNumber(lineItem.requestedQuantity) ||
+                isNonNegativeNumber(lineItem.approvedQuantity);
+        }
+
+        function isNonNegativeNumber(value) {
+            var numberValue = Number(value);
+
+            return value !== null &&
+                value !== undefined &&
+                value.toString().trim() !== '' &&
+                isFinite(numberValue) &&
+                numberValue >= 0;
+        }
+
+        function getLineItemsForCurrentTab() {
+            var currentTabLineItems = $filter('filter')(vm.requisition.requisitionLineItems, {
+                $program: {
+                    fullSupply: fullSupply
+                }
+            });
+
+            if (fullSupply && $stateParams.searchKeyword) {
+                currentTabLineItems = $filter('filter')(currentTabLineItems, $stateParams.searchKeyword);
+            }
+
+            return $filter('orderBy')(currentTabLineItems, [
+                '$program.orderableCategoryDisplayOrder',
+                '$program.orderableCategoryDisplayName',
+                '$program.displayOrder',
+                'orderable.fullProductName'
+            ]);
         }
 
         function orderableHasMatchingName(orderableName, filterValue) {
@@ -518,24 +569,44 @@
 
         function getFilteredLineItems() {
             return vm.lineItems.filter(function(item) {
-                return orderableHasMatchingName(item.orderable.fullProductName, vm.orderableFilterProperties.name)
-                    && (vm.showSkippedLineItems ? true : !item.skipped);
+                return orderableHasMatchingName(item.orderable.fullProductName, vm.orderableFilterProperties.name) &&
+                    (vm.showSkippedLineItems ? true : !item.skipped);
             });
         }
 
         vm.filterByOrderableParams = function() {
             vm.filteredItems = getFilteredLineItems();
+            vm.items = getPagedLineItems(vm.filteredItems);
         };
 
         vm.skipAllFullSupplyLineItems = function() {
+            if (vm.isWarehouseView) {
+                return;
+            }
+
             vm.requisition.skipAllFullSupplyLineItems();
             vm.filterByOrderableParams();
         };
 
         vm.unskipAllFullSupplyLineItems = function() {
+            if (vm.isWarehouseView) {
+                return;
+            }
+
             vm.requisition.unskipAllFullSupplyLineItems();
             vm.filterByOrderableParams();
         };
+
+        function getPagedLineItems(lineItems) {
+            var page = parseInt($stateParams[vm.paginationId + 'Page']),
+                size = parseInt($stateParams[vm.paginationId + 'Size']);
+
+            return paginationFactory.getPage(
+                lineItems,
+                isNaN(page) ? 0 : page,
+                isNaN(size) ? PAGE_SIZE : size
+            );
+        }
     }
 
 })();

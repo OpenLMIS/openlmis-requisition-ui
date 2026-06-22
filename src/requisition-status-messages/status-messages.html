@@ -1,4 +1,4 @@
-<section>
+<section ng-if="!vm.hideCommentsForWarehouse">
     <header>
         <h3>{{'requisitionStatusMessages.comments' | message}}</h3>
         <a ng-show="vm.displayReasonForRejection()" ng-click="vm.viewRejectionReason()">{{'requisitionStatusMessages.viewRejectionReason' | message}}</a>
