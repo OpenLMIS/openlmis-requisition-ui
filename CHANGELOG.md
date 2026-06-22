@@ -1,5 +1,6 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
+* [OLMIS-8238](https://openlmis.atlassian.net/browse/OLMIS-8238): Apply facility-level packs/doses display mode.
 
 7.0.17 / 2026-06-09
 ==================
