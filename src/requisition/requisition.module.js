@@ -34,6 +34,7 @@
         'openlmis-modal',
         'openlmis-offline',
         'openlmis-pagination',
+        'openlmis-quantity-unit-toggle',
         'openlmis-rights',
         'openlmis-urls',
         'openlmis-auth',
