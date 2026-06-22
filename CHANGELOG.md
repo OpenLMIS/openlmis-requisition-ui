@@ -1,5 +1,6 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
+* [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
 
 7.0.17 / 2026-06-09
 ==================
