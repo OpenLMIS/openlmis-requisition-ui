@@ -112,6 +112,13 @@ describe('ViewTabController', function() {
         this.canAuthorize = false;
         this.canApproveAndReject = true;
         this.canUnskipRequisitionItemWhenApproving = false;
+        this.program = {};
+        this.homeFacility = {
+            type: {
+                code: 'clinic',
+                name: 'Clinic'
+            }
+        };
 
         spyOn(this.alertService, 'error');
         spyOn(this.selectProductsModalService, 'show');
@@ -149,6 +156,152 @@ describe('ViewTabController', function() {
             this.initController();
 
             expect(this.vm.paginationId).toEqual('fullSupplyList');
+        });
+
+        describe('warehouse view', function() {
+
+                beforeEach(function() {
+                    this.homeFacility = {
+                        type: {
+                            code: 'warehouse',
+                            name: 'Warehouse'
+                        }
+                    };
+                    this.fullSupply = true;
+                    this.canSubmit = true;
+                    this.canAuthorize = true;
+                    this.canApproveAndReject = true;
+                    this.requisition.template.hasSkipColumn.andReturn(true);
+                    this.requisition.requisitionLineItems[0].skipped = true;
+                    this.requisition.requisitionLineItems[1].skipped = false;
+                    this.requisition.requisitionLineItems[2].skipped = false;
+                    this.requisition.requisitionLineItems[3].skipped = false;
+                    this.requisition.requisitionLineItems[4].skipped = true;
+                });
+
+                it('should identify warehouse by facility type code', function() {
+                    this.homeFacility.type.name = 'Distribution Center';
+
+                    this.initController();
+
+                    expect(this.vm.isWarehouseView).toBe(true);
+                });
+
+                it('should identify warehouse by facility type name', function() {
+                    this.homeFacility.type.code = 'central_store';
+                    this.homeFacility.type.name = 'Warehouse';
+
+                    this.initController();
+
+                    expect(this.vm.isWarehouseView).toBe(true);
+                });
+
+                it('should not auto-skip line items with non-negative requested or approved quantities', function() {
+                    this.requisition.requisitionLineItems.forEach(function(lineItem) {
+                        lineItem.skipped = false;
+                    });
+                    this.requisition.requisitionLineItems[0].requestedQuantity = 0;
+                    this.requisition.requisitionLineItems[0].approvedQuantity = undefined;
+                    this.requisition.requisitionLineItems[1].requestedQuantity = null;
+                    this.requisition.requisitionLineItems[1].approvedQuantity = 0;
+                    this.requisition.requisitionLineItems[2].requestedQuantity = 10;
+                    this.requisition.requisitionLineItems[2].approvedQuantity = undefined;
+                    this.requisition.requisitionLineItems[3].requestedQuantity = null;
+                    this.requisition.requisitionLineItems[3].approvedQuantity = 10;
+
+                    this.initController();
+
+                    expect(this.requisition.requisitionLineItems[0].skipped).not.toBe(true);
+                    expect(this.requisition.requisitionLineItems[1].skipped).not.toBe(true);
+                    expect(this.requisition.requisitionLineItems[2].skipped).not.toBe(true);
+                    expect(this.requisition.requisitionLineItems[3].skipped).not.toBe(true);
+                });
+
+                it('should unskip line items with non-negative requested or approved quantities', function() {
+                    this.requisition.requisitionLineItems[0].skipped = true;
+                    this.requisition.requisitionLineItems[0].requestedQuantity = 780;
+                    this.requisition.requisitionLineItems[0].approvedQuantity = 780;
+
+                    this.initController();
+
+                    expect(this.requisition.requisitionLineItems[0].skipped).toBe(false);
+                    expect(this.vm.filteredItems).toContain(this.requisition.requisitionLineItems[0]);
+                    expect(this.vm.items).toContain(this.requisition.requisitionLineItems[0]);
+                });
+
+                it('should auto-skip line items without non-negative requested or approved quantities', function() {
+                    this.requisition.requisitionLineItems.forEach(function(lineItem) {
+                        lineItem.skipped = false;
+                    });
+                    this.requisition.requisitionLineItems[0].requestedQuantity = null;
+                    this.requisition.requisitionLineItems[0].approvedQuantity = null;
+                    this.requisition.requisitionLineItems[1].requestedQuantity = undefined;
+                    this.requisition.requisitionLineItems[1].approvedQuantity = undefined;
+                    this.requisition.requisitionLineItems[2].requestedQuantity = '';
+                    this.requisition.requisitionLineItems[2].approvedQuantity = '';
+                    this.requisition.requisitionLineItems[3].requestedQuantity = 'not-a-number';
+                    this.requisition.requisitionLineItems[3].approvedQuantity = 'not-a-number';
+
+                    this.initController();
+
+                    expect(this.requisition.requisitionLineItems[0].skipped).toBe(true);
+                    expect(this.requisition.requisitionLineItems[1].skipped).toBe(true);
+                    expect(this.requisition.requisitionLineItems[2].skipped).toBe(true);
+                    expect(this.requisition.requisitionLineItems[3].skipped).toBe(true);
+                });
+
+                it('should make line items read only', function() {
+                    this.initController();
+
+                    expect(this.vm.userCanEdit).toBe(false);
+                    expect(this.vm.userCanEditColumn(this.columns[0])).toBe(false);
+                    expect(this.vm.canEditApprovalColumns).toBe(false);
+                });
+
+                it('should hide edit controls', function() {
+                    this.requisition.emergency = true;
+
+                    this.initController();
+
+                    expect(this.vm.showSkipControls).toBe(false);
+                    expect(this.vm.showSkippedLineItemsVisibility).toBe(true);
+                    expect(this.vm.showAddFullSupplyProductsButton).toBe(false);
+                    expect(this.vm.showUnskipFullSupplyProductsButton).toBe(false);
+                });
+
+                it('should hide delete column', function() {
+                    this.fullSupply = false;
+                    this.requisition.requisitionLineItems[4].$deletable = true;
+
+                    this.initController();
+
+                    expect(this.vm.showDeleteColumn()).toBe(false);
+                });
+
+                it('should hide skipped line items by default', function() {
+                    this.requisition.requisitionLineItems[0].requestedQuantity = null;
+                    this.requisition.requisitionLineItems[0].approvedQuantity = null;
+
+                    this.initController();
+
+                    expect(this.vm.showSkippedLineItems).toBe(false);
+                    expect(this.vm.lineItems.length).toBe(4);
+                    expect(this.vm.filteredItems.length).toBe(3);
+                    expect(this.vm.items.length).toBe(3);
+                    expect(this.vm.filteredItems).not.toContain(this.requisition.requisitionLineItems[0]);
+                    expect(this.vm.items).not.toContain(this.requisition.requisitionLineItems[0]);
+                });
+
+                it('should show originally skipped line items when toggled on', function() {
+                    this.initController();
+
+                    this.vm.showSkippedLineItems = true;
+                    this.vm.filterByOrderableParams();
+
+                    expect(this.vm.filteredItems).toContain(this.requisition.requisitionLineItems[0]);
+                    expect(this.vm.items).toContain(this.requisition.requisitionLineItems[0]);
+                });
+
         });
 
         describe('Add (Full Supply) Products button', function() {
@@ -368,6 +521,53 @@ describe('ViewTabController', function() {
 
                 expect(this.vm.userCanEdit).toBe(false);
             });
+
+        });
+
+        describe('non-warehouse skipped line item handling', function() {
+
+                beforeEach(function() {
+                    this.fullSupply = true;
+                    this.canSubmit = true;
+                    this.requisition.requisitionLineItems[0].skipped = true;
+                    this.requisition.requisitionLineItems[0].requestedQuantity = 10;
+                });
+
+                it('should not clear skipped line items when opening the tab', function() {
+                    this.initController();
+
+                    expect(this.requisition.requisitionLineItems[0].skipped).toBe(true);
+                });
+
+                it('should not auto-skip blank line items when opening the tab', function() {
+                    this.requisition.requisitionLineItems[0].skipped = false;
+                    this.requisition.requisitionLineItems[0].requestedQuantity = null;
+                    this.requisition.requisitionLineItems[0].approvedQuantity = undefined;
+
+                    this.initController();
+
+                    expect(this.requisition.requisitionLineItems[0].skipped).not.toBe(true);
+                });
+
+                it('should allow editing if the user has rights', function() {
+                    this.initController();
+
+                    expect(this.vm.userCanEditColumn(this.columns[0])).toBe(true);
+                });
+
+                it('should filter skipped line items by the visibility toggle', function() {
+                    this.initController();
+
+                    this.vm.showSkippedLineItems = false;
+                    this.vm.filterByOrderableParams();
+
+                    expect(this.vm.filteredItems).not.toContain(this.requisition.requisitionLineItems[0]);
+
+                    this.vm.showSkippedLineItems = true;
+                    this.vm.filterByOrderableParams();
+
+                    expect(this.vm.filteredItems).toContain(this.requisition.requisitionLineItems[0]);
+                });
 
         });
 
@@ -781,18 +981,22 @@ describe('ViewTabController', function() {
     });
 
     function initController() {
+        var lineItems = this.requisition.requisitionLineItems.filter(function(lineItem) {
+            return lineItem.$program.fullSupply === this.fullSupply;
+        }, this);
+
         this.vm = this.$controller('ViewTabController', {
-            lineItems: [],
-            items: [],
-            columns: [],
+            lineItems: lineItems,
+            columns: this.columns,
             requisition: this.requisition,
             canSubmit: this.canSubmit,
             canAuthorize: this.canAuthorize,
             fullSupply: this.fullSupply,
-            program: {},
+            program: this.program,
             $scope: this.$scope,
             canApproveAndReject: this.canApproveAndReject,
-            canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
+            canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving,
+            homeFacility: this.homeFacility
         });
         this.vm.$onInit();
     }

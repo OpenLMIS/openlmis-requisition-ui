@@ -36,7 +36,8 @@
             restrict: 'E',
             replace: true,
             scope: {
-                requisition: '=requisition'
+                requisition: '=requisition',
+                homeFacility: '=?homeFacility'
             },
             templateUrl: 'requisition-status-messages/status-messages.html'
         };

@@ -43,6 +43,11 @@
          * The requisition to which status message will be added.
          */
         vm.requisition = $scope.requisition;
+        vm.hideCommentsForWarehouse = isWarehouseFacility($scope.homeFacility);
+
+        $scope.$watch('homeFacility', function(homeFacility) {
+            vm.hideCommentsForWarehouse = isWarehouseFacility(homeFacility);
+        });
 
         /**
          * @ngdoc property
@@ -156,6 +161,15 @@
          */
         function viewRejectionReason() {
             viewRejectionsReasonsModalService.show(vm.requisition);
+        }
+
+        function isWarehouseFacility(facility) {
+            var type = facility && facility.type,
+                code = type && type.code ? type.code.toLowerCase() : undefined,
+                name = type && type.name ? type.name.toLowerCase() : undefined;
+
+            return code === 'warehouse' ||
+                name === 'warehouse';
         }
     }
 })();

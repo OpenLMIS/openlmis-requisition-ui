@@ -12,6 +12,7 @@
   "requisitionView.source.fund.warning.message": "There is no source of funds",
   "requisitionView.budget.remaining.amount": "Remaining",
   "requisitionView.allLineItemsSkipped": "Cannot submit requisition with all line items skipped.",
+  "requisitionView.acknowledge.label": "Acknowledge",
   "requisitionView.approve.confirm": "Are you sure you want to approve this R&R?",
   "requisitionView.approve.failure": "Failed to approve requisition!",
   "requisitionView.approve.label": "Approve",
