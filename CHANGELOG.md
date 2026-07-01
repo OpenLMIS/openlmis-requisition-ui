@@ -1,6 +1,7 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
 * [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
+* [OLMIS-8207](https://openlmis.atlassian.net/browse/OLMIS-8207): Display saved zero values in requisition quantity fields.
 
 7.0.17 / 2026-06-09
 ==================
