@@ -1,5 +1,6 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
+* [OLMIS-8176](https://openlmis.atlassian.net/browse/OLMIS-8176): Added a read-only Pack Size column to the requisition grid and order create screens.
 
 7.0.17 / 2026-06-09
 ==================

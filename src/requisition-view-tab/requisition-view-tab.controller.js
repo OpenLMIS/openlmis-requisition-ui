@@ -57,6 +57,7 @@
         vm.userCanEditColumn = userCanEditColumn;
         vm.monthlyTBColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
         vm.getLabelForColumn = getLabelForColumn;
+        vm.isProductNameColumn = isProductNameColumn;
 
         /**
          * @ngdoc property
@@ -274,6 +275,22 @@
         function cacheRequisition() {
             requisitionCacheService.cacheRequisition(vm.requisition);
             return $q.resolve();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-view-tab.controller:ViewTabController
+         * @name isProductNameColumn
+         *
+         * @description
+         * Checks whether the given column is the product name column, after which the read-only
+         * Pack size column is rendered.
+         *
+         * @param  {RequisitionColumn} column  the column of the requisition template
+         * @return {Boolean}                   true if it is the product name column
+         */
+        function isProductNameColumn(column) {
+            return column.name === TEMPLATE_COLUMNS.PRODUCT_NAME;
         }
 
         function getLabelForColumn(column) {

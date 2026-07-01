@@ -26,6 +26,7 @@
   "requisition.orderCreate.supFacility.placeholder": "Select Supplying Facility",
   "requisition.orderCreate.table.productCode": "Product Code",
   "requisition.orderCreate.table.product": "Product",
+  "requisition.orderCreate.table.packSize": "Pack Size",
   "requisition.orderCreate.table.soh.doses": "Stock On Hand (in Doses)",
   "requisition.orderCreate.table.soh.packs": "Stock On Hand (in Packs)",
   "requisition.orderCreate.table.quantity.packs": "Quantity (in Packs)",

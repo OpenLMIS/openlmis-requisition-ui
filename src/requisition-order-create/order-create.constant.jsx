@@ -18,6 +18,10 @@ const orderTableDefaultColumns = (
       accessor: 'orderable.fullProductName',
     },
     {
+      Header: formatMessage('requisition.orderCreate.table.packSize'),
+      accessor: 'orderable.netContent',
+    },
+    {
       Header: showInDoses
         ? formatMessage('requisition.orderCreate.table.soh.doses')
         : formatMessage('requisition.orderCreate.table.soh.packs'),
@@ -91,6 +95,10 @@ const orderReadonlyTableColumns = (
   {
     Header: formatMessage('requisition.orderCreate.table.product'),
     accessor: 'orderable.fullProductName',
+  },
+  {
+    Header: formatMessage('requisition.orderCreate.table.packSize'),
+    accessor: 'orderable.netContent',
   },
   {
     Header: showInDoses
