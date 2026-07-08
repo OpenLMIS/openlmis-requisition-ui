@@ -333,6 +333,24 @@ describe('ProductGridCell', function() {
         expect(cellScope.isLongTextColumn).toBe(false);
     });
 
+    it('should cap the Remarks column to its backend column length', function() {
+        this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
+        this.scope.column.name = 'remarks';
+
+        var cellScope = this.getCompiledElement().find('td').scope();
+
+        expect(cellScope.maxLength).toBe(250);
+    });
+
+    it('should cap the Requested quantity explanation column to its backend column length', function() {
+        this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
+        this.scope.column.name = 'requestedQuantityExplanation';
+
+        var cellScope = this.getCompiledElement().find('td').scope();
+
+        expect(cellScope.maxLength).toBe(255);
+    });
+
     function getCompiledElement() {
         var rootElement = angular.element('<div><div product-grid-cell requisition="requisition" column="column"' +
             ' line-item="lineItem" user-can-edit="userCanEdit" can-approve="canApprove" program="program">' +
