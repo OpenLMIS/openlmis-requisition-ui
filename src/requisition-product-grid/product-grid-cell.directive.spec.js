@@ -318,7 +318,8 @@ describe('ProductGridCell', function() {
         this.scope.column.$type = this.COLUMN_TYPES.TEXT;
         this.scope.column.source = this.COLUMN_SOURCES.USER_INPUT;
 
-        var cellScope = this.getCompiledElement().find('td').scope();
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
 
         expect(cellScope.isLongTextColumn).toBe(true);
     });
@@ -328,7 +329,8 @@ describe('ProductGridCell', function() {
         this.scope.column.$type = this.COLUMN_TYPES.TEXT;
         this.scope.column.source = this.COLUMN_SOURCES.REFERENCE_DATA;
 
-        var cellScope = this.getCompiledElement().find('td').scope();
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
 
         expect(cellScope.isLongTextColumn).toBe(false);
     });
@@ -337,7 +339,8 @@ describe('ProductGridCell', function() {
         this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
         this.scope.column.name = 'remarks';
 
-        var cellScope = this.getCompiledElement().find('td').scope();
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
 
         expect(cellScope.maxLength).toBe(250);
     });
@@ -346,7 +349,8 @@ describe('ProductGridCell', function() {
         this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
         this.scope.column.name = 'requestedQuantityExplanation';
 
-        var cellScope = this.getCompiledElement().find('td').scope();
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
 
         expect(cellScope.maxLength).toBe(255);
     });
