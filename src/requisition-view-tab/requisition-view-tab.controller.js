@@ -277,12 +277,6 @@
         }
 
         function getLabelForColumn(column) {
-            if (column.isQuantity) {
-                var columnLabelSuffix = requisition.showInDoses()
-                    ? messageService.get('requisitionViewTab.DosesSuffix')
-                    : messageService.get('requisitionViewTab.PacksSuffix');
-                return column.label + columnLabelSuffix;
-            }
             return column.label;
         }
 
