@@ -38,11 +38,11 @@
 
     productGridCell.$inject = [
         '$templateRequest', '$compile', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'COLUMN_TYPES', 'COLUMN_SOURCES',
-        'TB_MONTHLY_PROGRAM'
+        'TB_MONTHLY_PROGRAM', 'REQUISITION_LINE_ITEM_TEXT_MAX_LENGTHS'
     ];
 
     function productGridCell($templateRequest, $compile, requisitionValidator, TEMPLATE_COLUMNS, COLUMN_TYPES,
-                             COLUMN_SOURCES, TB_MONTHLY_PROGRAM) {
+                             COLUMN_SOURCES, TB_MONTHLY_PROGRAM, REQUISITION_LINE_ITEM_TEXT_MAX_LENGTHS) {
         return {
             restrict: 'A',
             link: link,
@@ -67,6 +67,9 @@
             scope.validate = validate;
             scope.update = update;
             scope.isReadOnly = isReadOnly(requisition, column);
+            scope.isLongTextColumn = column.$type === COLUMN_TYPES.TEXT &&
+                column.source === COLUMN_SOURCES.USER_INPUT;
+            scope.maxLength = REQUISITION_LINE_ITEM_TEXT_MAX_LENGTHS[column.name];
             scope.canSkip = canSkip;
             scope.showInDoses = showInDoses;
 
