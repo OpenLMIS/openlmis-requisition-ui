@@ -59,6 +59,7 @@ const orderTableDefaultColumns = (
             showInDoses={showInDoses}
             item={rowData}
             onChangeQuantity={handleQuantityChange}
+            showPacksToOrderHint
             numeric
             key={`quantity-input-${rowData.orderable?.id}`}
           />
@@ -119,6 +120,7 @@ const orderReadonlyTableColumns = (
           item={rowData}
           onChangeQuantity={() => {}}
           disabled={true}
+          showPacksToOrderHint
           numeric
           key={`readonly-quantity-input-${rowData.orderable?.id}`}
         />

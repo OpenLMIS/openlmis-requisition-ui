@@ -52,6 +52,8 @@ export const getUpdatedOrder = (selectedOrderable, order) => {
         versionNumber: selectedOrderable.meta.versionNumber,
       },
       netContent: selectedOrderable.netContent,
+      packRoundingThreshold: selectedOrderable.packRoundingThreshold,
+      roundToZero: selectedOrderable.roundToZero,
     },
   };
 
