@@ -64,6 +64,7 @@ describe('RequisitionViewController', function() {
             this.RequisitionWatcher = $injector.get('RequisitionWatcher');
             this.accessTokenFactory = $injector.get('accessTokenFactory');
             this.requisitionService = $injector.get('requisitionService');
+            this.REQUISITION_STATUS = $injector.get('REQUISITION_STATUS');
             this.offlineService = $injector.get('offlineService');
             this.facilityService = $injector.get('facilityService');
             this.programService = $injector.get('programService');
@@ -276,6 +277,57 @@ describe('RequisitionViewController', function() {
 
             expect(this.vm.getPrintUrl())
                 .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print'));
+        });
+
+    });
+
+    describe('NDSO print', function() {
+
+        beforeEach(function() {
+            spyOn(this.$window, 'open');
+            this.initController();
+        });
+
+        it('should prepare the NDSO print URL correctly', function() {
+            expect(this.vm.getNdsoPrintUrl())
+                .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print/ndso'));
+        });
+
+        it('should open the authenticated NDSO report in a new window', function() {
+            this.accessTokenFactory.addAccessToken.andReturn('authenticated-ndso-url');
+
+            this.vm.printNdso();
+
+            expect(this.accessTokenFactory.addAccessToken)
+                .toHaveBeenCalledWith(this.requisitionUrlFactory(
+                    '/api/requisitions/requisition-id-1/print/ndso'
+                ));
+
+            expect(this.$window.open).toHaveBeenCalledWith('authenticated-ndso-url', '_blank');
+        });
+
+        it('should allow NDSO printing for approved requisitions', function() {
+            this.requisition.status = this.REQUISITION_STATUS.APPROVED;
+
+            expect(this.vm.canPrintNdso()).toBe(true);
+        });
+
+        it('should allow NDSO printing for released requisitions', function() {
+            this.requisition.status = this.REQUISITION_STATUS.RELEASED;
+
+            expect(this.vm.canPrintNdso()).toBe(true);
+        });
+
+        it('should allow NDSO printing for report-only released requisitions', function() {
+            this.requisition.status = this.REQUISITION_STATUS.RELEASED_WITHOUT_ORDER;
+
+            expect(this.vm.canPrintNdso()).toBe(true);
+        });
+
+        it('should not allow NDSO printing before approval', function() {
+            this.requisition.status = this.REQUISITION_STATUS.IN_APPROVAL;
+
+            expect(this.vm.canPrintNdso()).toBe(false);
         });
 
     });

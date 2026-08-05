@@ -34,7 +34,8 @@
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
-        'rejectionReasonModalService', '$q', 'TB_STORAGE', 'LEPROSY_STORAGE', '$rootScope', 'RequisitionViewService', 'homeFacility'
+        'rejectionReasonModalService', '$q', 'TB_STORAGE', 'LEPROSY_STORAGE', '$rootScope', 'RequisitionViewService',
+        'homeFacility', 'REQUISITION_STATUS'
     ];
        
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
@@ -44,7 +45,7 @@
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
                                        canApproveAndReject, canDelete, canSkip, canSync, program, facility, 
                                        processingPeriod, rejectionReasonModalService, $q, TB_STORAGE, LEPROSY_STORAGE, 
-                                       $rootScope, RequisitionViewService, homeFacility) {
+                                       $rootScope, RequisitionViewService, homeFacility, REQUISITION_STATUS) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
@@ -229,6 +230,7 @@
         vm.updateRequisition = updateRequisition;
         vm.syncRnr = syncRnr;
         vm.syncRnrAndPrint = syncRnrAndPrint;
+        vm.printNdso = printNdso;
         vm.submitRnr = submitRnr;
         vm.authorizeRnr = authorizeRnr;
         vm.removeRnr = removeRnr;
@@ -237,6 +239,8 @@
         vm.skipRnr = skipRnr;
         vm.isOffline = offlineService.isOffline;
         vm.getPrintUrl = getPrintUrl;
+        vm.getNdsoPrintUrl = getNdsoPrintUrl;
+        vm.canPrintNdso = canPrintNdso;
         vm.getApproveButtonLabel = getApproveButtonLabel;
         vm.isFullSupplyTabValid = isFullSupplyTabValid;
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
@@ -409,6 +413,13 @@
             } else {
                 $window.open(accessTokenFactory.addAccessToken(vm.getPrintUrl()), '_blank');
             }
+        }
+
+        /**
+         * Opens the NDSO requisition PDF in a new browser tab.
+         */
+        function printNdso() {
+            $window.open(accessTokenFactory.addAccessToken(vm.getNdsoPrintUrl()), '_blank');
         }
 
         function saveRnr() {
@@ -677,6 +688,28 @@
          */
         function getPrintUrl() {
             return requisitionUrlFactory('/api/requisitions/' + vm.requisition.id + '/print');
+        }
+
+        /**
+         * Prepares the NDSO print URL for the current requisition.
+         *
+         * @return {String} the prepared URL
+         */
+        function getNdsoPrintUrl() {
+            return requisitionUrlFactory('/api/requisitions/' + vm.requisition.id + '/print/ndso');
+        }
+
+        /**
+         * Checks whether the requisition has reached a status supported by the NDSO report.
+         *
+         * @return {Boolean} true if the NDSO report can be printed
+         */
+        function canPrintNdso() {
+            return [
+                REQUISITION_STATUS.APPROVED,
+                REQUISITION_STATUS.RELEASED,
+                REQUISITION_STATUS.RELEASED_WITHOUT_ORDER
+            ].indexOf(vm.requisition.status) !== -1;
         }
 
         /**

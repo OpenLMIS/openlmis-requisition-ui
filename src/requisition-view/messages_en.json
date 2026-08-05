@@ -34,6 +34,7 @@
   "requisitionView.operatedBy": "Operated by",
   "requisitionView.patients": "Patient(s)",
   "requisitionView.print": "Print",
+  "requisitionView.printNdso": "Print NDSO",
   "requisitionView.province": "Province",
   "requisitionView.region": "Region",
   "requisitionView.district": "District",
