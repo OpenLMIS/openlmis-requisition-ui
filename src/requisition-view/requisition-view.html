@@ -3,7 +3,10 @@
     <button ng-disabled="vm.isOffline()" ng-click="vm.syncRnrAndPrint()" class="primary">
         {{::'requisitionView.print' | message}}
     </button>
-    <button ng-disabled="vm.isOffline() || !vm.canPrintNdso()" ng-click="vm.printNdso()" class="primary">
+    <button ng-if="vm.canPrintNdso()"
+            ng-disabled="vm.isOffline()"
+            ng-click="vm.printNdso()"
+            class="primary">
         {{::'requisitionView.printNdso' | message}}
     </button>
 </header>

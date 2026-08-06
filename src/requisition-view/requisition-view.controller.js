@@ -48,8 +48,9 @@
                                        $rootScope, RequisitionViewService, homeFacility, REQUISITION_STATUS) {
 
         var vm = this,
-            watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
-        /**
+            watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions')),
+            SERVICE_POINT_FACILITY_TYPES = ['service_point', 'servicepoint', 'service point'];
+        /**  
          * @ngdoc property
          * @propertyOf requisition-view.controller:RequisitionViewController
          * @name requisition
@@ -700,17 +701,34 @@
         }
 
         /**
-         * Checks whether the requisition has reached a status supported by the NDSO report.
+         * Checks whether the NDSO report should be available for this requisition.
+         * The report only applies from APPROVED onwards, and only to facilities that
+         * order from NDSO — service points raise internal requisitions against their
+         * main store, so the NDSO form does not apply to them.
          *
          * @return {Boolean} true if the NDSO report can be printed
          */
         function canPrintNdso() {
+            return isNdsoPrintableStatus() && !isServicePointFacility(vm.facility);
+        }
+
+        function isNdsoPrintableStatus() {
             return [
                 REQUISITION_STATUS.APPROVED,
                 REQUISITION_STATUS.RELEASED,
                 REQUISITION_STATUS.RELEASED_WITHOUT_ORDER
             ].indexOf(vm.requisition.status) !== -1;
         }
+
+        function isServicePointFacility(facility) {
+            var type = facility && facility.type,
+                code = type && type.code ? type.code.toLowerCase() : undefined,
+                name = type && type.name ? type.name.toLowerCase() : undefined;
+
+            return SERVICE_POINT_FACILITY_TYPES.indexOf(code) !== -1 ||
+                SERVICE_POINT_FACILITY_TYPES.indexOf(name) !== -1;
+        }
+        
 
         /**
          * @ngdoc method

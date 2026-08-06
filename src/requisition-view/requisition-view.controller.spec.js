@@ -330,6 +330,30 @@ describe('RequisitionViewController', function() {
             expect(this.vm.canPrintNdso()).toBe(false);
         });
 
+        it('should not allow NDSO printing for service point facilities', function() {
+            this.requisition.status = this.REQUISITION_STATUS.APPROVED;
+            this.vm.facility = {
+                type: {
+                    code: 'service_point',
+                    name: 'Service Point'
+                }
+            };
+
+            expect(this.vm.canPrintNdso()).toBe(false);
+        });
+
+        it('should allow NDSO printing for non service point facilities', function() {
+            this.requisition.status = this.REQUISITION_STATUS.APPROVED;
+            this.vm.facility = {
+                type: {
+                    code: 'health_center',
+                    name: 'Health Center'
+                }
+            };
+
+            expect(this.vm.canPrintNdso()).toBe(true);
+        });
+
     });
 
     describe('Sync error handling', function() {
