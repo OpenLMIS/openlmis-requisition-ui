@@ -34,7 +34,8 @@
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
-        'rejectionReasonModalService', '$q', 'TB_STORAGE', 'LEPROSY_STORAGE', '$rootScope', 'RequisitionViewService'
+        'rejectionReasonModalService', '$q', 'TB_STORAGE', 'LEPROSY_STORAGE', '$rootScope', 'RequisitionViewService',
+        'localStorageService'
     ];
 
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
@@ -44,7 +45,8 @@
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
                                        canApproveAndReject, canDelete, canSkip, canSync,
                                        program, facility, processingPeriod, rejectionReasonModalService, $q,
-                                       TB_STORAGE, LEPROSY_STORAGE, $rootScope, RequisitionViewService) {
+                                       TB_STORAGE, LEPROSY_STORAGE, $rootScope, RequisitionViewService,
+                                       localStorageService) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
@@ -619,8 +621,16 @@
          * @return {String} the prepared URL
          */
         function getPrintUrl() {
-            return requisitionUrlFactory('/api/requisitions/' + vm.requisition.id
-                + '/print?showInDoses=' + vm.requisition.showInDoses());
+            var url = '/api/requisitions/' + vm.requisition.id
+                + '/print?showInDoses=' + vm.requisition.showInDoses();
+
+            var locale = localStorageService.get('current_locale');
+            // a locale that was stored as null comes back as the string 'null', which is truthy
+            if (locale && locale !== 'null') {
+                url += '&lang=' + locale;
+            }
+
+            return requisitionUrlFactory(url);
         }
 
         /**
