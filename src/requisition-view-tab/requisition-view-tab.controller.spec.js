@@ -818,6 +818,29 @@ describe('ViewTabController', function() {
         });
     });
 
+    describe('isProductNameColumn', function() {
+
+        it('should return true for the product name column', function() {
+            this.initController();
+
+            var column = {
+                name: 'orderable.fullProductName'
+            };
+
+            expect(this.vm.isProductNameColumn(column)).toBe(true);
+        });
+
+        it('should return false for other columns', function() {
+            this.initController();
+
+            var column = {
+                name: 'orderable.productCode'
+            };
+
+            expect(this.vm.isProductNameColumn(column)).toBe(false);
+        });
+    });
+
     function initController() {
         this.vm = this.$controller('ViewTabController', {
             lineItems: [],

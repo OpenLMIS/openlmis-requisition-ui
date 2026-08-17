@@ -2,6 +2,11 @@ import React from 'react';
 import QuantityUnitInput from '../openlmis-quantity-unit-input/openlmis-quantity-unit-input';
 import TrashButton from '../react-components/buttons/trash-button';
 
+const packSizeColumn = (formatMessage) => ({
+  Header: formatMessage('requisition.orderCreate.table.packSize'),
+  accessor: 'orderable.netContent',
+});
+
 const orderTableDefaultColumns = (
   formatMessage,
   showInDoses,
@@ -17,10 +22,7 @@ const orderTableDefaultColumns = (
       Header: formatMessage('requisition.orderCreate.table.product'),
       accessor: 'orderable.fullProductName',
     },
-    {
-      Header: formatMessage('requisition.orderCreate.table.packSize'),
-      accessor: 'orderable.netContent',
-    },
+    packSizeColumn(formatMessage),
     {
       Header: formatMessage('requisition.orderCreate.table.soh'),
       accessor: 'soh',
@@ -93,10 +95,7 @@ const orderReadonlyTableColumns = (
     Header: formatMessage('requisition.orderCreate.table.product'),
     accessor: 'orderable.fullProductName',
   },
-  {
-    Header: formatMessage('requisition.orderCreate.table.packSize'),
-    accessor: 'orderable.netContent',
-  },
+  packSizeColumn(formatMessage),
   {
     Header: formatMessage('requisition.orderCreate.table.soh'),
     accessor: 'soh',
