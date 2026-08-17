@@ -1,6 +1,16 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
 * [OLMIS-8176](https://openlmis.atlassian.net/browse/OLMIS-8176): Added a read-only Pack Size column to the requisition grid and order create screens.
+* [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
+* [OLMIS-8207](https://openlmis.atlassian.net/browse/OLMIS-8207): Display saved zero values in requisition quantity fields.
+* [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191) / [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Wrap long Remarks and Requested quantity explanation consistently in editable and read-only product grid cells, and cap them to their column length (250 / 255) with a live character counter.
+
+Improvements:
+* SonarCloud now receives JS unit-test coverage (lcov) so the quality gate reflects real coverage on new code.
+* Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
+
+Bug fixes:
+* [OLMIS-8294](https://openlmis.atlassian.net/browse/OLMIS-8294): Pass sonar.projectVersion to the SonarCloud scanner through its args instead of appending it to sonar-project.properties during the build, so a missing trailing newline can no longer glue it onto the lcov report-path line and drop coverage to 0%.
 
 7.0.17 / 2026-06-09
 ==================

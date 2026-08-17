@@ -22,9 +22,7 @@ const orderTableDefaultColumns = (
       accessor: 'orderable.netContent',
     },
     {
-      Header: showInDoses
-        ? formatMessage('requisition.orderCreate.table.soh.doses')
-        : formatMessage('requisition.orderCreate.table.soh.packs'),
+      Header: formatMessage('requisition.orderCreate.table.soh'),
       accessor: 'soh',
       Cell: (props) => {
         const sohQuantity = props.value;
@@ -41,9 +39,7 @@ const orderTableDefaultColumns = (
       },
     },
     {
-      Header: showInDoses
-        ? formatMessage('requisition.orderCreate.table.quantity.doses')
-        : formatMessage('requisition.orderCreate.table.quantity.packs'),
+      Header: formatMessage('requisition.orderCreate.table.quantity'),
       accessor: 'orderedQuantity',
       Cell: (props) => {
         const { row } = props;
@@ -67,6 +63,7 @@ const orderTableDefaultColumns = (
             showInDoses={showInDoses}
             item={rowData}
             onChangeQuantity={handleQuantityChange}
+            showPacksToOrderHint
             numeric
             key={`quantity-input-${rowData.orderable?.id}`}
           />
@@ -101,9 +98,7 @@ const orderReadonlyTableColumns = (
     accessor: 'orderable.netContent',
   },
   {
-    Header: showInDoses
-      ? formatMessage('requisition.orderCreate.table.soh.doses')
-      : formatMessage('requisition.orderCreate.table.soh.packs'),
+    Header: formatMessage('requisition.orderCreate.table.soh'),
     accessor: 'soh',
     Cell: (props) => {
       const sohQuantity = props.value;
@@ -120,9 +115,7 @@ const orderReadonlyTableColumns = (
     },
   },
   {
-    Header: showInDoses
-      ? formatMessage('requisition.orderCreate.table.quantity.doses')
-      : formatMessage('requisition.orderCreate.table.quantity.packs'),
+    Header: formatMessage('requisition.orderCreate.table.quantity'),
     accessor: 'orderedQuantity',
     Cell: (props) => {
       const { row } = props;
@@ -135,6 +128,7 @@ const orderReadonlyTableColumns = (
           item={rowData}
           onChangeQuantity={() => {}}
           disabled={true}
+          showPacksToOrderHint
           numeric
           key={`readonly-quantity-input-${rowData.orderable?.id}`}
         />

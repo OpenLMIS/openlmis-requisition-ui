@@ -182,7 +182,7 @@
                             lineItem.quantities = {};
                         }
                         lineItem.quantities[column.name] = {};
-                        if (lineItem[column.name]) {
+                        if (lineItem[column.name] !== null && lineItem[column.name] !== undefined) {
                             lineItem.quantities[column.name].quantity = lineItem[column.name];
                             lineItem.quantities[column.name] = quantityUnitCalculateService.
                                 recalculateInputQuantity(lineItem.quantities[column.name],
@@ -294,12 +294,6 @@
         }
 
         function getLabelForColumn(column) {
-            if (column.isQuantity) {
-                var columnLabelSuffix = requisition.showInDoses()
-                    ? messageService.get('requisitionViewTab.DosesSuffix')
-                    : messageService.get('requisitionViewTab.PacksSuffix');
-                return column.label + columnLabelSuffix;
-            }
             return column.label;
         }
 

@@ -313,6 +313,48 @@ describe('ProductGridCell', function() {
 
     });
 
+    it('should flag a user-input text column (Remarks / Requested quantity explanation) as long-text', function() {
+        this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
+        this.scope.column.$type = this.COLUMN_TYPES.TEXT;
+        this.scope.column.source = this.COLUMN_SOURCES.USER_INPUT;
+
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
+
+        expect(cellScope.isLongTextColumn).toBe(true);
+    });
+
+    it('should not flag a non-user-input text column (e.g. product name) as long-text', function() {
+        this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
+        this.scope.column.$type = this.COLUMN_TYPES.TEXT;
+        this.scope.column.source = this.COLUMN_SOURCES.REFERENCE_DATA;
+
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
+
+        expect(cellScope.isLongTextColumn).toBe(false);
+    });
+
+    it('should cap the Remarks column to its backend column length', function() {
+        this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
+        this.scope.column.name = 'remarks';
+
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
+
+        expect(cellScope.maxLength).toBe(250);
+    });
+
+    it('should cap the Requested quantity explanation column to its backend column length', function() {
+        this.scope.column = new this.RequisitionColumnDataBuilder().build(this.scope.requisition);
+        this.scope.column.name = 'requestedQuantityExplanation';
+
+        var element = this.getCompiledElement();
+        var cellScope = element.find('td').scope();
+
+        expect(cellScope.maxLength).toBe(255);
+    });
+
     function getCompiledElement() {
         var rootElement = angular.element('<div><div product-grid-cell requisition="requisition" column="column"' +
             ' line-item="lineItem" user-can-edit="userCanEdit" can-approve="canApprove" program="program">' +
