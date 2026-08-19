@@ -71,6 +71,7 @@ describe('RequisitionViewController', function() {
             this.rejectionReasonService = $injector.get('rejectionReasonService');
             this.rejectionReasonModalService = $injector.get('rejectionReasonModalService');
             this.rejectionReasonCategoryService = $injector.get('rejectionReasonCategoryService');
+            this.localStorageService = $injector.get('localStorageService');
         });
 
         this.program = new ProgramDataBuilder()
@@ -252,11 +253,34 @@ describe('RequisitionViewController', function() {
     describe('getPrintUrl', function() {
 
         it('getPrintUrl should prepare URL correctly', function() {
+            spyOn(this.localStorageService, 'get').andReturn(undefined);
             this.initController();
 
             expect(this.vm.getPrintUrl())
                 .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print?showInDoses='
                     + this.requisition.showInDoses()));
+        });
+
+        it('getPrintUrl should not pass a locale that was stored as null', function() {
+            spyOn(this.localStorageService, 'get').andCallFake(function(key) {
+                return key === 'current_locale' ? 'null' : undefined;
+            });
+            this.initController();
+
+            expect(this.vm.getPrintUrl())
+                .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print?showInDoses='
+                    + this.requisition.showInDoses()));
+        });
+
+        it('getPrintUrl should pass the current locale so the report is translated', function() {
+            spyOn(this.localStorageService, 'get').andCallFake(function(key) {
+                return key === 'current_locale' ? 'fr' : undefined;
+            });
+            this.initController();
+
+            expect(this.vm.getPrintUrl())
+                .toEqual(this.requisitionUrlFactory('/api/requisitions/requisition-id-1/print?showInDoses='
+                    + this.requisition.showInDoses() + '&lang=fr'));
         });
 
     });

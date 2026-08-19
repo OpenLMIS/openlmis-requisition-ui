@@ -1,6 +1,7 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
 * [OLMIS-8176](https://openlmis.atlassian.net/browse/OLMIS-8176): Added a read-only Pack Size column to the requisition grid and order create screens.
+* [ODRC-130](https://openlmis.atlassian.net/browse/ODRC-130): Send the user's current locale as `lang` when printing a requisition or an order, so the reports come back translated.
 * [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
 * [OLMIS-8207](https://openlmis.atlassian.net/browse/OLMIS-8207): Display saved zero values in requisition quantity fields.
 * [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191) / [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Wrap long Remarks and Requested quantity explanation consistently in editable and read-only product grid cells, and cap them to their column length (250 / 255) with a live character counter.

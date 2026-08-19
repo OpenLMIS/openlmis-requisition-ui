@@ -28,15 +28,22 @@
         .module('requisition-order-create')
         .service('orderCreatePrintService', service);
 
-    service.$inject = ['openlmisUrlFactory', 'accessTokenFactory', '$window'];
+    service.$inject = ['openlmisUrlFactory', 'accessTokenFactory', '$window', 'localStorageService'];
 
-    function service(openlmisUrlFactory, accessTokenFactory, $window) {
+    function service(openlmisUrlFactory, accessTokenFactory, $window, localStorageService) {
         this.print = print;
         this.reportId = '9b8726b9-0de6-46eb-b5d0-d035d400a61e';
 
         function print(orderId) {
             var reportUrl = '/api/reports/templates/angola/' +
                 this.reportId + '/pdf?order=' + orderId;
+
+            var locale = localStorageService.get('current_locale');
+            // a locale that was stored as null comes back as the string 'null', which is truthy
+            if (locale && locale !== 'null') {
+                reportUrl += '&lang=' + locale;
+            }
+
             var url = accessTokenFactory.addAccessToken(
                 openlmisUrlFactory(reportUrl)
             );
