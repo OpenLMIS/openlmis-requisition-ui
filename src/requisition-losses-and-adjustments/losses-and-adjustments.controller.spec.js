@@ -237,6 +237,25 @@ describe('LossesAndAdjustmentsController', function() {
             expect(adjustmentsModalService.open).toHaveBeenCalled();
         });
 
+        it('should format the modal total in the currently selected unit', function() {
+            $scope.requisition.showInDoses = function() {
+                return false;
+            };
+            vm.lineItem.orderable = {
+                netContent: NET_CONTENT
+            };
+            vm.lineItem.updateDependentFields = jasmine.createSpy('updateDependentFields');
+            calculationFactory.totalLossesAndAdjustments.andReturn(12);
+
+            vm.showModal();
+            $scope.$digest();
+
+            var summaries = adjustmentsModalService.open.mostRecentCall.args[7];
+
+            expect(summaries['requisitionLossesAndAdjustments.total']([]))
+                .toEqual('1 ( +2' + dosesBracket);
+        });
+
         it('should call adjustmentsModalService with proper params', function() {
             vm.showModal();
 

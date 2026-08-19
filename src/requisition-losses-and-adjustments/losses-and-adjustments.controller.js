@@ -101,22 +101,22 @@
          * Opens Total Losses and Adjustments modal.
          */
         function showModal() {
-            var showInDoses = $scope.requisition.showInDoses ? $scope.requisition.showInDoses() : true;
+            var currentAdjustments = getAdjustments(vm.lineItem.stockAdjustments);
+
             adjustmentsModalService.open(
-                getAdjustments(vm.lineItem.stockAdjustments),
-                filterAvailableReasons(reasons, getAdjustments(vm.lineItem.stockAdjustments)),
-                vm.lineItem, showInDoses,
+                currentAdjustments,
+                filterAvailableReasons(reasons, currentAdjustments),
+                vm.lineItem, isShownInDoses(),
                 'requisitionLossesAndAdjustments.lossesAndAdjustments',
                 'requisitionLossesAndAdjustments.addNewLossOrAdjustment',
                 vm.isDisabled,
                 {
                     'requisitionLossesAndAdjustments.total': function(adjustments) {
-                        return quantityUnitCalculateService.recalculateSOHQuantity(
+                        return toDisplayedQuantity(
                             calculationFactory.totalLossesAndAdjustments(
                                 getSimpleAdjustments(adjustments),
                                 $scope.requisition.stockAdjustmentReasons
-                            ), vm.lineItem.orderable.netContent,
-                            $scope.requisition.showInDoses()
+                            )
                         );
                     }
                 },
@@ -171,11 +171,19 @@
         }
 
         function getDisplayedQuantity() {
+            return toDisplayedQuantity(vm.lineItem.totalLossesAndAdjustments);
+        }
+
+        function toDisplayedQuantity(totalLossesAndAdjustments) {
             return quantityUnitCalculateService.recalculateSOHQuantity(
-                vm.lineItem.totalLossesAndAdjustments || 0,
+                totalLossesAndAdjustments || 0,
                 vm.lineItem.orderable.netContent || 0,
-                $scope.requisition.showInDoses()
+                isShownInDoses()
             );
+        }
+
+        function isShownInDoses() {
+            return $scope.requisition.showInDoses ? $scope.requisition.showInDoses() : true;
         }
     }
 
