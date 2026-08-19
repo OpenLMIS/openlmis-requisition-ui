@@ -172,7 +172,8 @@
 
         function getDisplayedQuantity() {
             return quantityUnitCalculateService.recalculateSOHQuantity(
-                vm.lineItem.totalLossesAndAdjustments, vm.lineItem.orderable.netContent,
+                vm.lineItem.totalLossesAndAdjustments || 0,
+                vm.lineItem.orderable.netContent || 0,
                 $scope.requisition.showInDoses()
             );
         }
