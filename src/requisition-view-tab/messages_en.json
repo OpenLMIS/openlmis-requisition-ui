@@ -2,6 +2,7 @@
     "requisitionViewTab.addProduct": "Add Product",
     "requisitionViewTab.category": "Category",
     "requisitionViewTab.product": "Product",
+    "requisitionViewTab.packSize": "Pack Size",
     "requisitionViewTab.fullSupplyProductsSkipped": "${skippedProductCount} full supply product(s) are skipped.",
     "requisitionViewTab.quantity": "Quantity",
     "requisitionViewTab.explanation": "Explanation",

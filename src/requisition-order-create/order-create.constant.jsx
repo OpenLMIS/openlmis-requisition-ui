@@ -1,6 +1,7 @@
 import React from 'react';
 import QuantityUnitInput from '../openlmis-quantity-unit-input/openlmis-quantity-unit-input';
 import TrashButton from '../react-components/buttons/trash-button';
+import getService from '../react-components/utils/angular-utils';
 
 const orderTableDefaultColumns = (
   formatMessage,
@@ -17,6 +18,7 @@ const orderTableDefaultColumns = (
       Header: formatMessage('requisition.orderCreate.table.product'),
       accessor: 'orderable.fullProductName',
     },
+    getService('packSizeColumnFactory').build(formatMessage),
     {
       Header: formatMessage('requisition.orderCreate.table.soh'),
       accessor: 'soh',
@@ -89,6 +91,7 @@ const orderReadonlyTableColumns = (
     Header: formatMessage('requisition.orderCreate.table.product'),
     accessor: 'orderable.fullProductName',
   },
+  getService('packSizeColumnFactory').build(formatMessage),
   {
     Header: formatMessage('requisition.orderCreate.table.soh'),
     accessor: 'soh',
