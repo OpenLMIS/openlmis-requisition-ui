@@ -15,8 +15,10 @@
 
 describe('LossesAndAdjustmentsController', function() {
 
+    var NET_CONTENT = 10;
+
     var vm, $scope, adjustmentsModalService, lineItem, lineItem2, requisitionValidatorMock, $q, calculationFactory,
-        columns, reasonOne, reasonTwo;
+        columns, reasonOne, reasonTwo, messageService, quantityUnitCalculateService, dosesBracket;
 
     beforeEach(function() {
         module('requisition-losses-and-adjustments', function($provide) {
@@ -38,6 +40,9 @@ describe('LossesAndAdjustmentsController', function() {
         inject(function($injector) {
             adjustmentsModalService = $injector.get('adjustmentsModalService');
             calculationFactory = $injector.get('calculationFactory');
+            messageService = $injector.get('messageService');
+            quantityUnitCalculateService = $injector.get('quantityUnitCalculateService');
+            dosesBracket = messageService.get('openlmisInputDosesPacks.DosesBracket');
             $q = $injector.get('$q');
 
             $scope = $injector.get('$rootScope').$new();
@@ -134,6 +139,91 @@ describe('LossesAndAdjustmentsController', function() {
         expect(vm.lineItem).toEqual($scope.lineItem);
     });
 
+    describe('getDisplayedQuantity', function() {
+
+        beforeEach(function() {
+            $scope.lineItem = {
+                id: 'line-item-id',
+                stockAdjustments: [],
+                orderable: {
+                    netContent: NET_CONTENT
+                }
+            };
+
+            vm.$onInit();
+        });
+
+        describe('in packs mode', function() {
+
+            beforeEach(function() {
+                $scope.requisition.showInDoses = function() {
+                    return false;
+                };
+            });
+
+            [undefined, null, 0].forEach(function(total) {
+                it('should display zero packs if total is ' + total, function() {
+                    vm.lineItem.totalLossesAndAdjustments = total;
+
+                    expect(vm.getDisplayedQuantity()).toEqual('0 ( +0' + dosesBracket);
+                });
+            });
+
+            it('should split a positive total into packs and remaining doses', function() {
+                vm.lineItem.totalLossesAndAdjustments = 12;
+
+                expect(vm.getDisplayedQuantity()).toEqual('1 ( +2' + dosesBracket);
+            });
+
+            it('should not clamp a negative total to zero', function() {
+                spyOn(quantityUnitCalculateService, 'recalculateSOHQuantity').andCallThrough();
+                vm.lineItem.totalLossesAndAdjustments = -25;
+
+                vm.getDisplayedQuantity();
+
+                expect(quantityUnitCalculateService.recalculateSOHQuantity)
+                    .toHaveBeenCalledWith(-25, NET_CONTENT, false);
+            });
+
+            [undefined, null, 0].forEach(function(netContent) {
+                it('should display zero if net content is ' + netContent, function() {
+                    vm.lineItem.orderable.netContent = netContent;
+                    vm.lineItem.totalLossesAndAdjustments = 12;
+
+                    expect(vm.getDisplayedQuantity()).toEqual(0);
+                });
+            });
+
+        });
+
+        describe('in doses mode', function() {
+
+            beforeEach(function() {
+                $scope.requisition.showInDoses = function() {
+                    return true;
+                };
+            });
+
+            [undefined, null].forEach(function(total) {
+                it('should display zero if total is ' + total, function() {
+                    vm.lineItem.totalLossesAndAdjustments = total;
+
+                    expect(vm.getDisplayedQuantity()).toEqual(0);
+                });
+            });
+
+            [0, 12, -25].forEach(function(total) {
+                it('should display the total unchanged if it is ' + total, function() {
+                    vm.lineItem.totalLossesAndAdjustments = total;
+
+                    expect(vm.getDisplayedQuantity()).toEqual(total);
+                });
+            });
+
+        });
+
+    });
+
     describe('showModal', function() {
         beforeEach(function() {
             spyOn(adjustmentsModalService, 'open').andReturn($q.when());
@@ -145,6 +235,25 @@ describe('LossesAndAdjustmentsController', function() {
             vm.showModal();
 
             expect(adjustmentsModalService.open).toHaveBeenCalled();
+        });
+
+        it('should format the modal total in the currently selected unit', function() {
+            $scope.requisition.showInDoses = function() {
+                return false;
+            };
+            vm.lineItem.orderable = {
+                netContent: NET_CONTENT
+            };
+            vm.lineItem.updateDependentFields = jasmine.createSpy('updateDependentFields');
+            calculationFactory.totalLossesAndAdjustments.andReturn(12);
+
+            vm.showModal();
+            $scope.$digest();
+
+            var summaries = adjustmentsModalService.open.mostRecentCall.args[7];
+
+            expect(summaries['requisitionLossesAndAdjustments.total']([]))
+                .toEqual('1 ( +2' + dosesBracket);
         });
 
         it('should call adjustmentsModalService with proper params', function() {

@@ -38,8 +38,8 @@
      *
      * This is how product grid cell will look after rendering.
      * ```
-     * <a class="losses-and-adjustments" ng-class="{'disabled': vm.isDisabled()}" ng-click="vm.showModal()">
-     *     {{vm.lineItem.totalLossesAndAdjustments || 0}}
+     * <a class="losses-and-adjustments icon-link" ng-click="vm.showModal()">
+     *     {{vm.getDisplayedQuantity() || 0}}
      * </a>
      * ```
      */

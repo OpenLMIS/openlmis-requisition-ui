@@ -11,6 +11,7 @@ Improvements:
 * Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
 
 Bug fixes:
+* [OLMIS-8183](https://openlmis.atlassian.net/browse/OLMIS-8183): Total losses and adjustments no longer shows NaN on a new requisition in packs mode; a missing value now reads as zero.
 * [OLMIS-8294](https://openlmis.atlassian.net/browse/OLMIS-8294): Pass sonar.projectVersion to the SonarCloud scanner through its args instead of appending it to sonar-project.properties during the build, so a missing trailing newline can no longer glue it onto the lcov report-path line and drop coverage to 0%.
 
 7.0.17 / 2026-06-09
