@@ -34,4 +34,19 @@
         @extend button.danger;
         @include icon-only("remove");
     }
+
+    .supplying-facility-header {
+        display: block;
+        font-weight: bold;
+        margin-bottom: $space-size;
+    }
+
+    .supplying-facility-shortfall-row {
+        background: rgba($brand-danger, 0.1);
+    }
+
+    .supplying-facility-shortfall-value {
+        color: $brand-danger;
+        font-weight: bold;
+    }
 }
