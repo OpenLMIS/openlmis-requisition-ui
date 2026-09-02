@@ -7,6 +7,7 @@
 * [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191) / [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Wrap long Remarks and Requested quantity explanation consistently in editable and read-only product grid cells, and cap them to their column length (250 / 255) with a live character counter.
 
 Improvements:
+* [OLMIS-8298](https://openlmis.atlassian.net/browse/OLMIS-8298): Specs written next to the React components (`*.spec.jsx`) now run in the karma suite and count as tests in SonarCloud, so the `.jsx` sources they exercise report real coverage.
 * SonarCloud now receives JS unit-test coverage (lcov) so the quality gate reflects real coverage on new code.
 * Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
 
