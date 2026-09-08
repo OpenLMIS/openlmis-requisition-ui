@@ -28,5 +28,12 @@
     "requisitionPatientsViewTab.numberOfChildrenOnMBRegimen.label": "Number of children on MB regimen",
     "requisitionPatientsViewTab.numberOfChildrenOnPBRegimen.label": "Number of children on PB regimen",
     "requisitionViewTab.filterPlaceholder": "Filter by product name",
-    "requisitionViewTab.skippedItemsVisibility": "Show skipped items"
+    "requisitionViewTab.skippedItemsVisibility": "Show skipped items",
+    "requisitionViewTab.supplyingFacility.columnLabel": "Supplying facility SOH",
+    "requisitionViewTab.supplyingFacility.columnTooltip": "Stock on hand at the supplying facility for this product, displayed during approval",
+    "requisitionViewTab.supplyingFacility.name": "Supplying Facility: ${facilities}",
+    "requisitionViewTab.supplyingFacility.notConfigured": "Supplying Facility: not configured",
+    "requisitionViewTab.supplyingFacility.stockUnavailable": "Supplying Facility: ${facilities} (stock unavailable)",
+    "requisitionViewTab.supplyingFacility.accessDenied": "Supplying-facility stock on hand is not visible to you because you do not have permission to view stock cards at the supplying facility. You can still approve this requisition through the standard workflow. Contact your administrator to request access.",
+    "requisitionViewTab.supplyingFacility.placeholder": "-"
 }
