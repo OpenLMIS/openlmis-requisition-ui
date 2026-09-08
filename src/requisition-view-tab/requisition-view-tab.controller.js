@@ -583,7 +583,8 @@
          * @description
          * Returns true when the approved quantity for the given line item exceeds the stock on hand at
          * the supplying facility. A missing stock on hand is treated as zero for the comparison, and the
-         * check applies only when at least one line item carries a stock on hand value.
+         * check applies only when at least one line item carries a stock on hand value. The comparison
+         * uses the raw stored values, so it stays correct regardless of the Packs/Doses display toggle.
          *
          * @param  {Object}  lineItem the requisition line item to check
          * @return {Boolean}          true when the approved quantity exceeds the supplying-facility stock
@@ -627,16 +628,21 @@
          * @name getSupplyingFacilityStockOnHand
          *
          * @description
-         * Returns the supplying-facility stock on hand to display for the given line item: the numeric value
-         * (including zero), or a placeholder when no value is available.
+         * Returns the supplying-facility stock on hand to display for the given line item. The value follows
+         * the Packs/Doses toggle the same way the built-in stock on hand column does, so both cells always
+         * show the same unit. Returns a placeholder when no value is available.
          *
          * @param  {Object} lineItem the requisition line item
-         * @return {*}               the stock on hand value or the placeholder
+         * @return {*}               the stock on hand in the selected quantity unit, or the placeholder
          */
         function getSupplyingFacilityStockOnHand(lineItem) {
-            return isPresent(lineItem.supplyingFacilityStockOnHand) ?
-                lineItem.supplyingFacilityStockOnHand :
-                vm.supplyingFacilityPlaceholder;
+            if (!isPresent(lineItem.supplyingFacilityStockOnHand)) {
+                return vm.supplyingFacilityPlaceholder;
+            }
+            return requisition.recalculateQuantity(
+                lineItem.supplyingFacilityStockOnHand,
+                lineItem.orderable.netContent
+            );
         }
 
         function buildSupplyingFacilityHeader(facilities, hasStock) {

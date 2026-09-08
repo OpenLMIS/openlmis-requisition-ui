@@ -957,6 +957,9 @@ describe('ViewTabController (supplying-facility stock)', function() {
                     return this.columnsMap[name];
                 }
             };
+            requisition.recalculateQuantity = function(quantity) {
+                return quantity;
+            };
             return requisition;
         };
     });
@@ -1234,6 +1237,27 @@ describe('ViewTabController (supplying-facility stock)', function() {
 
             expect(vm.isSupplyingFacilityShortfall(lineItem)).toBe(true);
         });
+
+        it('should compare raw values regardless of the quantity-unit toggle', function() {
+            var requisition = this.requisition({
+                supplyingFacilities: [{
+                    name: 'Central Medical Stores'
+                }]
+            });
+            requisition.recalculateQuantity = function(quantity) {
+                return quantity + ' packs';
+            };
+            var lineItem = {
+                supplyingFacilityStockOnHand: 3,
+                approvedQuantity: 8,
+                orderable: {
+                    netContent: 10
+                }
+            };
+            var vm = this.initController(requisition, [lineItem]);
+
+            expect(vm.isSupplyingFacilityShortfall(lineItem)).toBe(true);
+        });
     });
 
     describe('getSupplyingFacilityStockOnHand', function() {
@@ -1254,13 +1278,19 @@ describe('ViewTabController (supplying-facility stock)', function() {
 
         it('should return the numeric value when present', function() {
             expect(this.vm.getSupplyingFacilityStockOnHand({
-                supplyingFacilityStockOnHand: 7
+                supplyingFacilityStockOnHand: 7,
+                orderable: {
+                    netContent: 1
+                }
             })).toBe(7);
         });
 
         it('should return zero as zero', function() {
             expect(this.vm.getSupplyingFacilityStockOnHand({
-                supplyingFacilityStockOnHand: 0
+                supplyingFacilityStockOnHand: 0,
+                orderable: {
+                    netContent: 1
+                }
             })).toBe(0);
         });
 
@@ -1274,6 +1304,35 @@ describe('ViewTabController (supplying-facility stock)', function() {
             expect(this.vm.getSupplyingFacilityStockOnHand({
                 supplyingFacilityStockOnHand: null
             })).toBe('requisitionViewTab.supplyingFacility.placeholder');
+        });
+
+        it('should convert the displayed value through the requisition quantity-unit toggle', function() {
+            var requisition = this.requisition({
+                supplyingFacilities: [{
+                    name: 'Central Medical Stores'
+                }]
+            });
+            requisition.recalculateQuantity = jasmine.createSpy('recalculateQuantity')
+                .andCallFake(function(quantity) {
+                    return quantity + ' packs';
+                });
+            var vm = this.initController(requisition, [{
+                supplyingFacilityStockOnHand: 12,
+                approvedQuantity: 1,
+                orderable: {
+                    netContent: 10
+                }
+            }]);
+
+            var displayed = vm.getSupplyingFacilityStockOnHand({
+                supplyingFacilityStockOnHand: 12,
+                orderable: {
+                    netContent: 10
+                }
+            });
+
+            expect(displayed).toBe('12 packs');
+            expect(requisition.recalculateQuantity).toHaveBeenCalledWith(12, 10);
         });
     });
 });
