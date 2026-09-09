@@ -8,6 +8,7 @@
 * [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Show the supplying-facility stock on hand for each product on the requisition approval view, with a notification when the approver cannot view stock cards at the supplying facility.
 
 Improvements:
+* [OLMIS-8298](https://openlmis.atlassian.net/browse/OLMIS-8298): Specs written next to the React components (`*.spec.jsx`) now run in the karma suite and count as tests in SonarCloud, so the `.jsx` sources they exercise report real coverage.
 * SonarCloud now receives JS unit-test coverage (lcov) so the quality gate reflects real coverage on new code.
 * Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
 
