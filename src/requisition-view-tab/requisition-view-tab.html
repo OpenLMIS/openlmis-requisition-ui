@@ -28,7 +28,7 @@
 
     <quantity-unit-toggle class="is-primary" quantity-unit="vm.requisition.quantityUnit"></quantity-unit-toggle>
 
-	<p ng-if="vm.showSupplyingFacilityBanner" class="alert is-error">
+	<p ng-if="vm.showSupplyingFacilityBanner" class="alert is-error supplying-facility-banner">
 		{{'requisitionViewTab.supplyingFacility.accessDenied' | message}}
 	</p>
 	<span ng-if="vm.showSupplyingFacilitySoh" class="supplying-facility-header">{{vm.supplyingFacilityHeader}}</span>

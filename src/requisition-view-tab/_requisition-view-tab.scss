@@ -8,6 +8,7 @@
     .toolbar {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: center !important;
 
         .requisition-indicator {
@@ -35,8 +36,16 @@
         @include icon-only("remove");
     }
 
+    // The supplying-facility header and the no-access banner describe the grid, not a toolbar
+    // control, so each takes its own full-width row (left-aligned) rather than sitting next to
+    // the Packs/Doses toggle. This keeps the toggle in one place whichever of the two is shown.
+    .supplying-facility-header,
+    .supplying-facility-banner {
+        flex: 0 0 100%;
+        text-align: left;
+    }
+
     .supplying-facility-header {
-        display: block;
         font-weight: bold;
         margin-bottom: $space-size;
     }
