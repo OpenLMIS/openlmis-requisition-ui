@@ -28,7 +28,7 @@
 
     <quantity-unit-toggle class="is-primary" quantity-unit="vm.requisition.quantityUnit"></quantity-unit-toggle>
 
-	<p ng-if="vm.showSupplyingFacilityBanner" class="alert is-error">
+	<p ng-if="vm.showSupplyingFacilityBanner" class="alert is-error supplying-facility-banner">
 		{{'requisitionViewTab.supplyingFacility.accessDenied' | message}}
 	</p>
 	<span ng-if="vm.showSupplyingFacilitySoh" class="supplying-facility-header">{{vm.supplyingFacilityHeader}}</span>
@@ -37,18 +37,29 @@
 		<caption ng-if="!vm.items.length">{{vm.noProductsMessage | message}}</caption>
 		<thead>
 			<tr>
+				<th class="col-supplyingFacilityStockOnHand"
+					ng-if="vm.showSupplyingFacilitySoh && !vm.supplyingFacilityAfterColumn"
+					openlmis-popover="{{'requisitionViewTab.supplyingFacility.columnTooltip' | message}}"
+					popover-trigger-area="element">{{'requisitionViewTab.supplyingFacility.columnLabel' | message}}</th>
 				<th class="col-{{column.name}}" ng-repeat-start="column in vm.columns | orderBy : 'displayOrder'"
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
 					popover-trigger-area="element">{{vm.getLabelForColumn(column)}}</th>
-				<th class="col-packSize" ng-if="vm.isProductNameColumn(column)" ng-repeat-end>{{'requisitionViewTab.packSize' | message}}</th>
-				<th class="col-supplyingFacilityStockOnHand" ng-if="vm.showSupplyingFacilitySoh"
+				<th class="col-packSize" ng-if="vm.isProductNameColumn(column)">{{'requisitionViewTab.packSize' | message}}</th>
+				<th class="col-supplyingFacilityStockOnHand"
+					ng-if="vm.showSupplyingFacilitySoh && vm.isColumnBeforeSupplyingFacility(column)"
 					openlmis-popover="{{'requisitionViewTab.supplyingFacility.columnTooltip' | message}}"
-					popover-trigger-area="element">{{'requisitionViewTab.supplyingFacility.columnLabel' | message}}</th>
+					popover-trigger-area="element"
+					ng-repeat-end>{{'requisitionViewTab.supplyingFacility.columnLabel' | message}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
 			</tr>
 		</thead>
 		<tbody ng-repeat="(category, lineItems) in vm.items | groupBy:'$program.orderableCategoryDisplayName'" tbody-title="{{category}}">
 			<tr ng-repeat="lineItem in lineItems | orderBy : '$program.displayOrder'" ng-class="{'skipped-line-item' : lineItem.skipped, 'supplying-facility-shortfall-row': vm.showSupplyingFacilitySoh && vm.isSupplyingFacilityShortfall(lineItem)}">
+				<td ng-if="vm.showSupplyingFacilitySoh && !vm.supplyingFacilityAfterColumn"
+					class="col-supplyingFacilityStockOnHand"
+					ng-class="{'supplying-facility-shortfall-value': vm.isSupplyingFacilityShortfall(lineItem)}">
+					{{vm.getSupplyingFacilityStockOnHand(lineItem)}}
+				</td>
 				<td ng-repeat-start="column in vm.columns | orderBy : 'displayOrder'"
 					product-grid-cell
 					requisition="vm.requisition"
@@ -58,10 +69,11 @@
 					program="vm.program"
 					can-approve="vm.canApproveAndReject">
 				</td>
-				<td class="col-packSize" ng-if="vm.isProductNameColumn(column)" ng-repeat-end>{{lineItem.orderable.netContent}}</td>
-				<td ng-if="vm.showSupplyingFacilitySoh"
+				<td class="col-packSize" ng-if="vm.isProductNameColumn(column)">{{lineItem.orderable.netContent}}</td>
+				<td ng-if="vm.showSupplyingFacilitySoh && vm.isColumnBeforeSupplyingFacility(column)"
 					class="col-supplyingFacilityStockOnHand"
-					ng-class="{'supplying-facility-shortfall-value': vm.isSupplyingFacilityShortfall(lineItem)}">
+					ng-class="{'supplying-facility-shortfall-value': vm.isSupplyingFacilityShortfall(lineItem)}"
+					ng-repeat-end>
 					{{vm.getSupplyingFacilityStockOnHand(lineItem)}}
 				</td>
 				<td ng-if="vm.showDeleteColumn()">

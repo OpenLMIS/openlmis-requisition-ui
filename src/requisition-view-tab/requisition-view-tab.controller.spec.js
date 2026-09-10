@@ -1149,6 +1149,70 @@ describe('ViewTabController (supplying-facility stock)', function() {
         });
     });
 
+    describe('supplying-facility column position', function() {
+
+        var makeColumn = function(name, displayOrder) {
+            return {
+                name: name,
+                displayOrder: displayOrder,
+                isQuantityColumn: function() {
+                    return false;
+                }
+            };
+        };
+
+        it('places the supplying-facility cell after the last column below its displayOrder', function() {
+            var precedingColumn = {
+                name: 'b'
+            };
+            var otherColumn = {
+                name: 'a'
+            };
+            var vm = this.initController(
+                this.requisition({
+                    supplyingFacilities: [{
+                        name: 'Central Medical Stores'
+                    }]
+                }),
+                [{
+                    supplyingFacilityStockOnHand: 10,
+                    updateFieldValue: function() {}
+                }],
+                [
+                    makeColumn('a', 1),
+                    makeColumn('b', 3),
+                    makeColumn('supplyingFacilityStockOnHand', 4),
+                    makeColumn('c', 5)
+                ]
+            );
+
+            expect(vm.supplyingFacilityAfterColumn).toBe('b');
+            expect(vm.isColumnBeforeSupplyingFacility(precedingColumn)).toBe(true);
+            expect(vm.isColumnBeforeSupplyingFacility(otherColumn)).toBe(false);
+        });
+
+        it('renders the supplying-facility cell first when its displayOrder precedes all others', function() {
+            var vm = this.initController(
+                this.requisition({
+                    supplyingFacilities: [{
+                        name: 'Central Medical Stores'
+                    }]
+                }),
+                [{
+                    supplyingFacilityStockOnHand: 10,
+                    updateFieldValue: function() {}
+                }],
+                [
+                    makeColumn('supplyingFacilityStockOnHand', 1),
+                    makeColumn('a', 2),
+                    makeColumn('b', 3)
+                ]
+            );
+
+            expect(vm.supplyingFacilityAfterColumn).toBe(null);
+        });
+    });
+
     describe('isSupplyingFacilityShortfall', function() {
 
         beforeEach(function() {
