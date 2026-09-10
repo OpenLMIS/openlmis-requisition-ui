@@ -5,8 +5,7 @@
 * [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
 * [OLMIS-8207](https://openlmis.atlassian.net/browse/OLMIS-8207): Display saved zero values in requisition quantity fields.
 * [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191) / [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Wrap long Remarks and Requested quantity explanation consistently in editable and read-only product grid cells, and cap them to their column length (250 / 255) with a live character counter.
-* [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Show the supplying-facility stock on hand for each product on the requisition approval view, with a notification when the approver cannot view stock cards at the supplying facility.
-* [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Render the supplying-facility stock on hand column in its configured template position instead of after the grid, and shorten the no-access notification.
+* [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Show the supplying-facility stock on hand for each product on the requisition approval view, in the column's configured template position, with a notification when the approver cannot view stock cards at the supplying facility.
 
 Improvements:
 * SonarCloud now receives JS unit-test coverage (lcov) so the quality gate reflects real coverage on new code.
