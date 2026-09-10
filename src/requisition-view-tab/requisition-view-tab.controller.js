@@ -63,6 +63,7 @@
         vm.monthlyTBColumns = TEMPLATE_COLUMNS.getTbMonthlyColumns();
         vm.getLabelForColumn = getLabelForColumn;
         vm.isProductNameColumn = isProductNameColumn;
+        vm.isColumnBeforeSupplyingFacility = isColumnBeforeSupplyingFacility;
 
         /**
          * @ngdoc property
@@ -268,6 +269,7 @@
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
             computeSupplyingFacilityStock();
+            computeSupplyingFacilityColumnPosition(vm.columns);
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
             vm.fullSupply = fullSupply;
             registerSkippedItemsWatcher();
@@ -620,6 +622,37 @@
         function isSupplyingFacilityColumnEnabled() {
             var column = requisition.template.getColumn(SUPPLYING_FACILITY_STOCK_ON_HAND);
             return !!(column && column.isDisplayed);
+        }
+
+        // The supplying-facility stock on hand is rendered by a dedicated cell (not the generic
+        // product-grid-cell), so to honour the template's column order we remember the displayed
+        // column whose displayOrder is the highest one still below the supplying-facility column's
+        // own, and render the dedicated cell right after it. A null value means it comes first.
+        function computeSupplyingFacilityColumnPosition(orderedColumns) {
+            vm.supplyingFacilityAfterColumn = null;
+
+            var supplyingFacilityColumn;
+            columns.forEach(function(column) {
+                if (column.name === SUPPLYING_FACILITY_STOCK_ON_HAND) {
+                    supplyingFacilityColumn = column;
+                }
+            });
+            if (!supplyingFacilityColumn) {
+                return;
+            }
+
+            var precedingColumn;
+            orderedColumns.forEach(function(column) {
+                if (column.displayOrder < supplyingFacilityColumn.displayOrder &&
+                    (!precedingColumn || column.displayOrder > precedingColumn.displayOrder)) {
+                    precedingColumn = column;
+                }
+            });
+            vm.supplyingFacilityAfterColumn = precedingColumn ? precedingColumn.name : null;
+        }
+
+        function isColumnBeforeSupplyingFacility(column) {
+            return vm.supplyingFacilityAfterColumn === column.name;
         }
 
         /**
