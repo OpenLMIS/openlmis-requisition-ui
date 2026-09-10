@@ -44,11 +44,12 @@
 				<th class="col-{{column.name}}" ng-repeat-start="column in vm.columns | orderBy : 'displayOrder'"
 					ng-class="{'col-sticky': !column.$canChangeOrder}" openlmis-popover="{{vm.getDescriptionForColumn(column)}}"
 					popover-trigger-area="element">{{vm.getLabelForColumn(column)}}</th>
+				<th class="col-packSize" ng-if="vm.isProductNameColumn(column)">{{'requisitionViewTab.packSize' | message}}</th>
 				<th class="col-supplyingFacilityStockOnHand"
 					ng-if="vm.showSupplyingFacilitySoh && vm.isColumnBeforeSupplyingFacility(column)"
 					openlmis-popover="{{'requisitionViewTab.supplyingFacility.columnTooltip' | message}}"
-					popover-trigger-area="element">{{'requisitionViewTab.supplyingFacility.columnLabel' | message}}</th>
-				<th class="col-packSize" ng-if="vm.isProductNameColumn(column)" ng-repeat-end>{{'requisitionViewTab.packSize' | message}}</th>
+					popover-trigger-area="element"
+					ng-repeat-end>{{'requisitionViewTab.supplyingFacility.columnLabel' | message}}</th>
 				<th class="col-sticky sticky-right" ng-if="vm.showDeleteColumn()"></th>
 			</tr>
 		</thead>
@@ -68,12 +69,13 @@
 					program="vm.program"
 					can-approve="vm.canApproveAndReject">
 				</td>
+				<td class="col-packSize" ng-if="vm.isProductNameColumn(column)">{{lineItem.orderable.netContent}}</td>
 				<td ng-if="vm.showSupplyingFacilitySoh && vm.isColumnBeforeSupplyingFacility(column)"
 					class="col-supplyingFacilityStockOnHand"
-					ng-class="{'supplying-facility-shortfall-value': vm.isSupplyingFacilityShortfall(lineItem)}">
+					ng-class="{'supplying-facility-shortfall-value': vm.isSupplyingFacilityShortfall(lineItem)}"
+					ng-repeat-end>
 					{{vm.getSupplyingFacilityStockOnHand(lineItem)}}
 				</td>
-				<td class="col-packSize" ng-if="vm.isProductNameColumn(column)" ng-repeat-end>{{lineItem.orderable.netContent}}</td>
 				<td ng-if="vm.showDeleteColumn()">
 					<button class="hide-line-item"
 						ng-click="vm.deleteLineItem(lineItem)"

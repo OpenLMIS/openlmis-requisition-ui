@@ -34,6 +34,6 @@
     "requisitionViewTab.supplyingFacility.name": "Supplying Facility: ${facilities}",
     "requisitionViewTab.supplyingFacility.notConfigured": "Supplying Facility: not configured",
     "requisitionViewTab.supplyingFacility.stockUnavailable": "Supplying Facility: ${facilities} (stock unavailable)",
-    "requisitionViewTab.supplyingFacility.accessDenied": "Stock on hand at the supplying facility is not shown because you don't have access to its stock cards. You can still approve this requisition. To see stock levels, contact your administrator.",
+    "requisitionViewTab.supplyingFacility.accessDenied": "Stock on hand at the supplying facility is not shown because you do not have access to its stock cards. You can still approve this requisition. To see stock levels, contact your administrator.",
     "requisitionViewTab.supplyingFacility.placeholder": "-"
 }
