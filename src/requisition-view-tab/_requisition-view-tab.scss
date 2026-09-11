@@ -11,7 +11,26 @@
         flex-wrap: wrap;
         align-items: center !important;
 
+        // Keep the Packs/Doses toggle in one consistent spot (right-aligned,
+        // grouped with the saving-indicator) whether or not the requisition is
+        // editable. The saving-indicator's auto left margin absorbs the row's
+        // free space and carries the indicator plus the toggle that follows it
+        // to the right; everything ahead stays left-packed via flex-start.
         .requisition-indicator {
+            margin-left: auto;
+        }
+
+        // Small gap so the toggle reads as grouped with the indicator, not fused.
+        .requisition-indicator + quantity-unit-toggle {
+            margin-left: $space-size;
+        }
+
+        // Read-only requisitions ($isEditable === false): ng-show hides the
+        // indicator (display:none via .ng-hide), so the toggle itself takes the
+        // auto margin to hold the same right-aligned slot. Higher specificity
+        // than the gap rule above, so exactly one element ever owns
+        // margin-left:auto and the pair never splits with a mid-row gap.
+        .requisition-indicator.ng-hide + quantity-unit-toggle {
             margin-left: auto;
         }
     }
