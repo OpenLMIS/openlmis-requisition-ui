@@ -60,6 +60,7 @@
             }
 
             ngModelCtrl.$viewChangeListeners.push(validateRequisition);
+            element.on('blur', validateRequisition);
 
             wrapper.on('openlmisInvalid.show', updateMessage);
             wrapper.on('openlmisInvalid.hide', updateMessage);
