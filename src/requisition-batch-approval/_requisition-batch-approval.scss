@@ -29,15 +29,14 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        min-height: 0px;
 
         margin:0px 20px;
 
-        > * {
-            flex: 0 0 auto;
-        }
-
-        > .openlmis-table-pane {
+        > .openlmis-table-container {
             flex-grow: 1;
+            min-height: 0px;
+            width: 100%;
         }
     }
 

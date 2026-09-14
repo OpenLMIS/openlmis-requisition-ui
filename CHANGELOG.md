@@ -13,6 +13,7 @@ Improvements:
 * Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
 
 Bug fixes:
+* [OLMIS-8193](https://openlmis.atlassian.net/browse/OLMIS-8193): The batch approval table scrolls horizontally again on small screens, with the product and total columns staying frozen.
 * [OLMIS-8183](https://openlmis.atlassian.net/browse/OLMIS-8183): Total losses and adjustments no longer shows NaN on a new requisition in packs mode; a missing value now reads as zero.
 * [OLMIS-8294](https://openlmis.atlassian.net/browse/OLMIS-8294): Pass sonar.projectVersion to the SonarCloud scanner through its args instead of appending it to sonar-project.properties during the build, so a missing trailing newline can no longer glue it onto the lcov report-path line and drop coverage to 0%.
 * [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Keep the Packs/Doses quantity-unit toggle in a consistent right-aligned position on the requisition view, so it no longer shifts to the left of the toolbar on read-only requisitions where the saving indicator is hidden.
