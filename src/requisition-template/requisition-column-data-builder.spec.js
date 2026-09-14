@@ -50,6 +50,8 @@
         RequisitionColumnDataBuilder.prototype.buildTotalCostColumn = buildTotalCostColumn;
         RequisitionColumnDataBuilder.prototype.buildApprovedQuantityColumn = buildApprovedQuantityColumn;
         RequisitionColumnDataBuilder.prototype.buildRemarksColumn = buildRemarksColumn;
+        RequisitionColumnDataBuilder.prototype.buildNumberOfPatientsOnTreatmentNextMonthColumn =
+            buildNumberOfPatientsOnTreatmentNextMonthColumn;
         RequisitionColumnDataBuilder.prototype.asStockOnHand = asStockOnHand;
         RequisitionColumnDataBuilder.prototype.asUserInput = asUserInput;
 
@@ -470,6 +472,26 @@
             builder.isDisplayed = true;
             builder.label = 'Remarks';
             builder.name = 'remarks';
+            builder.option = null;
+            builder.source = 'USER_INPUT';
+            builder.tag = null;
+
+            return builder.build(requisition);
+        }
+
+        function buildNumberOfPatientsOnTreatmentNextMonthColumn(requisition) {
+            var builder = this;
+
+            builder.columnDefinition = {
+                canChangeOrder: true,
+                columnType: 'NUMERIC'
+            };
+            builder.definition = 'The number of patients who will be treated in the next month.';
+            builder.displayOrder = 7;
+            builder.indicator = 'TC';
+            builder.isDisplayed = true;
+            builder.label = 'No of Patients on Treatment next month (C)';
+            builder.name = 'numberOfPatientsOnTreatmentNextMonth';
             builder.option = null;
             builder.source = 'USER_INPUT';
             builder.tag = null;
