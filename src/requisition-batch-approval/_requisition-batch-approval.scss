@@ -27,15 +27,21 @@
 
     #batch-approval-form {
         display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-height: 0px;
 
         margin:0px 20px;
 
-        > .openlmis-table-pane {
+        > .openlmis-table-container {
             flex-grow: 1;
+            min-height: 0px;
+            width: 100%;
         }
     }
 
     .openlmis-toolbar {
+        position: static;
         margin: 0px;
         padding: $space-size/2 $space-size;
     }
