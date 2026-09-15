@@ -1,24 +1,24 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
+Improvements:
 * [OLMIS-8176](https://openlmis.atlassian.net/browse/OLMIS-8176): Added a read-only Pack Size column to the requisition grid and order create screens.
 * [ODRC-130](https://openlmis.atlassian.net/browse/ODRC-130): Send the user's current locale as `lang` when printing a requisition or an order, so the reports come back translated.
 * [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
 * [OLMIS-8207](https://openlmis.atlassian.net/browse/OLMIS-8207): Display saved zero values in requisition quantity fields.
 * [OLMIS-8191](https://openlmis.atlassian.net/browse/OLMIS-8191) / [OLMIS-8192](https://openlmis.atlassian.net/browse/OLMIS-8192): Wrap long Remarks and Requested quantity explanation consistently in editable and read-only product grid cells, and cap them to their column length (250 / 255) with a live character counter.
 * [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Show the supplying-facility stock on hand for each product on the requisition approval view, in the column's configured template position, with a notification when the approver cannot view stock cards at the supplying facility.
-
-Improvements:
+* [OLMIS-8180](https://openlmis.atlassian.net/browse/OLMIS-8180): The order summary modal shows the quantity in the selected unit.
+* [OLMIS-8244](https://openlmis.atlassian.net/browse/OLMIS-8244): Order create shows the packs-to-order hint.
 * [OLMIS-8298](https://openlmis.atlassian.net/browse/OLMIS-8298): Specs written next to the React components (`*.spec.jsx`) now run in the karma suite and count as tests in SonarCloud, so the `.jsx` sources they exercise report real coverage.
 * SonarCloud now receives JS unit-test coverage (lcov) so the quality gate reflects real coverage on new code.
 * Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
 
 Bug fixes:
 * [OLMIS-8193](https://openlmis.atlassian.net/browse/OLMIS-8193): The batch approval table scrolls horizontally again on small screens, with the product and total columns staying frozen.
+* [OLMIS-8182](https://openlmis.atlassian.net/browse/OLMIS-8182): Restored the total column calculation.
 * [OLMIS-8183](https://openlmis.atlassian.net/browse/OLMIS-8183): Total losses and adjustments no longer shows NaN on a new requisition in packs mode; a missing value now reads as zero.
 * [OLMIS-8294](https://openlmis.atlassian.net/browse/OLMIS-8294): Pass sonar.projectVersion to the SonarCloud scanner through its args instead of appending it to sonar-project.properties during the build, so a missing trailing newline can no longer glue it onto the lcov report-path line and drop coverage to 0%.
 * [OPSD-116](https://openlmis.atlassian.net/browse/OPSD-116): Keep the Packs/Doses quantity-unit toggle in a consistent right-aligned position on the requisition view, so it no longer shifts to the left of the toolbar on read-only requisitions where the saving indicator is hidden.
-
-Bug fixes:
 * [OLMIS-8177](https://openlmis.atlassian.net/browse/OLMIS-8177): Removed a dead validation class binding from the requisition product grid packs/doses quantity input.
 
 7.0.17 / 2026-06-09
