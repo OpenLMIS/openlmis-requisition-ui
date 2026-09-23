@@ -66,7 +66,8 @@
                 <button class="btn btn-default" ng-click="vm.cancel()">
                     {{'requisitionView.rejection.reason.cancel' | message}}
                 </button>
-                <button class="btn btn-primary" form="rejectionsForm" type="submit">
+                <button class="btn btn-primary" form="rejectionsForm" type="submit"
+                        ng-disabled="vm.selectedRejectionReasons === null || vm.selectedRejectionReasons.length === 0">
                     {{'requisitionView.rejection.reason.update' | message}}
                 </button>
             </div>

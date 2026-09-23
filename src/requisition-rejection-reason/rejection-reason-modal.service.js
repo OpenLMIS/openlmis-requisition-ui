@@ -28,9 +28,9 @@
         .module('requisition-rejection-reason')
         .service('rejectionReasonModalService', rejectionReasonModalService);
 
-    rejectionReasonModalService.$inject = ['openlmisModalService', '$filter'];
+    rejectionReasonModalService.$inject = ['openlmisModalService', '$filter', '$q'];
 
-    function rejectionReasonModalService(openlmisModalService, $filter) {
+    function rejectionReasonModalService(openlmisModalService, $filter, $q) {
         this.open = open;
 
         /**
@@ -72,6 +72,8 @@
                         this.selectedRejectionReasons.push(this.reason);
                         this.reason = {};
                         this.category = {};
+
+                        return $q.when();
                     }
 
                     function removeRejectionReason(reason) {
@@ -86,6 +88,9 @@
                     }
 
                     function save() {
+                        if (!this.selectedRejectionReasons || !this.selectedRejectionReasons.length) {
+                            return;
+                        }
                         modalDeferred.resolve(this.selectedRejectionReasons);
                     }
                 },
