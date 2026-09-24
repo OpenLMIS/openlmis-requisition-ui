@@ -37,7 +37,7 @@
                     <div class="openlmis-table-container">
                         <table>
                             <caption class="rejection-warning alert is-info"
-                                     ng-show="vm.selectedRejectionReasons === null || vm.selectedRejectionReasons.length === 0">
+                                     ng-show="!vm.hasRejectionReasons()">
                                 {{'requisitionView.rejection.reason.warning.message' | message}}
                             </caption>
                             <thead>
@@ -66,7 +66,8 @@
                 <button class="btn btn-default" ng-click="vm.cancel()">
                     {{'requisitionView.rejection.reason.cancel' | message}}
                 </button>
-                <button class="btn btn-primary" form="rejectionsForm" type="submit">
+                <button class="btn btn-primary" form="rejectionsForm" type="submit"
+                        ng-disabled="!vm.hasRejectionReasons()">
                     {{'requisitionView.rejection.reason.update' | message}}
                 </button>
             </div>
