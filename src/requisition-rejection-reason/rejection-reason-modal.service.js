@@ -60,6 +60,7 @@
                     this.cancel = cancel;
                     this.save = save;
                     this.filterByCategory = filterByCategory;
+                    this.hasRejectionReasons = hasRejectionReasons;
 
                     function filterByCategory(selectedCategory) {
                         this.filteredRejectionReasons = $filter('filter')(this.rejectionReasons.content,
@@ -83,12 +84,16 @@
                         }
                     }
 
+                    function hasRejectionReasons() {
+                        return !!this.selectedRejectionReasons && this.selectedRejectionReasons.length > 0;
+                    }
+
                     function cancel() {
                         modalDeferred.reject();
                     }
 
                     function save() {
-                        if (!this.selectedRejectionReasons || !this.selectedRejectionReasons.length) {
+                        if (!this.hasRejectionReasons()) {
                             return;
                         }
                         modalDeferred.resolve(this.selectedRejectionReasons);

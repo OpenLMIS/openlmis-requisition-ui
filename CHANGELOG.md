@@ -1,7 +1,6 @@
 7.0.18-SNAPSHOT (WIP)
 ==================
 Improvements:
-* [OLMIS-8349](https://openlmis.atlassian.net/browse/OLMIS-8349): Requisition reason is not required results in reject error
 * [OLMIS-8176](https://openlmis.atlassian.net/browse/OLMIS-8176): Added a read-only Pack Size column to the requisition grid and order create screens.
 * [ODRC-130](https://openlmis.atlassian.net/browse/ODRC-130): Send the user's current locale as `lang` when printing a requisition or an order, so the reports come back translated.
 * [OLMIS-8179](https://openlmis.atlassian.net/browse/OLMIS-8179): Remove unit suffix from requisition column headers.
@@ -15,6 +14,7 @@ Improvements:
 * Feed sonar.projectVersion from project.properties so SonarCloud's New Code baseline tracks releases.
 
 Bug fixes:
+* [OLMIS-8349](https://openlmis.atlassian.net/browse/OLMIS-8349): Requisition reason is not required results in reject error
 * [OLMIS-8193](https://openlmis.atlassian.net/browse/OLMIS-8193): The batch approval table scrolls horizontally again on small screens, with the product and total columns staying frozen.
 * [OLMIS-8182](https://openlmis.atlassian.net/browse/OLMIS-8182): Restored the total column calculation.
 * [OLMIS-8183](https://openlmis.atlassian.net/browse/OLMIS-8183): Total losses and adjustments no longer shows NaN on a new requisition in packs mode; a missing value now reads as zero.
