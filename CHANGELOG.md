@@ -16,6 +16,7 @@ Improvements:
 Bug fixes:
 * [OLMIS-8349](https://openlmis.atlassian.net/browse/OLMIS-8349): Requisition reason is not required results in reject error
 * [OLMIS-8193](https://openlmis.atlassian.net/browse/OLMIS-8193): The batch approval table scrolls horizontally again on small screens, with the product and total columns staying frozen.
+* [OLMIS-8367](https://openlmis.atlassian.net/browse/OLMIS-8367): The batch approval table sits directly under the saving indicator again instead of being pushed down by it.
 * [OLMIS-8182](https://openlmis.atlassian.net/browse/OLMIS-8182): Restored the total column calculation.
 * [OLMIS-8183](https://openlmis.atlassian.net/browse/OLMIS-8183): Total losses and adjustments no longer shows NaN on a new requisition in packs mode; a missing value now reads as zero.
 * [OLMIS-8294](https://openlmis.atlassian.net/browse/OLMIS-8294): Pass sonar.projectVersion to the SonarCloud scanner through its args instead of appending it to sonar-project.properties during the build, so a missing trailing newline can no longer glue it onto the lcov report-path line and drop coverage to 0%.
