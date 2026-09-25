@@ -26,15 +26,15 @@ services:
     volumes:
       - '/openlmis-auth-ui'
   fulfillment-ui:
-    image: openlmis/fulfillment-ui:6.1.10-SNAPSHOT
+    image: openlmis/fulfillment-ui:6.2.0-RC2
     volumes:
       - '/openlmis-fulfillment-ui'
   referencedata-ui:
-    image: openlmis/referencedata-ui:5.7.0-RC1
+    image: openlmis/referencedata-ui:5.7.0-RC2
     volumes:
       - '/openlmis-referencedata-ui'
   stockmanagement-ui:
-    image: openlmis/stockmanagement-ui:2.2.0-SNAPSHOT
+    image: openlmis/stockmanagement-ui:2.2.0-RC2
     volumes:
      - '/openlmis-stockmanagement-ui'
   ui-components:
