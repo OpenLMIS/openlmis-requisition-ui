@@ -260,6 +260,101 @@ describe('ProductGridCell', function() {
         expect(cell.text()).toEqual('readOnlyFieldValue');
     });
 
+    // OLMIS-8123: No of Patients on Treatment next month (C) must not be editable on the
+    // standard edit path (facility/initiate/submit) and stays editable only on the approval
+    // stage for district-level users (patients tab templates), like Approved Quantity/Remarks.
+    describe('No of Patients on Treatment next month (C) column (OLMIS-8123)', function() {
+
+        beforeEach(function() {
+            this.buildCColumn = function() {
+                return new this.RequisitionColumnDataBuilder()
+                    .buildNumberOfPatientsOnTreatmentNextMonthColumn(this.scope.requisition);
+            };
+        });
+
+        it('should be read only for an editing user who is not an approver', function() {
+            this.scope.userCanEdit = true;
+            this.scope.canApprove = false;
+            this.scope.column = this.buildCColumn();
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text()).toEqual('readOnlyFieldValue');
+            expect(this.getCompiledElement().find('input').length).toEqual(0);
+        });
+
+        it('should be read only even in a TB Monthly program for a non-approver', function() {
+            this.scope.userCanEdit = true;
+            this.scope.canApprove = false;
+            this.scope.program.name = 'TB Monthly';
+            this.scope.column = this.buildCColumn();
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .toEqual('readOnlyFieldValue');
+        });
+
+        it('should be editable for an approver when patients tab is enabled', function() {
+            this.scope.canApprove = true;
+            this.scope.requisition.template.patientsTabEnabled = true;
+            this.scope.column = this.buildCColumn();
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
+        });
+
+        it('should stay read only for an approver when patients tab is disabled', function() {
+            this.scope.canApprove = true;
+            this.scope.requisition.template.patientsTabEnabled = false;
+            this.scope.column = this.buildCColumn();
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .toEqual('readOnlyFieldValue');
+        });
+    });
+
+    // OLMIS-8123 regression guard: the sibling columns sharing the approval-stage rule must
+    // keep their previous behavior and not be affected by the column C change.
+    describe('approval-stage sibling columns are unchanged (OLMIS-8123 regression)', function() {
+
+        it('should keep Approved Quantity editable for an approver (non patients tab)', function() {
+            this.scope.canApprove = true;
+            this.scope.requisition.template.patientsTabEnabled = false;
+            this.scope.column = new this.RequisitionColumnDataBuilder()
+                .buildApprovedQuantityColumn(this.scope.requisition);
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
+        });
+
+        it('should keep Remarks editable for an approver in both template kinds', function() {
+            this.scope.canApprove = true;
+
+            this.scope.requisition.template.patientsTabEnabled = false;
+            this.scope.column = new this.RequisitionColumnDataBuilder().buildRemarksColumn(this.scope.requisition);
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
+
+            this.scope.requisition.template.patientsTabEnabled = true;
+            this.scope.column = new this.RequisitionColumnDataBuilder().buildRemarksColumn(this.scope.requisition);
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
+        });
+
+        it('should keep Total Received Quantity editable in a TB Monthly program', function() {
+            this.scope.userCanEdit = true;
+            this.scope.program.name = 'TB Monthly';
+            this.scope.column = new this.RequisitionColumnDataBuilder()
+                .asUserInput()
+                .build(this.scope.requisition);
+            this.scope.column.name = 'totalReceivedQuantity';
+            this.scope.column.columnDefinition.columnType = this.COLUMN_TYPES.NUMERIC;
+            this.scope.column.$type = this.COLUMN_TYPES.NUMERIC;
+
+            expect(angular.element(this.getCompiledElement().children()[0]).text())
+                .not.toEqual('readOnlyFieldValue');
+        });
+    });
+
     describe('Skip Column', function() {
 
         var skipColumn, element;
