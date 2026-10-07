@@ -24,10 +24,12 @@
                 ng-options="status.label as status.label | requisitionStatus for status in vm.statuses"
                 ng-model="vm.selectedStatus">
         </select>
-        <label class="checkbox">
-            <input id="offlineSearch" type="checkbox" ng-model="vm.searchOffline"
-                   ng-model-options="{ getterSetter: true }"
-                   ng-disabled="vm.isOfflineDisabled()"/>
+        <label class="checkbox" ng-hide="vm.isOfflineDisabled()">
+            <input id="offlineSearch" type="checkbox" ng-model="vm.offline"/>
+            {{'requisitionSearch.offline' | message}}
+        </label>
+        <label class="checkbox" ng-show="vm.isOfflineDisabled()">
+            <input type="checkbox" checked disabled/>
             {{'requisitionSearch.offline' | message}}
         </label>
         <fieldset>

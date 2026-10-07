@@ -45,6 +45,7 @@ describe('openlmis.requisitions.search', function() {
         this.goToThePage = goToThePage;
 
         spyOn(this.permissionService, 'hasRoleWithRightAndFacility').andReturn(this.$q.resolve(true));
+        spyOn(this.offlineService, 'isOffline').andReturn(false);
 
         this.facilities = [
             new FacilityDataBuilder().build(),
@@ -115,7 +116,7 @@ describe('openlmis.requisitions.search', function() {
     });
 
     it('should show the list of offline requisitions if the application is offline, without the flag', function() {
-        spyOn(this.offlineService, 'isOffline').andReturn(true);
+        this.offlineService.isOffline.andReturn(true);
         this.offline = 'false';
 
         this.goToThePage();

@@ -45,7 +45,6 @@
         vm.openRnr = openRnr;
         vm.removeOfflineRequisition = removeOfflineRequisition;
         vm.isOfflineDisabled = isOfflineDisabled;
-        vm.searchOffline = searchOffline;
 
         /**
          * @ngdoc property
@@ -142,8 +141,8 @@
          * @type {Boolean}
          *
          * @description
-         * The offline search the user chose. This is what gets saved in the URL; the checkbox
-         * shows searchOffline(), which also covers the application being offline.
+         * The offline search the user chose. This is what gets saved in the URL. While the
+         * application is offline the search reads the local storage whatever this says.
          */
         vm.offline = undefined;
 
@@ -198,31 +197,14 @@
          * @name isOfflineDisabled
          *
          * @description
-         * Check if "Search offline" checkbox should be disabled.
+         * Check if the user's "Search offline" choice is out of play because the application is
+         * offline. The view then shows the option ticked and disabled, since the search reads the
+         * local storage anyway.
          *
-         * @return {Boolean} true if offline is disabled, false otherwise
+         * @return {Boolean} true if the application is offline, false otherwise
          */
         function isOfflineDisabled() {
             return offlineService.isOffline();
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name searchOffline
-         *
-         * @description
-         * Getter/setter behind the "Search offline" checkbox. Reads as true when the user chose
-         * offline search or when the application is offline. Writes only the user's choice.
-         *
-         * @param  {Boolean} offline the new choice, when called as a setter
-         * @return {Boolean}         whether the search will read the local storage
-         */
-        function searchOffline(offline) {
-            if (arguments.length) {
-                vm.offline = offline;
-            }
-            return vm.offline || offlineService.isOffline();
         }
 
         /**

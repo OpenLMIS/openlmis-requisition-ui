@@ -402,46 +402,6 @@ describe('RequisitionSearchController', function() {
 
     });
 
-    describe('searchOffline', function() {
-
-        beforeEach(function() {
-            initController(this);
-            this.vm.$onInit();
-        });
-
-        it('should return the user choice when the application is online', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(false);
-
-            this.vm.offline = true;
-
-            expect(this.vm.searchOffline()).toBe(true);
-
-            this.vm.offline = false;
-
-            expect(this.vm.searchOffline()).toBe(false);
-        });
-
-        it('should return true when the application is offline whatever the user chose', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(true);
-            this.vm.offline = false;
-
-            expect(this.vm.searchOffline()).toBe(true);
-        });
-
-        it('should store the user choice when called with a value', function() {
-            spyOn(this.offlineService, 'isOffline').andReturn(false);
-
-            this.vm.searchOffline(true);
-
-            expect(this.vm.offline).toBe(true);
-
-            this.vm.searchOffline(false);
-
-            expect(this.vm.offline).toBe(false);
-        });
-
-    });
-
     describe('isOfflineDisabled', function() {
 
         beforeEach(function() {
@@ -473,7 +433,7 @@ describe('RequisitionSearchController', function() {
             expect(result).toBe(false);
         });
 
-        it('should not change searchOffline if application is online', function() {
+        it('should not change the user choice if application is online', function() {
             spyOn(this.offlineService, 'isOffline').andReturn(false);
             this.vm.offline = false;
 
