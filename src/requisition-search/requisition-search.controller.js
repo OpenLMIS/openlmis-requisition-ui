@@ -45,6 +45,7 @@
         vm.openRnr = openRnr;
         vm.removeOfflineRequisition = removeOfflineRequisition;
         vm.isOfflineDisabled = isOfflineDisabled;
+        vm.searchOffline = searchOffline;
 
         /**
          * @ngdoc property
@@ -67,18 +68,6 @@
          * Contains all available requisition statuses.
          */
         vm.statuses = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name searchOffline
-         * @type {Boolean}
-         *
-         * @description
-         * Flag defining whether online or offline search should done. If it is set to true
-         * the local storage will be searched for requisitions.
-         */
-        vm.searchOffline = false;
 
         /**
          * @ngdoc property
@@ -153,7 +142,8 @@
          * @type {Boolean}
          *
          * @description
-         * Indicates if requisitions will be searched offline or online.
+         * The offline search the user chose. This is what gets saved in the URL; the checkbox
+         * shows searchOffline(), which also covers the application being offline.
          */
         vm.offline = undefined;
 
@@ -175,7 +165,7 @@
             vm.facilities = facilities;
             vm.statuses = REQUISITION_STATUS.$toList();
 
-            vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
+            vm.offline = $stateParams.offline === 'true';
 
             if ($stateParams.facility) {
                 vm.selectedFacility = $filter('filter')(vm.facilities, {
@@ -208,16 +198,31 @@
          * @name isOfflineDisabled
          *
          * @description
-         * Check if "Search offline" checkbox should be disabled. It will set the searchOffline
-         * flag to true if app goes in the offline mode.
+         * Check if "Search offline" checkbox should be disabled.
          *
          * @return {Boolean} true if offline is disabled, false otherwise
          */
         function isOfflineDisabled() {
-            if (offlineService.isOffline()) {
-                vm.offline = true;
-            }
             return offlineService.isOffline();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-search.controller:RequisitionViewController
+         * @name searchOffline
+         *
+         * @description
+         * Getter/setter behind the "Search offline" checkbox. Reads as true when the user chose
+         * offline search or when the application is offline. Writes only the user's choice.
+         *
+         * @param  {Boolean} offline the new choice, when called as a setter
+         * @return {Boolean}         whether the search will read the local storage
+         */
+        function searchOffline(offline) {
+            if (arguments.length) {
+                vm.offline = offline;
+            }
+            return vm.offline || offlineService.isOffline();
         }
 
         /**

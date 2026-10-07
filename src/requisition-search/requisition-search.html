@@ -25,7 +25,8 @@
                 ng-model="vm.selectedStatus">
         </select>
         <label class="checkbox">
-            <input id="offlineSearch" type="checkbox" ng-model="vm.offline"
+            <input id="offlineSearch" type="checkbox" ng-model="vm.searchOffline"
+                   ng-model-options="{ getterSetter: true }"
                    ng-disabled="vm.isOfflineDisabled()"/>
             {{'requisitionSearch.offline' | message}}
         </label>
