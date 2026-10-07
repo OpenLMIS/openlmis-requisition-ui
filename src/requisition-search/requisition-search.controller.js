@@ -45,6 +45,7 @@
         vm.openRnr = openRnr;
         vm.removeOfflineRequisition = removeOfflineRequisition;
         vm.isOfflineDisabled = isOfflineDisabled;
+        vm.isOfflineForced = isOfflineForced;
 
         /**
          * @ngdoc property
@@ -197,14 +198,30 @@
          * @name isOfflineDisabled
          *
          * @description
-         * Check if the user's "Search offline" choice is out of play because the application is
-         * offline. The view then shows the option ticked and disabled, since the search reads the
-         * local storage anyway.
+         * Check if "Search offline" checkbox should be disabled.
          *
-         * @return {Boolean} true if the application is offline, false otherwise
+         * @return {Boolean} true if offline is disabled, false otherwise
          */
         function isOfflineDisabled() {
             return offlineService.isOffline();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-search.controller:RequisitionViewController
+         * @name isOfflineForced
+         *
+         * @description
+         * Check if the search reads the local storage only because the application is offline,
+         * not because the user chose it. The view binds it as a read-only getter/setter, so a
+         * value written back, such as the filter popover restoring its snapshot on Cancel, is
+         * ignored.
+         *
+         * @return {Boolean} true if the application is offline and the user did not choose
+         *                   offline search
+         */
+        function isOfflineForced() {
+            return offlineService.isOffline() && !vm.offline;
         }
 
         /**

@@ -450,6 +450,45 @@ describe('RequisitionSearchController', function() {
 
     });
 
+    describe('isOfflineForced', function() {
+
+        beforeEach(function() {
+            initController(this);
+        });
+
+        it('should return true if application is offline and the user did not choose offline search', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            this.vm.offline = false;
+
+            expect(this.vm.isOfflineForced()).toBe(true);
+        });
+
+        it('should return false if the user chose offline search', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            this.vm.offline = true;
+
+            expect(this.vm.isOfflineForced()).toBe(false);
+        });
+
+        it('should return false if application is online', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            this.vm.offline = false;
+
+            expect(this.vm.isOfflineForced()).toBe(false);
+        });
+
+        it('should ignore a value written back by the view', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            this.vm.offline = false;
+
+            var result = this.vm.isOfflineForced(true);
+
+            expect(result).toBe(false);
+            expect(this.vm.offline).toBe(false);
+        });
+
+    });
+
     function initController(test) {
         test.vm = test.$controller('RequisitionSearchController', {
             requisitions: test.items,
