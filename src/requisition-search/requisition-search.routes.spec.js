@@ -33,6 +33,7 @@ describe('openlmis.requisitions.search', function() {
             this.requisitionService = $injector.get('requisitionService');
             this.$location = $injector.get('$location');
             this.requisitionSearchService = $injector.get('requisitionSearchService');
+            this.offlineService = $injector.get('offlineService');
             RequisitionDataBuilder = $injector.get('RequisitionDataBuilder');
             PageDataBuilder = $injector.get('PageDataBuilder');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
@@ -97,6 +98,25 @@ describe('openlmis.requisitions.search', function() {
 
     it('should show the list of offline requisitions if offline flag is set', function() {
         this.offline = 'true';
+
+        this.goToThePage();
+
+        expect(this.getResolvedValue('requisitions')).toEqual(this.requisitions);
+        expect(this.requisitionService.search).toHaveBeenCalledWith(true, {
+            program: this.program,
+            facility: this.facility,
+            initiatedDateFrom: this.initiatedDateFrom,
+            initiatedDateTo: this.initiatedDateTo,
+            page: this.page,
+            size: this.size,
+            sort: this.sort,
+            requisitionStatus: this.requisitionStatus
+        });
+    });
+
+    it('should show the list of offline requisitions if the application is offline, without the flag', function() {
+        spyOn(this.offlineService, 'isOffline').andReturn(true);
+        this.offline = 'false';
 
         this.goToThePage();
 
