@@ -631,12 +631,9 @@
         function computeSupplyingFacilityColumnPosition(orderedColumns) {
             vm.supplyingFacilityAfterColumn = null;
 
-            var supplyingFacilityColumn;
-            columns.forEach(function(column) {
-                if (column.name === SUPPLYING_FACILITY_STOCK_ON_HAND) {
-                    supplyingFacilityColumn = column;
-                }
-            });
+            // Read the column from the template: getColumns drops columns flagged $fullSupplyOnly, so the
+            // tab's columns omit it for emergency requisitions and on the non-full supply tab.
+            var supplyingFacilityColumn = requisition.template.getColumn(SUPPLYING_FACILITY_STOCK_ON_HAND);
             if (!supplyingFacilityColumn) {
                 return;
             }

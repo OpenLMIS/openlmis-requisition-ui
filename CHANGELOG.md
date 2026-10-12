@@ -1,6 +1,9 @@
 7.2.0-SNAPSHOT (WIP)
 ==================
 
+Bug fixes:
+* [OLMIS-8403](https://openlmis.atlassian.net/browse/OLMIS-8403): The supplying-facility stock on hand column no longer shows first in emergency requisitions and on the non-full supply tab; it follows its template position there too.
+
 7.1.0 / 2026-09-29
 ==================
 Improvements:
