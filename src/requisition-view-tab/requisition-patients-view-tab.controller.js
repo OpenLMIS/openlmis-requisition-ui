@@ -130,14 +130,29 @@
             return array;
         }
 
+        // Validation state (isInvalid) is session-only and must never be persisted,
+        // otherwise red highlights survive a page refresh. Returns a copy with isInvalid
+        // cleared, leaving the in-memory rows (and the in-session highlighting) intact.
+        function withoutInvalidState(array) {
+            return array.map(function(row) {
+                return angular.extend({}, row, {
+                    data: row.data.map(function(field) {
+                        return angular.extend({}, field, {
+                            isInvalid: false
+                        });
+                    })
+                });
+            });
+        }
+
         // Saves data from the table in local storage
         vm.handleSaveInLocalStorage = function(partArrayTitle, rowsValues) {
             if (partArrayTitle === leprosyTitle) {
                 localStorageFactory(LEPROSY_STORAGE).clearAll();
-                localStorageFactory(LEPROSY_STORAGE).put(rowsValues);
+                localStorageFactory(LEPROSY_STORAGE).put(withoutInvalidState(rowsValues));
             } else if (partArrayTitle === TBTitle) {
                 localStorageFactory(TB_STORAGE).clearAll();
-                localStorageFactory(TB_STORAGE).put(rowsValues);
+                localStorageFactory(TB_STORAGE).put(withoutInvalidState(rowsValues));
             }
 
             var TBArray = getFromLocalStorage(TB_STORAGE);
