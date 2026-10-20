@@ -31,14 +31,15 @@
     requisitionFactory.$inject = [
         '$q', '$resource', 'requisitionUrlFactory', 'RequisitionTemplate', 'LineItem', 'REQUISITION_STATUS',
         'COLUMN_SOURCES', 'localStorageFactory', 'dateUtils', '$filter', 'TEMPLATE_COLUMNS', 'authorizationService',
-        'REQUISITION_RIGHTS', 'UuidGenerator', 'requisitionCacheService', 'localStorageService', 'QUANTITY_UNIT',
-        'quantityUnitCalculateService'
+        'REQUISITION_RIGHTS', 'UuidGenerator', 'requisitionCacheService', 'QUANTITY_UNIT',
+        'quantityUnitCalculateService', 'quantityUnitConfigService'
     ];
 
     function requisitionFactory($q, $resource, requisitionUrlFactory, RequisitionTemplate, LineItem, REQUISITION_STATUS,
                                 COLUMN_SOURCES, localStorageFactory, dateUtils, $filter, TEMPLATE_COLUMNS,
                                 authorizationService, REQUISITION_RIGHTS, UuidGenerator, requisitionCacheService,
-                                localStorageService, QUANTITY_UNIT, quantityUnitCalculateService) {
+                                QUANTITY_UNIT, quantityUnitCalculateService,
+                                quantityUnitConfigService) {
 
         var offlineRequisitions = localStorageFactory('requisitions'),
             resource = $resource(requisitionUrlFactory('/api/v2/requisitions/:id'), {}, {
@@ -161,12 +162,7 @@
             }
 
             this.showInDoses = showInDoses;
-            var cachedQuantityUnit = localStorageService.get('quantityUnit');
-            if (cachedQuantityUnit === null) {
-                this.quantityUnit = QUANTITY_UNIT.$getDefaultQuantityUnit();
-            } else {
-                this.quantityUnit = cachedQuantityUnit;
-            }
+            this.quantityUnit = quantityUnitConfigService.getEffectiveUnit();
         }
 
         /**

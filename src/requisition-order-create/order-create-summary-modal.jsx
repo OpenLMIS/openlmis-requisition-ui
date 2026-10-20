@@ -8,11 +8,14 @@ import getService from '../react-components/utils/angular-utils';
 const OrderCreateSummaryModal = ({ isOpen, orders, onSaveClick, onModalClose }) => {
     const { formatMessage } = useMemo(() => getService('messageService'), []);
     const quantityUnitCalculateService = useMemo(() => getService('quantityUnitCalculateService'), []);
-    const localStorageService = useMemo(() => getService('localStorageService'), []);
+    const quantityUnitConfigService = useMemo(() => getService('quantityUnitConfigService'), []);
     const QUANTITY_UNIT = useMemo(() => getService('QUANTITY_UNIT'), []);
-    const showInDoses = (localStorageService.get('quantityUnit') || QUANTITY_UNIT.DOSES) === QUANTITY_UNIT.DOSES;
+    const showInDoses = useMemo(
+        () => quantityUnitConfigService.getEffectiveUnit() === QUANTITY_UNIT.DOSES,
+        [quantityUnitConfigService, QUANTITY_UNIT.DOSES]
+    );
     const columns = useMemo(() => orderTableColumns(true, formatMessage, showInDoses, null,
-        quantityUnitCalculateService), [showInDoses]);
+        quantityUnitCalculateService), [formatMessage, showInDoses, quantityUnitCalculateService]);
     const [currentTab, setCurrentTab] = useState(0);
 
     return (
