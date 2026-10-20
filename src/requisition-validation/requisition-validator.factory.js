@@ -263,7 +263,9 @@
                 return validateTbMonthly(requisition, column);
             }
 
-            return column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS || !column.$display;
+            return column.name === TEMPLATE_COLUMNS.TOTAL_LOSSES_AND_ADJUSTMENTS ||
+                column.name === TEMPLATE_COLUMNS.NEXT_OF_PATIENTS_ON_TREATMENT_NEXT_MONTH ||
+                !column.$display;
         }
 
         function validateQuantityRequired(lineItem, column) {
