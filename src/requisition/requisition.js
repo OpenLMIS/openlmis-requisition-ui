@@ -86,7 +86,8 @@
                 },
                 remove: {
                     headers: {
-                        'Idempotency-Key': getIdempotencyKey
+                        'Idempotency-Key': getIdempotencyKey,
+                        'If-Match': getETagFromParams
                     },
                     url: requisitionUrlFactory('/api/requisitions/:id'),
                     method: 'DELETE'
@@ -205,7 +206,8 @@
             var requisition = this;
             return handlePromise(resource.remove({
                 id: requisition.id,
-                idempotencyKey: requisition.idempotencyKey
+                idempotencyKey: requisition.idempotencyKey,
+                eTag: requisition.eTag
             }).$promise, function() {
                 offlineRequisitions.removeBy('id', requisition.id);
             }, function(data) {
@@ -846,6 +848,14 @@
 
         function getETag(config) {
             return config.data.eTag;
+        }
+
+        function getETagFromParams(config) {
+            var eTag = config.params ? config.params.eTag : undefined;
+            if (config.params) {
+                delete config.params.eTag;
+            }
+            return eTag;
         }
 
         function getIdempotencyKey(config) {

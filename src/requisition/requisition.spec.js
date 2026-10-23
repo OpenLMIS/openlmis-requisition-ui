@@ -456,6 +456,44 @@ describe('Requisition', function() {
 
             expect(spy).not.toHaveBeenCalled();
         });
+
+        it('should send the version it was fetched with in the If-Match header', function() {
+            var resolved = jasmine.createSpy('resolved');
+            this.requisition.eTag = 'W/3';
+
+            this.$httpBackend
+                .expectDELETE(this.requisitionUrlFactory('/api/requisitions/' + this.requisition.id),
+                    function(headers) {
+                        return headers['If-Match'] === 'W/3';
+                    })
+                .respond(204);
+
+            this.requisition.$remove().then(resolved);
+
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(resolved).toHaveBeenCalled();
+        });
+
+        it('should not send If-Match when the requisition has no eTag', function() {
+            var resolved = jasmine.createSpy('resolved');
+            delete this.requisition.eTag;
+
+            this.$httpBackend
+                .expectDELETE(this.requisitionUrlFactory('/api/requisitions/' + this.requisition.id),
+                    function(headers) {
+                        return !headers.hasOwnProperty('If-Match');
+                    })
+                .respond(204);
+
+            this.requisition.$remove().then(resolved);
+
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(resolved).toHaveBeenCalled();
+        });
     });
 
     describe('save', function() {
