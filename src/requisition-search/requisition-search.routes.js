@@ -41,12 +41,12 @@
                 facilities: function(requisitionSearchService) {
                     return requisitionSearchService.getFacilities();
                 },
-                requisitions: function(paginationService, requisitionService, $stateParams) {
+                requisitions: function(paginationService, requisitionService, offlineService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         if (stateParams.facility) {
-                            var offlineFlag = stateParams.offline;
+                            var offline = stateParams.offline === 'true' || offlineService.isOffline();
                             delete stateParams.offline;
-                            return requisitionService.search(offlineFlag === 'true', stateParams);
+                            return requisitionService.search(offline, stateParams);
                         }
                         return undefined;
                     });

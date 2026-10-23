@@ -89,7 +89,7 @@ describe('RequisitionSearchController', function() {
             expect(this.vm.statuses).toEqual(this.REQUISITION_STATUS.$toList());
         });
 
-        it('should set searchOffline to true if true was passed through state parameters', function() {
+        it('should set offline to true if true was passed through state parameters', function() {
             this.$stateParams.offline = 'true';
 
             this.vm.$onInit();
@@ -97,15 +97,15 @@ describe('RequisitionSearchController', function() {
             expect(this.vm.offline).toEqual(true);
         });
 
-        it('should set searchOffline to true if application is in offline mode', function() {
+        it('should not set offline when the application is offline but the URL does not say so', function() {
             spyOn(this.offlineService, 'isOffline').andReturn(true);
 
             this.vm.$onInit();
 
-            expect(this.vm.offline).toEqual(true);
+            expect(this.vm.offline).toEqual(false);
         });
 
-        it('should set searchOffline to false if false was passed the URL and application is not in offline mode',
+        it('should set offline to false if false was passed the URL and application is not in offline mode',
             function() {
                 this.$stateParams.offline = 'false';
                 spyOn(this.offlineService, 'isOffline').andReturn(false);
@@ -291,12 +291,37 @@ describe('RequisitionSearchController', function() {
             });
         });
 
-        it('should set offline', function() {
+        it('should pass the offline choice to the state', function() {
             this.vm.offline = true;
 
             this.vm.search();
 
-            expect(this.vm.offline).toBe(true);
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
+                program: null,
+                facility: null,
+                initiatedDateFrom: null,
+                initiatedDateTo: null,
+                offline: true
+            }, {
+                reload: true
+            });
+        });
+
+        it('should pass the user choice, not the offline state the application is in', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            this.vm.offline = false;
+
+            this.vm.search();
+
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.requisitions.search', {
+                program: null,
+                facility: null,
+                initiatedDateFrom: null,
+                initiatedDateTo: null,
+                offline: false
+            }, {
+                reload: true
+            });
         });
 
         it('should reload state', function() {
@@ -391,12 +416,13 @@ describe('RequisitionSearchController', function() {
             expect(result).toBe(true);
         });
 
-        it('should set searchOffline to true if application goes in the offline mode', function() {
+        it('should not change the user choice when the application goes offline', function() {
+            this.vm.offline = false;
             spyOn(this.offlineService, 'isOffline').andReturn(true);
 
             this.vm.isOfflineDisabled();
 
-            expect(this.vm.offline).toBe(true);
+            expect(this.vm.offline).toBe(false);
         });
 
         it('should return false if application is online', function() {
@@ -407,7 +433,7 @@ describe('RequisitionSearchController', function() {
             expect(result).toBe(false);
         });
 
-        it('should not change searchOffline if application is online', function() {
+        it('should not change the user choice if application is online', function() {
             spyOn(this.offlineService, 'isOffline').andReturn(false);
             this.vm.offline = false;
 
@@ -420,6 +446,45 @@ describe('RequisitionSearchController', function() {
             this.vm.isOfflineDisabled();
 
             expect(this.vm.offline).toBe(true);
+        });
+
+    });
+
+    describe('isOfflineForced', function() {
+
+        beforeEach(function() {
+            initController(this);
+        });
+
+        it('should return true if application is offline and the user did not choose offline search', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            this.vm.offline = false;
+
+            expect(this.vm.isOfflineForced()).toBe(true);
+        });
+
+        it('should return false if the user chose offline search', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(true);
+            this.vm.offline = true;
+
+            expect(this.vm.isOfflineForced()).toBe(false);
+        });
+
+        it('should return false if application is online', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            this.vm.offline = false;
+
+            expect(this.vm.isOfflineForced()).toBe(false);
+        });
+
+        it('should ignore a value written back by the view', function() {
+            spyOn(this.offlineService, 'isOffline').andReturn(false);
+            this.vm.offline = false;
+
+            var result = this.vm.isOfflineForced(true);
+
+            expect(result).toBe(false);
+            expect(this.vm.offline).toBe(false);
         });
 
     });
