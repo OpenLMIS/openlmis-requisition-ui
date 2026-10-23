@@ -566,6 +566,44 @@ describe('RequisitionViewController', function() {
 
             expect(this.RequisitionWatcher.prototype.disableWatcher).toHaveBeenCalled();
         });
+
+        it('should notify and reload when the requisition has a newer version on the server', function() {
+            this.requisition.$remove.andReturn(this.$q.reject({
+                status: 409
+            }));
+
+            this.vm.removeRnr();
+            this.$rootScope.$apply();
+
+            expect(this.notificationService.error).toHaveBeenCalledWith('requisitionView.versionMismatch');
+            expect(this.$state.reload).toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
+        });
+
+        it('should notify and reload when the delete is forbidden', function() {
+            this.requisition.$remove.andReturn(this.$q.reject({
+                status: 403
+            }));
+
+            this.vm.removeRnr();
+            this.$rootScope.$apply();
+
+            expect(this.notificationService.error).toHaveBeenCalledWith('requisitionView.updateForbidden');
+            expect(this.$state.reload).toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
+        });
+
+        it('should only close the loading modal on other failures', function() {
+            this.requisition.$remove.andReturn(this.$q.reject());
+
+            this.vm.removeRnr();
+            this.$rootScope.$apply();
+
+            expect(this.loadingModalService.close).toHaveBeenCalled();
+            expect(this.$state.reload).not.toHaveBeenCalled();
+            expect(this.alertService.error).not.toHaveBeenCalled();
+            expect(this.notificationService.error).not.toHaveBeenCalled();
+        });
     });
 
     describe('approveRnr', function() {
