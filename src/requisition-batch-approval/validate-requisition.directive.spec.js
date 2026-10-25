@@ -127,6 +127,38 @@ describe('validateRequisition directive', function() {
 
     });
 
+    describe('on blur (OLMIS-8127)', function() {
+
+        it('should mark requisition invalid when blank field loses focus', function() {
+            div.find('div:nth-child(1) input').val('');
+            div.find('div:nth-child(1) input').triggerHandler('change');
+            $scope.$apply();
+
+            div.find('div:nth-child(1) input').triggerHandler('blur');
+
+            div.find('div:nth-child(1) input')
+                .parent()
+                .trigger('openlmisInvalid.show');
+
+            expect($scope.requisition.$error).not.toBeUndefined();
+        });
+
+        it('should not mark requisition invalid on blur when field is filled', function() {
+            div.find('div:nth-child(1) input').val(5);
+            div.find('div:nth-child(1) input').triggerHandler('change');
+            $scope.$apply();
+
+            div.find('div:nth-child(1) input').triggerHandler('blur');
+
+            div.find('div:nth-child(1) input')
+                .parent()
+                .trigger('openlmisInvalid.show');
+
+            expect($scope.requisition.$error).toBeUndefined();
+        });
+
+    });
+
     function compileMarkup(markup) {
         var element = $compile(markup)($scope);
 
