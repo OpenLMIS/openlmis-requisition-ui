@@ -476,6 +476,45 @@ describe('Requisition', function() {
             expect(resolved).toHaveBeenCalled();
         });
 
+        it('should remove offline when 409', function() {
+            this.$httpBackend
+                .whenDELETE(this.requisitionUrlFactory('/api/requisitions/' + this.requisition.id))
+                .respond(409);
+
+            this.requisition.$remove();
+
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(this.offlineRequisitions.removeBy).toHaveBeenCalledWith('id', this.requisition.id);
+        });
+
+        it('should remove offline when 403', function() {
+            this.$httpBackend
+                .whenDELETE(this.requisitionUrlFactory('/api/requisitions/' + this.requisition.id))
+                .respond(403);
+
+            this.requisition.$remove();
+
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(this.offlineRequisitions.removeBy).toHaveBeenCalledWith('id', this.requisition.id);
+        });
+
+        it('should keep offline when the delete fails otherwise', function() {
+            this.$httpBackend
+                .whenDELETE(this.requisitionUrlFactory('/api/requisitions/' + this.requisition.id))
+                .respond(500);
+
+            this.requisition.$remove();
+
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(this.offlineRequisitions.removeBy).not.toHaveBeenCalled();
+        });
+
         it('should not send If-Match when the requisition has no eTag', function() {
             var resolved = jasmine.createSpy('resolved');
             delete this.requisition.eTag;

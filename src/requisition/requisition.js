@@ -211,6 +211,10 @@
             }).$promise, function() {
                 offlineRequisitions.removeBy('id', requisition.id);
             }, function(data) {
+                if (data.status === 409 || data.status === 403) {
+                    // the page reloads after these; without the cached copy it gets the server version
+                    offlineRequisitions.removeBy('id', requisition.id);
+                }
                 handleFailure(data, requisition);
             });
         }
