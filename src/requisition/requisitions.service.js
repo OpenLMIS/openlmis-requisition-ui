@@ -31,12 +31,12 @@
     service.$inject = [
         '$q', '$resource', 'requisitionUrlFactory', 'Requisition', 'dateUtils', 'localStorageFactory', 'offlineService',
         '$filter', 'requisitionCacheService', 'OrderableResource', 'FacilityTypeApprovedProductResource',
-        'periodService'
+        'periodService', '$http'
     ];
 
     function service($q, $resource, requisitionUrlFactory, Requisition, dateUtils, localStorageFactory, offlineService,
                      $filter, requisitionCacheService, OrderableResource, FacilityTypeApprovedProductResource,
-                     periodService) {
+                     periodService, $http) {
 
         var onlineOnlyRequisitions = localStorageFactory('onlineOnly'),
             offlineStatusMessages = localStorageFactory('statusMessages');
@@ -51,7 +51,8 @@
                     'Idempotency-Key': getIdempotencyKey
                 },
                 url: requisitionUrlFactory('/api/v2/requisitions/initiate'),
-                method: 'POST'
+                method: 'POST',
+                transformResponse: $http.defaults.transformResponse.concat(addETag)
             },
             search: {
                 url: requisitionUrlFactory('/api/requisitions/search'),
@@ -332,6 +333,13 @@
             });
 
             return angular.toJson(body);
+        }
+
+        function addETag(data, headers, status) {
+            if (status >= 200 && status < 300 && angular.isObject(data)) {
+                data.eTag = headers('eTag');
+            }
+            return data;
         }
 
         function transformGetResponse(data, headers, status) {

@@ -503,6 +503,34 @@ describe('requisitionService', function() {
         expect(data.stockAdjustmentReasons).toEqual([this.reasonNotHidden, this.reasonWithoutHidden]);
     });
 
+    it('should keep the ETag of the initiated requisition', function() {
+        var data;
+
+        this.$httpBackend
+            .whenPOST(this.requisitionUrlFactory(
+                '/api/v2/requisitions/initiate'
+                + '?emergency=' + this.emergency
+                + '&facility=' + this.facility.id
+                + '&program=' + this.program.id
+                + '&suggestedPeriod=' + this.period.id
+            ))
+            .respond(201, this.requisition, {
+                ETag: 'W/0'
+            });
+
+        this.requisitionService
+            .initiate(this.facility.id, this.program.id, this.period.id, this.emergency)
+            .then(function(response) {
+                data = response;
+            });
+
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
+
+        expect(data.eTag).toEqual('W/0');
+        expect(this.requisitionCacheService.cacheRequisition.mostRecentCall.args[0].eTag).toEqual('W/0');
+    });
+
     it('should get requisitions for convert', function() {
         var data,
             requisitionCopy = this.formatDatesInRequisition(angular.copy(this.requisitionDto)),

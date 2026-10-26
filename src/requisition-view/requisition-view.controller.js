@@ -475,8 +475,10 @@
          *
          * @description
          * Responsible for removing requisition. Displays confirmation dialog before deletion.
-         * If an error occurs during authorization, it will display an error notification modal.
-         * Otherwise, a success notification modal will be shown.
+         * On success, a success notification is shown and the user returns to the previous page.
+         * If the requisition has changed on the server since it was loaded (409), or the user can no
+         * longer delete it (403), the requisition is reloaded, as after a failed sync. Any other
+         * failure only closes the loading modal; the server's message is shown by the error interceptor.
          */
         function removeRnr() {
             confirmService.confirmDestroy(
@@ -491,7 +493,14 @@
                         clearPatientsLocalStorage();
                     });
                     stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
-                }, loadingModalService.close);
+                }, function(response) {
+                    var status = response && response.status;
+                    if (status === 409 || status === 403) {
+                        handleSaveError(status);
+                    } else {
+                        loadingModalService.close();
+                    }
+                });
             });
         }
 
