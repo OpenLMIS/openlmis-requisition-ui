@@ -855,10 +855,8 @@
         }
 
         function getETagFromParams(config) {
-            var eTag = config.params ? config.params.eTag : undefined;
-            if (config.params) {
-                delete config.params.eTag;
-            }
+            var eTag = config.params.eTag;
+            delete config.params.eTag;
             return eTag;
         }
 
