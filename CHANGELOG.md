@@ -2,7 +2,7 @@
 ==================
 Bug fixes:
 * [OLMIS-8375](https://openlmis.atlassian.net/browse/OLMIS-8375): "Search offline" on View Requisitions no longer stays on after the application is back online; only a choice the user made while online is kept.
-* [OLMIS-8385](https://openlmis.atlassian.net/browse/OLMIS-8385): Deleting a requisition now sends the version the user is looking at (If-Match), so a requisition that someone else has changed since the page was opened is no longer deleted from the outdated view. As for Sync, the user is told the requisition has a newer version and the page reloads with it. Needs openlmis-requisition 8.7.3 or later for the server-side check; older services ignore the header.
+* [OLMIS-8385](https://openlmis.atlassian.net/browse/OLMIS-8385): Deleting a requisition now sends the version the user is looking at (If-Match), so a requisition that someone else has changed since the page was opened is no longer deleted from the outdated view. This includes a requisition initiated in the same browser and not synced yet. As for Sync, the user is told the requisition has a newer version and the page reloads with the server's version, even when the outdated view had unsaved changes. Needs openlmis-requisition 8.7.3 or later, for the server-side check and for the version returned on initiate; older services ignore the header.
 
 7.1.1 / 2026-10-16
 ==================
