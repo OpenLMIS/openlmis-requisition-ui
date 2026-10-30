@@ -161,7 +161,16 @@
 
         vm.filteredItems = undefined;
 
-        vm.showSkippedLineItems = true;
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-view-tab.controller:ViewTabController
+         * @name showSkippedLineItems
+         * @type {Boolean}
+         *
+         * @description
+         * Whether skipped line items are listed. Kept in the URL so it stays in effect between pages.
+         */
+        vm.showSkippedLineItems = undefined;
 
         vm.fullSupply = undefined;
 
@@ -256,7 +265,8 @@
 
             vm.lineItems = lineItems;
             vm.items = items;
-            vm.filteredItems = lineItems;
+            vm.showSkippedLineItems = $stateParams.showSkippedLineItems !== 'false';
+            vm.filteredItems = vm.showSkippedLineItems ? lineItems : getFilteredLineItems();
             vm.requisition = requisition;
             vm.columns = displayedColumns;
             vm.program = program;
@@ -265,6 +275,7 @@
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
             vm.showUnskipFullSupplyProductsButton = showUnskipFullSupplyProductsButton();
             vm.showSkipControls = showSkipControls();
+            vm.showSkippedLineItemsToggle = showSkippedLineItemsToggle();
             vm.showOrderableFilter = showOrderableFilter();
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
@@ -333,11 +344,13 @@
          * @description
          * Caches given requisition in the local storage.
          *
-         * @return {Promise} the promise resolved after adding requisition to the local storage
+         * @return {Promise} the promise resolved with the state params to keep on the next page
          */
         function cacheRequisition() {
             requisitionCacheService.cacheRequisition(vm.requisition);
-            return $q.resolve();
+            return $q.resolve({
+                showSkippedLineItems: vm.showSkippedLineItems
+            });
         }
 
         /**
@@ -518,6 +531,12 @@
         function showSkipControls() {
             return vm.userCanEdit &&
                 fullSupply &&
+                !requisition.emergency &&
+                requisition.template.hasSkipColumn();
+        }
+
+        function showSkippedLineItemsToggle() {
+            return fullSupply &&
                 !requisition.emergency &&
                 requisition.template.hasSkipColumn();
         }

@@ -1,7 +1,8 @@
-7.1.2-SNAPSHOT (WIP)
+re7.1.2-SNAPSHOT (WIP)
 ==================
 Bug fixes:
 * [OLMIS-8375](https://openlmis.atlassian.net/browse/OLMIS-8375): "Search offline" on View Requisitions no longer stays on after the application is back online; only a choice the user made while online is kept.
+* [OLMIS-8399](https://openlmis.atlassian.net/browse/OLMIS-8399): "Show skipped products" now stays in effect when moving between pages of the product grid, and is also available to users who approve or only view the requisition.
 
 7.1.1 / 2026-10-16
 ==================
