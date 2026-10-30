@@ -82,6 +82,10 @@
                 requisitionIds = [],
                 offlineBatchRequisitions = localStorageFactory('batchApproveRequisitions');
 
+            if (requisitions.length === 0) {
+                return $q.resolve([]);
+            }
+
             requisitions.forEach(function(requisition) {
                 requisitionsObject[requisition.id] = requisition;
                 requisitionIds.push(requisition.id);

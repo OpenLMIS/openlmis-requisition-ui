@@ -125,6 +125,15 @@ describe('validateRequisition directive', function() {
             expect($scope.requisition.$error).toBeUndefined();
         });
 
+        it('should keep error from the server if all inputs are filled', function() {
+            var input = div.find('div:nth-child(1) input');
+            $scope.requisition.$error = 'The requisition could not be updated';
+
+            input.parent().trigger('openlmisInvalid.hide');
+
+            expect($scope.requisition.$error).toEqual('The requisition could not be updated');
+        });
+
     });
 
     function compileMarkup(markup) {
