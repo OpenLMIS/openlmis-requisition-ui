@@ -65,9 +65,13 @@
             wrapper.on('openlmisInvalid.hide', updateMessage);
 
             function updateMessage() {
-                requisition.$error = isValid(requisition) ?
-                    messageService.get('requisitionBatchApproval.invalidRequisition') :
-                    undefined;
+                var invalidMessage = messageService.get('requisitionBatchApproval.invalidRequisition');
+
+                if (isValid(requisition)) {
+                    requisition.$error = invalidMessage;
+                } else if (requisition.$error === invalidMessage) {
+                    requisition.$error = undefined;
+                }
             }
 
             function validateRequisition() {

@@ -5,6 +5,7 @@
   "requisitionBatchApproval.batchApproval": "Batch Approval",
   "requisitionBatchApproval.cost": "Cost",
   "requisitionBatchApproval.errorApprove": "Server was unable to approve this requisition",
+  "requisitionBatchApproval.errorSave": "Server was unable to save this requisition",
   "requisitionBatchApproval.numberTooLarge": "This number is larger than what can be saved",
   "requisitionBatchApproval.outdated": "This is an outdated offline version.",
   "requisitionBatchApproval.product": "Product",

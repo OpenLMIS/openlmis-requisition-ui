@@ -2,6 +2,7 @@
 ==================
 Bug fixes:
 * [OLMIS-8375](https://openlmis.atlassian.net/browse/OLMIS-8375): "Search offline" on View Requisitions no longer stays on after the application is back online; only a choice the user made while online is kept.
+* [OLMIS-8416](https://openlmis.atlassian.net/browse/OLMIS-8416): Batch approval no longer hangs when a selected requisition was already approved elsewhere.
 
 7.1.1 / 2026-10-16
 ==================

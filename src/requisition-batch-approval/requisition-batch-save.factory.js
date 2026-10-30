@@ -32,9 +32,9 @@
         .module('requisition-batch-approval')
         .factory('requisitionBatchSaveFactory', factory);
 
-    factory.$inject = ['$q', '$filter', 'localStorageFactory', 'requisitionBatchApprovalService'];
+    factory.$inject = ['$q', '$filter', 'localStorageFactory', 'requisitionBatchApprovalService', 'messageService'];
 
-    function factory($q, $filter, localStorageFactory, requisitionBatchApprovalService) {
+    function factory($q, $filter, localStorageFactory, requisitionBatchApprovalService, messageService) {
 
         var factory = {
             saveRequisitions: saveRequisitions
@@ -67,6 +67,7 @@
                 requisitionDtos = [];
 
             requisitions.forEach(function(requisition) {
+                delete requisition.$error;
                 requisitionDtos.push(transformRequisition(requisition));
             });
 
@@ -81,11 +82,16 @@
 
                 return deferred.resolve(response.requisitionDtos);
             }, function(response) {
+                var requisitionErrors = response.data && response.data.requisitionErrors || [],
+                    savedRequisitions = response.data && response.data.requisitionDtos || [];
 
                 angular.forEach(requisitions, function(requisition) {
-                    var requisitionError = $filter('filter')(response.requisitionErrors, {
-                        requisitionId: requisition.id
-                    });
+                    var requisitionError = $filter('filter')(requisitionErrors, {
+                            requisitionId: requisition.id
+                        }),
+                        savedRequisition = $filter('filter')(savedRequisitions, {
+                            id: requisition.id
+                        });
                     if (requisitionError.length > 0) {
                         requisition.$error = requisitionError[0].errorMessage.message;
                         if (isDateModifiedMismatchMessage(requisitionError[0].errorMessage.messageKey)) {
@@ -93,16 +99,15 @@
                             removeFromStorage(requisition, offlineBatchRequisitions);
                             removeFromStorage(requisition, offlineRequisitions);
                         }
-                    } else {
+                    } else if (savedRequisition.length > 0) {
                         //Save successful requisitions to storage
-                        var savedRequisition = $filter('filter')(response.requisitionDtos, {
-                            id: requisition.id
-                        });
                         saveToStorage(angular.copy(savedRequisition[0]), offlineBatchRequisitions);
+                    } else {
+                        requisition.$error = messageService.get('requisitionBatchApproval.errorSave');
                     }
                 });
 
-                return deferred.reject(response.requisitionDtos);
+                return deferred.reject(savedRequisitions);
             });
 
             return deferred.promise;

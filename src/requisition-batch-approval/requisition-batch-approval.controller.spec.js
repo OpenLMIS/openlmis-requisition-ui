@@ -425,6 +425,18 @@ describe('RequisitionBatchApprovalController', function() {
 
             expect(this.loadingModalService.close).toHaveBeenCalled();
         });
+
+        it('should keep the save error of a requisition that was not approved', function() {
+            this.vm.requisitions[0].$error = 'Requisition cannot be updated';
+            this.vm.approve();
+
+            confirmDeferred.resolve();
+            batchDeferred.resolve([]);
+            this.$rootScope.$apply();
+
+            expect(this.$state.go.calls[0].args[1].errors[this.vm.requisitions[0].id])
+                .toEqual('Requisition cannot be updated');
+        });
     });
 
     function initController() {

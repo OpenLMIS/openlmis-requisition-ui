@@ -234,13 +234,16 @@ describe('RequisitionBatchSaveFactory', function() {
         });
 
         deferred.reject({
-            requisitionDtos: [requisitions[0]],
-            requisitionErrors: [{
-                requisitionId: requisitions[1].id,
-                errorMessage: {
-                    message: 'This requisition is invalid!'
-                }
-            }]
+            status: 400,
+            data: {
+                requisitionDtos: [requisitions[0]],
+                requisitionErrors: [{
+                    requisitionId: requisitions[1].id,
+                    errorMessage: {
+                        message: 'This requisition is invalid!'
+                    }
+                }]
+            }
         });
         $rootScope.$apply();
 
@@ -252,13 +255,16 @@ describe('RequisitionBatchSaveFactory', function() {
         requisitionBatchSaveFactory.saveRequisitions(requisitions);
 
         deferred.reject({
-            requisitionDtos: [requisitions[0]],
-            requisitionErrors: [{
-                requisitionId: requisitions[1].id,
-                errorMessage: {
-                    message: 'This requisition is invalid!'
-                }
-            }]
+            status: 400,
+            data: {
+                requisitionDtos: [requisitions[0]],
+                requisitionErrors: [{
+                    requisitionId: requisitions[1].id,
+                    errorMessage: {
+                        message: 'This requisition is invalid!'
+                    }
+                }]
+            }
         });
         $rootScope.$apply();
 
@@ -270,13 +276,16 @@ describe('RequisitionBatchSaveFactory', function() {
         requisitionBatchSaveFactory.saveRequisitions(requisitions);
 
         deferred.reject({
-            requisitionDtos: [requisitions[0]],
-            requisitionErrors: [{
-                requisitionId: requisitions[1].id,
-                errorMessage: {
-                    messageKey: 'requisition.error.validation.dateModifiedMismatch'
-                }
-            }]
+            status: 400,
+            data: {
+                requisitionDtos: [requisitions[0]],
+                requisitionErrors: [{
+                    requisitionId: requisitions[1].id,
+                    errorMessage: {
+                        messageKey: 'requisition.error.validation.dateModifiedMismatch'
+                    }
+                }]
+            }
         });
         $rootScope.$apply();
 
@@ -289,13 +298,16 @@ describe('RequisitionBatchSaveFactory', function() {
             requisitionBatchSaveFactory.saveRequisitions(requisitions);
 
             deferred.reject({
-                requisitionDtos: [requisitions[0]],
-                requisitionErrors: [{
-                    requisitionId: requisitions[1].id,
-                    errorMessage: {
-                        message: 'This requisition is invalid!'
-                    }
-                }]
+                status: 400,
+                data: {
+                    requisitionDtos: [requisitions[0]],
+                    requisitionErrors: [{
+                        requisitionId: requisitions[1].id,
+                        errorMessage: {
+                            message: 'This requisition is invalid!'
+                        }
+                    }]
+                }
             });
             $rootScope.$apply();
 
@@ -304,4 +316,36 @@ describe('RequisitionBatchSaveFactory', function() {
             expect(batchRequisitionsStorage.put.calls.length).toEqual(1);
             expect(batchRequisitionsStorage.put).toHaveBeenCalledWith(requisitions[0]);
         });
+
+    it('adds an error to every requisition if the response has no requisition errors', function() {
+        var data;
+
+        requisitionBatchSaveFactory.saveRequisitions(requisitions).catch(function(response) {
+            data = response;
+        });
+
+        deferred.reject({
+            status: -1,
+            data: null
+        });
+        $rootScope.$apply();
+
+        expect(data).toEqual([]);
+        expect(requisitions[0].$error).toBe('requisitionBatchApproval.errorSave');
+        expect(requisitions[1].$error).toBe('requisitionBatchApproval.errorSave');
+        expect(batchRequisitionsStorage.put).not.toHaveBeenCalled();
+    });
+
+    it('clears errors from previous saves', function() {
+        requisitions[0].$error = 'Previous error';
+
+        requisitionBatchSaveFactory.saveRequisitions(requisitions);
+
+        deferred.resolve({
+            requisitionDtos: requisitions
+        });
+        $rootScope.$apply();
+
+        expect(requisitions[0].$error).toBeUndefined();
+    });
 });
