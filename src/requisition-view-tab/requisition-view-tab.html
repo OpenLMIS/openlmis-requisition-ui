@@ -12,7 +12,7 @@
 		<input type="text" placeholder="{{ 'requisitionViewTab.filterPlaceholder' | message}}"
 			ng-model="vm.orderableFilterProperties.name" ng-change="vm.filterByOrderableParams()">
 	</div>
-	<div ng-show="vm.showSkipControls" id="skipped-line-items-visibility">
+	<div ng-show="vm.showSkippedLineItemsToggle" id="skipped-line-items-visibility">
 		<label for="skippedItemsVisibility">{{:: 'requisitionViewTab.skippedItemsVisibility' | message  }}</label>
 		<input
 			type="checkbox"
