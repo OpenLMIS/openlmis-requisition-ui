@@ -45,6 +45,7 @@ describe('ViewTabController', function() {
             this.requisitionValidator = $injector.get('requisitionValidator');
             this.selectProductsModalService = $injector.get('selectProductsModalService');
             this.requisitionCacheService = $injector.get('requisitionCacheService');
+            this.$state = $injector.get('$state');
         });
 
         var requisitionDataBuilder = new RequisitionDataBuilder();
@@ -460,6 +461,86 @@ describe('ViewTabController', function() {
 
         });
 
+        describe('showSkippedLineItemsToggle', function() {
+
+            beforeEach(function() {
+                this.requisition.template.hasSkipColumn.andReturn(true);
+            });
+
+            it('should be shown to a user who can only approve or view the requisition', function() {
+                this.initController();
+
+                expect(this.vm.userCanEdit).toBe(false);
+                expect(this.vm.showSkippedLineItemsToggle).toBe(true);
+            });
+
+            it('should be hidden on the non-full supply tab', function() {
+                this.fullSupply = false;
+
+                this.initController();
+
+                expect(this.vm.showSkippedLineItemsToggle).toBe(false);
+            });
+
+            it('should be hidden for an emergency requisition', function() {
+                this.requisition.emergency = true;
+
+                this.initController();
+
+                expect(this.vm.showSkippedLineItemsToggle).toBe(false);
+            });
+
+            it('should be hidden if the requisition template does not have a skip column', function() {
+                this.requisition.template.hasSkipColumn.andReturn(false);
+
+                this.initController();
+
+                expect(this.vm.showSkippedLineItemsToggle).toBe(false);
+            });
+
+        });
+
+        describe('showSkippedLineItems', function() {
+
+            it('should show skipped line items by default', function() {
+                this.initController();
+
+                expect(this.vm.showSkippedLineItems).toBe(true);
+            });
+
+            it('should keep skipped line items hidden after a page change', function() {
+                var lineItems = this.requisition.requisitionLineItems.slice(0, 2);
+                lineItems[0].skipped = true;
+                lineItems[0].orderable.fullProductName = 'A';
+                lineItems[1].skipped = false;
+                lineItems[1].orderable.fullProductName = 'B';
+                this.lineItems = lineItems;
+                this.$stateParams = {
+                    showSkippedLineItems: 'false'
+                };
+
+                this.initController();
+
+                expect(this.vm.showSkippedLineItems).toBe(false);
+                expect(this.vm.filteredItems).toEqual([lineItems[1]]);
+            });
+
+            it('should reload the page with the choice when it is changed', function() {
+                spyOn(this.$state, 'go');
+                spyOn(this.requisitionCacheService, 'cacheRequisition');
+                this.initController();
+                this.vm.showSkippedLineItems = false;
+
+                this.vm.showSkippedLineItemsChanged();
+
+                expect(this.requisitionCacheService.cacheRequisition).toHaveBeenCalledWith(this.requisition);
+                expect(this.$state.go).toHaveBeenCalledWith(this.$state.current.name, {
+                    showSkippedLineItems: false
+                });
+            });
+
+        });
+
         describe('quantities initialization', function() {
 
             it('should populate quantities with zero value from line item', function() {
@@ -843,8 +924,8 @@ describe('ViewTabController', function() {
 
     function initController() {
         this.vm = this.$controller('ViewTabController', {
-            lineItems: [],
-            items: [],
+            lineItems: this.lineItems || [],
+            items: this.lineItems || [],
             columns: [],
             requisition: this.requisition,
             canSubmit: this.canSubmit,
@@ -853,7 +934,8 @@ describe('ViewTabController', function() {
             program: {},
             $scope: this.$scope,
             canApproveAndReject: this.canApproveAndReject,
-            canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving
+            canUnskipRequisitionItemWhenApproving: this.canUnskipRequisitionItemWhenApproving,
+            $stateParams: this.$stateParams || {}
         });
         this.vm.$onInit();
     }
