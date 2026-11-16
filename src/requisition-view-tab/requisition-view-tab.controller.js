@@ -33,7 +33,7 @@
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
         'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'program', 'TB_MONTHLY_PROGRAM', '$scope',
-        'quantityUnitCalculateService'
+        'quantityUnitCalculateService', '$state'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
@@ -41,7 +41,7 @@
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
                                canUnskipRequisitionItemWhenApproving, program, TB_MONTHLY_PROGRAM, $scope,
-                               quantityUnitCalculateService) {
+                               quantityUnitCalculateService, $state) {
         var vm = this;
 
         var SUPPLYING_FACILITY_STOCK_ON_HAND = 'supplyingFacilityStockOnHand';
@@ -344,13 +344,11 @@
          * @description
          * Caches given requisition in the local storage.
          *
-         * @return {Promise} the promise resolved with the state params to keep on the next page
+         * @return {Promise} the promise resolved after adding requisition to the local storage
          */
         function cacheRequisition() {
             requisitionCacheService.cacheRequisition(vm.requisition);
-            return $q.resolve({
-                showSkippedLineItems: vm.showSkippedLineItems
-            });
+            return $q.resolve();
         }
 
         /**
@@ -529,10 +527,7 @@
         }
 
         function showSkipControls() {
-            return vm.userCanEdit &&
-                fullSupply &&
-                !requisition.emergency &&
-                requisition.template.hasSkipColumn();
+            return vm.userCanEdit && showSkippedLineItemsToggle();
         }
 
         function showSkippedLineItemsToggle() {
@@ -731,6 +726,22 @@
 
         vm.filterByOrderableParams = function() {
             vm.filteredItems = getFilteredLineItems();
+        };
+
+        /**
+         * @ngdoc method
+         * @methodOf requisition-view-tab.controller:ViewTabController
+         * @name showSkippedLineItemsChanged
+         *
+         * @description
+         * Caches the requisition and reloads the page with the choice in the URL, so it stays in effect after
+         * a page change or a reload of the requisition, for example after a sync.
+         */
+        vm.showSkippedLineItemsChanged = function() {
+            cacheRequisition();
+            $state.go($state.current.name, {
+                showSkippedLineItems: vm.showSkippedLineItems
+            });
         };
 
         vm.skipAllFullSupplyLineItems = function() {

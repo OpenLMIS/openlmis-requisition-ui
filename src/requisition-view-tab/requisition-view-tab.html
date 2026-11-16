@@ -19,7 +19,7 @@
 			name="skippedItemsVisibility"
 			id="skippedItemsVisibility"
 			ng-model="vm.showSkippedLineItems"
-			ng-change="vm.filterByOrderableParams()">
+			ng-change="vm.showSkippedLineItemsChanged()">
 	</div>
 	<button class="add" ng-if="vm.showAddFullSupplyProductsButton" ng-click="vm.addFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showAddNonFullSupplyProductsButton" ng-click="vm.addNonFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>

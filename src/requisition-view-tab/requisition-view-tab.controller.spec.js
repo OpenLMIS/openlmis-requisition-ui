@@ -45,6 +45,7 @@ describe('ViewTabController', function() {
             this.requisitionValidator = $injector.get('requisitionValidator');
             this.selectProductsModalService = $injector.get('selectProductsModalService');
             this.requisitionCacheService = $injector.get('requisitionCacheService');
+            this.$state = $injector.get('$state');
         });
 
         var requisitionDataBuilder = new RequisitionDataBuilder();
@@ -524,6 +525,20 @@ describe('ViewTabController', function() {
                 expect(this.vm.filteredItems).toEqual([lineItems[1]]);
             });
 
+            it('should reload the page with the choice when it is changed', function() {
+                spyOn(this.$state, 'go');
+                spyOn(this.requisitionCacheService, 'cacheRequisition');
+                this.initController();
+                this.vm.showSkippedLineItems = false;
+
+                this.vm.showSkippedLineItemsChanged();
+
+                expect(this.requisitionCacheService.cacheRequisition).toHaveBeenCalledWith(this.requisition);
+                expect(this.$state.go).toHaveBeenCalledWith(this.$state.current.name, {
+                    showSkippedLineItems: false
+                });
+            });
+
         });
 
         describe('quantities initialization', function() {
@@ -589,20 +604,6 @@ describe('ViewTabController', function() {
             this.vm.cacheRequisition();
 
             expect(this.requisitionCacheService.cacheRequisition).toHaveBeenCalledWith(this.requisition);
-        });
-
-        it('should pass the skipped line items choice on to the next page', function() {
-            var params;
-            this.vm.showSkippedLineItems = false;
-
-            this.vm.cacheRequisition().then(function(result) {
-                params = result;
-            });
-            this.$rootScope.$apply();
-
-            expect(params).toEqual({
-                showSkippedLineItems: false
-            });
         });
 
     });

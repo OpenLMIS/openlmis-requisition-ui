@@ -1,4 +1,4 @@
-re7.1.2-SNAPSHOT (WIP)
+7.1.2-SNAPSHOT (WIP)
 ==================
 Bug fixes:
 * [OLMIS-8375](https://openlmis.atlassian.net/browse/OLMIS-8375): "Search offline" on View Requisitions no longer stays on after the application is back online; only a choice the user made while online is kept.
