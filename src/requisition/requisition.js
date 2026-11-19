@@ -79,14 +79,16 @@
                 },
                 skip: {
                     headers: {
-                        'Idempotency-Key': getIdempotencyKey
+                        'Idempotency-Key': getIdempotencyKey,
+                        'If-Match': getETagFromParams
                     },
                     url: requisitionUrlFactory('/api/requisitions/:id/skip'),
                     method: 'PUT'
                 },
                 remove: {
                     headers: {
-                        'Idempotency-Key': getIdempotencyKey
+                        'Idempotency-Key': getIdempotencyKey,
+                        'If-Match': getETagFromParams
                     },
                     url: requisitionUrlFactory('/api/requisitions/:id'),
                     method: 'DELETE'
@@ -205,10 +207,12 @@
             var requisition = this;
             return handlePromise(resource.remove({
                 id: requisition.id,
-                idempotencyKey: requisition.idempotencyKey
+                idempotencyKey: requisition.idempotencyKey,
+                eTag: requisition.eTag
             }).$promise, function() {
                 offlineRequisitions.removeBy('id', requisition.id);
             }, function(data) {
+                removeOfflineIfOutdated(data, requisition.id);
                 handleFailure(data, requisition);
             });
         }
@@ -249,10 +253,7 @@
             }, this).$promise, function(saved) {
                 saveToStorage(saved, availableOffline);
             }, function(saved) {
-                if (saved.status === 409 || saved.status === 403) {
-                    // in case of conflict or unauthorized, remove requisition from storage
-                    offlineRequisitions.removeBy('id', id);
-                }
+                removeOfflineIfOutdated(saved, id);
             });
         }
 
@@ -336,10 +337,12 @@
             var requisition = this;
             return handlePromise(resource.skip({
                 id: requisition.id,
-                idempotencyKey: requisition.idempotencyKey
+                idempotencyKey: requisition.idempotencyKey,
+                eTag: requisition.eTag
             }, {}).$promise, function(requisition) {
                 offlineRequisitions.removeBy('id', requisition.id);
             }, function(data) {
+                removeOfflineIfOutdated(data, requisition.id);
                 handleFailure(data, requisition);
             });
         }
@@ -848,11 +851,24 @@
             return config.data.eTag;
         }
 
+        function getETagFromParams(config) {
+            var eTag = config.params.eTag;
+            delete config.params.eTag;
+            return eTag;
+        }
+
         function getIdempotencyKey(config) {
             var key = config.params.idempotencyKey;
             if (key) {
                 delete config.params.idempotencyKey;
                 return key;
+            }
+        }
+
+        function removeOfflineIfOutdated(response, id) {
+            // the page reloads after a 409 or 403; without the cached copy it gets the server version
+            if (response.status === 409 || response.status === 403) {
+                offlineRequisitions.removeBy('id', id);
             }
         }
 

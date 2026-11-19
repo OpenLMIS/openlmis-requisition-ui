@@ -51,7 +51,8 @@
                     'Idempotency-Key': getIdempotencyKey
                 },
                 url: requisitionUrlFactory('/api/v2/requisitions/initiate'),
-                method: 'POST'
+                method: 'POST',
+                transformResponse: transformInitiateResponse
             },
             search: {
                 url: requisitionUrlFactory('/api/requisitions/search'),
@@ -334,6 +335,12 @@
             return angular.toJson(body);
         }
 
+        function transformInitiateResponse(data, headers, status) {
+            return transformResponse(data, headers, status, function(response) {
+                return addETag(response, headers);
+            });
+        }
+
         function transformGetResponse(data, headers, status) {
             return transformResponse(data, headers, status, function(response) {
                 if (response.modifiedDate) {
@@ -345,7 +352,7 @@
                 if (response.processingPeriod.endDate) {
                     response.processingPeriod.endDate = dateUtils.toDate(response.processingPeriod.endDate);
                 }
-                response.eTag = headers('eTag');
+                addETag(response, headers);
                 transformRequisitionOffline(response);
                 return response;
             });
@@ -375,10 +382,15 @@
         }
 
         function transformResponse(data, headers, status, transformer) {
-            if (status === 200) {
+            if (status === 200 || status === 201) {
                 return transformer(angular.fromJson(data));
             }
             return data;
+        }
+
+        function addETag(response, headers) {
+            response.eTag = headers('eTag');
+            return response;
         }
 
         function transformRequisition(requisition) {
