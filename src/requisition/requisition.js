@@ -211,10 +211,7 @@
             }).$promise, function() {
                 offlineRequisitions.removeBy('id', requisition.id);
             }, function(data) {
-                if (data.status === 409 || data.status === 403) {
-                    // the page reloads after these; without the cached copy it gets the server version
-                    offlineRequisitions.removeBy('id', requisition.id);
-                }
+                removeOfflineIfOutdated(data, requisition.id);
                 handleFailure(data, requisition);
             });
         }
@@ -255,10 +252,7 @@
             }, this).$promise, function(saved) {
                 saveToStorage(saved, availableOffline);
             }, function(saved) {
-                if (saved.status === 409 || saved.status === 403) {
-                    // in case of conflict or unauthorized, remove requisition from storage
-                    offlineRequisitions.removeBy('id', id);
-                }
+                removeOfflineIfOutdated(saved, id);
             });
         }
 
@@ -865,6 +859,13 @@
             if (key) {
                 delete config.params.idempotencyKey;
                 return key;
+            }
+        }
+
+        function removeOfflineIfOutdated(response, id) {
+            // the page reloads after a 409 or 403; without the cached copy it gets the server version
+            if (response.status === 409 || response.status === 403) {
+                offlineRequisitions.removeBy('id', id);
             }
         }
 
