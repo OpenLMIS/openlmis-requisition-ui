@@ -595,8 +595,10 @@
          *
          * @description
          * Responsible for skipping requisition. Displays confirmation dialog before skipping.
-         * If an error occurs during skipping it will display an error notification modal.
-         * Otherwise, a success notification modal will be shown.
+         * On success, a success notification is shown and the user returns to the previous page.
+         * If the requisition has changed on the server since it was loaded (409), or the user can no
+         * longer skip it (403), the requisition is reloaded, as after a failed sync. Any other failure
+         * displays an error alert.
          */
         function skipRnr() {
             confirmService.confirm(
@@ -610,7 +612,9 @@
                         notificationService.success('requisitionView.skip.success');
                     });
                     stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
-                }, failWithMessage('requisitionView.skip.failure'));
+                }, function(response) {
+                    handleSaveError(response, failWithMessage('requisitionView.skip.failure'));
+                });
             });
         }
 

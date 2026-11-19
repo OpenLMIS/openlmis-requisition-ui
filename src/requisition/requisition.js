@@ -79,7 +79,8 @@
                 },
                 skip: {
                     headers: {
-                        'Idempotency-Key': getIdempotencyKey
+                        'Idempotency-Key': getIdempotencyKey,
+                        'If-Match': getETagFromParams
                     },
                     url: requisitionUrlFactory('/api/requisitions/:id/skip'),
                     method: 'PUT'
@@ -336,10 +337,12 @@
             var requisition = this;
             return handlePromise(resource.skip({
                 id: requisition.id,
-                idempotencyKey: requisition.idempotencyKey
+                idempotencyKey: requisition.idempotencyKey,
+                eTag: requisition.eTag
             }, {}).$promise, function(requisition) {
                 offlineRequisitions.removeBy('id', requisition.id);
             }, function(data) {
+                removeOfflineIfOutdated(data, requisition.id);
                 handleFailure(data, requisition);
             });
         }

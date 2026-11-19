@@ -248,6 +248,36 @@ describe('RequisitionViewController', function() {
             expect(this.alertService.error).toHaveBeenCalledWith('requisitionView.skip.failure');
         });
 
+        it('should notify and reload when the requisition has a newer version on the server', function() {
+            this.loadingModalService.open.andReturn(this.$q.resolve());
+            this.requisition.$skip.andReturn(this.$q.reject({
+                status: 409
+            }));
+
+            this.vm.skipRnr();
+            this.$rootScope.$apply();
+
+            expect(this.notificationService.error).toHaveBeenCalledWith('requisitionView.versionMismatch');
+            expect(this.$state.reload).toHaveBeenCalled();
+            expect(this.alertService.error).not.toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
+        });
+
+        it('should notify and reload when the skip is forbidden', function() {
+            this.loadingModalService.open.andReturn(this.$q.resolve());
+            this.requisition.$skip.andReturn(this.$q.reject({
+                status: 403
+            }));
+
+            this.vm.skipRnr();
+            this.$rootScope.$apply();
+
+            expect(this.notificationService.error).toHaveBeenCalledWith('requisitionView.updateForbidden');
+            expect(this.$state.reload).toHaveBeenCalled();
+            expect(this.alertService.error).not.toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
+        });
+
     });
 
     describe('getPrintUrl', function() {
