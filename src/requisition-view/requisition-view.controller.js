@@ -326,7 +326,7 @@
                 });
                 reloadState();
             }, function(response) {
-                handleSaveError(response.status);
+                handleSaveError(response);
             });
         }
 
@@ -355,7 +355,7 @@
                     popup.location.href = accessTokenFactory.addAccessToken(vm.getPrintUrl());
                     reloadState();
                 }, function(response) {
-                    handleSaveError(response.status);
+                    handleSaveError(response);
                     popup.close();
                 });
             } else {
@@ -411,7 +411,7 @@
                         stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
                     }, loadingModalService.close);
                 }, function(response) {
-                    handleSaveError(response.status);
+                    handleSaveError(response);
                 });
             }
         }
@@ -463,7 +463,7 @@
                         stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
                     }, loadingModalService.close);
                 }, function(response) {
-                    handleSaveError(response.status);
+                    handleSaveError(response);
                 });
             }
         }
@@ -494,12 +494,7 @@
                     });
                     stateTrackerService.goToPreviousState('openlmis.requisitions.initRnr');
                 }, function(response) {
-                    var status = response && response.status;
-                    if (status === 409 || status === 403) {
-                        handleSaveError(status);
-                    } else {
-                        loadingModalService.close();
-                    }
+                    handleSaveError(response, loadingModalService.close);
                 });
             });
         }
@@ -532,7 +527,7 @@
                             stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
                         }, loadingModalService.close);
                     }, function(response) {
-                        handleSaveError(response.status);
+                        handleSaveError(response);
                     });
                 } else {
                     $scope.$broadcast('openlmis-form-submit');
@@ -690,7 +685,8 @@
             return valid;
         }
 
-        function handleSaveError(status) {
+        function handleSaveError(response, otherFailure) {
+            var status = response && response.status;
             if (status === 409) {
                 // in case of conflict, use the server version
                 notificationService.error('requisitionView.versionMismatch');
@@ -700,7 +696,7 @@
                 notificationService.error('requisitionView.updateForbidden');
                 reloadState();
             } else {
-                failWithMessage('requisitionView.sync.failure')();
+                (otherFailure || failWithMessage('requisitionView.sync.failure'))();
             }
         }
 
