@@ -31,12 +31,12 @@
     service.$inject = [
         '$q', '$resource', 'requisitionUrlFactory', 'Requisition', 'dateUtils', 'localStorageFactory', 'offlineService',
         '$filter', 'requisitionCacheService', 'OrderableResource', 'FacilityTypeApprovedProductResource',
-        'periodService', '$http'
+        'periodService'
     ];
 
     function service($q, $resource, requisitionUrlFactory, Requisition, dateUtils, localStorageFactory, offlineService,
                      $filter, requisitionCacheService, OrderableResource, FacilityTypeApprovedProductResource,
-                     periodService, $http) {
+                     periodService) {
 
         var onlineOnlyRequisitions = localStorageFactory('onlineOnly'),
             offlineStatusMessages = localStorageFactory('statusMessages');
@@ -52,7 +52,7 @@
                 },
                 url: requisitionUrlFactory('/api/v2/requisitions/initiate'),
                 method: 'POST',
-                transformResponse: $http.defaults.transformResponse.concat(addETag)
+                transformResponse: transformInitiateResponse
             },
             search: {
                 url: requisitionUrlFactory('/api/requisitions/search'),
@@ -335,11 +335,10 @@
             return angular.toJson(body);
         }
 
-        function addETag(data, headers, status) {
-            if (status >= 200 && status < 300 && angular.isObject(data)) {
-                data.eTag = headers('eTag');
-            }
-            return data;
+        function transformInitiateResponse(data, headers, status) {
+            return transformResponse(data, headers, status, function(response) {
+                return addETag(response, headers);
+            });
         }
 
         function transformGetResponse(data, headers, status) {
@@ -353,7 +352,7 @@
                 if (response.processingPeriod.endDate) {
                     response.processingPeriod.endDate = dateUtils.toDate(response.processingPeriod.endDate);
                 }
-                response.eTag = headers('eTag');
+                addETag(response, headers);
                 transformRequisitionOffline(response);
                 return response;
             });
@@ -383,10 +382,15 @@
         }
 
         function transformResponse(data, headers, status, transformer) {
-            if (status === 200) {
+            if (status === 200 || status === 201) {
                 return transformer(angular.fromJson(data));
             }
             return data;
+        }
+
+        function addETag(response, headers) {
+            response.eTag = headers('eTag');
+            return response;
         }
 
         function transformRequisition(requisition) {
