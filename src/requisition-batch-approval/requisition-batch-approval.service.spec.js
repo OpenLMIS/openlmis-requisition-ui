@@ -238,6 +238,170 @@ describe('requisitionBatchApprovalService', function() {
         expect(data[0].id).toBe(requisitions[0].id);
     });
 
+    describe('with a requisition stored with reduced products', function() {
+
+        var reducedRequisition;
+
+        beforeEach(function() {
+            reducedRequisition = angular.copy(requisitions[0]);
+            reducedRequisition.$modified = true;
+            reducedRequisition.requisitionLineItems[0].approvedQuantity = 77;
+            reducedRequisition.requisitionLineItems.forEach(function(lineItem) {
+                lineItem.orderable = {
+                    id: lineItem.orderable.id,
+                    versionNumber: 1
+                };
+            });
+
+            var unreducedRequisition = angular.copy(requisitions[1]);
+            unreducedRequisition.$modified = true;
+
+            batchRequisitionsStorage.search.andCallFake(function(params) {
+                if (params.id === '1') {
+                    return [angular.copy(reducedRequisition)];
+                }
+                if (params.id === '2') {
+                    return [unreducedRequisition];
+                }
+                return [];
+            });
+        });
+
+        it('should restore its products from the server and keep its edits', function() {
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1')).respond(200, {
+                requisitionDtos: [requisitions[0]]
+            });
+
+            var data;
+            requisitionBatchApprovalService.get(['1']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data.length).toEqual(1);
+            expect(data[0].$modified).toBe(true);
+            expect(data[0].requisitionLineItems[0].approvedQuantity).toEqual(77);
+            expect(data[0].requisitionLineItems[0].orderable.productCode).toEqual('Code 1');
+            expect(data[0].requisitionLineItems[0].orderable.fullProductName).toEqual('Product name 1');
+            expect(data[0].requisitionLineItems[1].orderable.productCode).toEqual('Code 2');
+            expect(batchRequisitionsStorage.put.callCount).toEqual(1);
+            expect(batchRequisitionsStorage.put).toHaveBeenCalledWith(data[0]);
+        });
+
+        it('should request only reduced and not stored requisitions', function() {
+            httpBackend.expect('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1,3')).respond(200, {
+                requisitionDtos: [requisitions[0]]
+            });
+
+            var data;
+            requisitionBatchApprovalService.get(['1', '2', '3']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            httpBackend.verifyNoOutstandingExpectation();
+
+            expect(data.length).toEqual(2);
+            expect(findById(data, 1).requisitionLineItems[0].orderable.productCode).toEqual('Code 1');
+            expect(findById(data, 2).$modified).toBe(true);
+        });
+
+        it('should return it as stored when the server does not return it', function() {
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1')).respond(200, {
+                requisitionDtos: []
+            });
+
+            var data;
+            requisitionBatchApprovalService.get(['1']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data).toEqual([reducedRequisition]);
+        });
+
+        it('should keep the reference of a product the server copy does not have', function() {
+            var serverRequisition = angular.copy(requisitions[0]);
+            serverRequisition.requisitionLineItems.splice(1, 1);
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1')).respond(200, {
+                requisitionDtos: [serverRequisition]
+            });
+
+            var data;
+            requisitionBatchApprovalService.get(['1']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data[0].requisitionLineItems[0].orderable.productCode).toEqual('Code 1');
+            expect(data[0].requisitionLineItems[1].orderable).toEqual({
+                id: 2,
+                versionNumber: 1
+            });
+        });
+
+        it('should return it as stored when the request fails', function() {
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1')).respond(400, {});
+
+            var data;
+            requisitionBatchApprovalService.get(['1']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data).toEqual([reducedRequisition]);
+        });
+
+        it('should reject when the request for a not stored requisition fails', function() {
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1,3')).respond(400, {});
+
+            var rejected = false;
+            requisitionBatchApprovalService.get(['1', '3']).catch(function() {
+                rejected = true;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should return it unchanged while offline', function() {
+            spyOn(offlineService, 'isOffline').andReturn(true);
+            batchRequisitionsStorage.getBy.andReturn(angular.copy(reducedRequisition));
+
+            var data;
+            requisitionBatchApprovalService.get(['1']).then(function(response) {
+                data = response;
+            });
+            $rootScope.$apply();
+
+            httpBackend.verifyNoOutstandingRequest();
+
+            expect(data).toEqual([reducedRequisition]);
+        });
+    });
+
+    it('should not request a modified requisition stored with full products', function() {
+        var storedRequisition = angular.copy(requisitions[0]);
+        storedRequisition.$modified = true;
+        batchRequisitionsStorage.search.andReturn([storedRequisition]);
+
+        var data;
+        requisitionBatchApprovalService.get(['1']).then(function(response) {
+            data = response;
+        });
+        $rootScope.$apply();
+
+        httpBackend.verifyNoOutstandingRequest();
+
+        expect(data).toEqual([storedRequisition]);
+    });
+
     it('should save all selected requisitions', function() {
         var getRequisitionUrl = '/api/requisitions?saveAll';
 
@@ -274,6 +438,12 @@ describe('requisitionBatchApprovalService', function() {
 
         expect(data.requisitionDtos[0].id).toBe(requisitions[0].id);
     });
+
+    function findById(requisitionList, id) {
+        return requisitionList.filter(function(requisition) {
+            return requisition.id === id;
+        })[0];
+    }
 
     function checkConnection() {
         return $q.when(true);

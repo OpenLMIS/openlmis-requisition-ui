@@ -62,7 +62,9 @@
          * @name get
          *
          * @description
-         * Retrieves requisitions by ids.
+         * Retrieves requisitions by ids. Requisitions modified locally are taken from the local storage. When online,
+         * the ones stored with products reduced to version references are also fetched, and get their products back
+         * from the server copy while keeping the local changes.
          *
          * @param  {String}  ids Requisition UUIDs
          * @return {Promise}    requisition promise
@@ -85,6 +87,7 @@
 
                 deferred.resolve(offlineResponse);
             } else {
+                var reducedById = {};
 
                 angular.forEach(ids, function(id) {
                     var requisition = offlineRequisitions.search({
@@ -93,6 +96,10 @@
                     });
                     if (!requisition || !requisition.length) {
                         idsArray.push(id);
+                    } else if (hasReducedProducts(requisition[0])) {
+                        idsArray.push(id);
+                        reducedById[requisition[0].id] = requisition[0];
+                        offlineResponse.push(requisition[0]);
                     } else {
                         offlineResponse.push(requisition[0]);
                     }
@@ -100,14 +107,26 @@
 
                 if (idsArray.length > 0) {
                     getRequisitions(idsArray).then(function(response) {
-                        var requisitionDtos = response.requisitionDtos;
+                        var requisitionDtos = [];
 
-                        angular.forEach(requisitionDtos, function(requisitionDto) {
-                            saveToLocalStorage(requisitionDto);
+                        angular.forEach(response.requisitionDtos, function(requisitionDto) {
+                            var reducedRequisition = reducedById[requisitionDto.id];
+                            if (reducedRequisition) {
+                                restoreProducts(reducedRequisition, requisitionDto);
+                                offlineRequisitions.put(reducedRequisition);
+                            } else {
+                                saveToLocalStorage(requisitionDto);
+                                requisitionDtos.push(requisitionDto);
+                            }
                         });
-                        requisitionDtos = requisitionDtos.concat(offlineResponse);
-                        deferred.resolve(requisitionDtos);
-                    }, deferred.reject);
+                        deferred.resolve(requisitionDtos.concat(offlineResponse));
+                    }, function(response) {
+                        if (Object.keys(reducedById).length === idsArray.length) {
+                            deferred.resolve(offlineResponse);
+                        } else {
+                            deferred.reject(response);
+                        }
+                    });
                 } else {
                     deferred.resolve(offlineResponse);
                 }
@@ -131,6 +150,22 @@
             return resource.get({
                 id: ids.join(',')
             }).$promise;
+        }
+
+        function hasReducedProducts(requisition) {
+            return requisition.requisitionLineItems.some(function(lineItem) {
+                return !lineItem.orderable.productCode;
+            });
+        }
+
+        function restoreProducts(requisition, requisitionDto) {
+            requisition.requisitionLineItems.forEach(function(lineItem) {
+                requisitionDto.requisitionLineItems.forEach(function(lineItemDto) {
+                    if (lineItemDto.orderable.id === lineItem.orderable.id) {
+                        lineItem.orderable = lineItemDto.orderable;
+                    }
+                });
+            });
         }
 
         function saveToLocalStorage(requisition) {
