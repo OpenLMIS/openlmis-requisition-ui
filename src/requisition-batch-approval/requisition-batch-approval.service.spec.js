@@ -370,6 +370,60 @@ describe('requisitionBatchApprovalService', function() {
             expect(rejected).toBe(true);
         });
 
+        it('should return it as stored with the other requisitions when the server refuses only it', function() {
+            var serverRequisition = angular.copy(requisitions[1]);
+            serverRequisition.id = 3;
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1,3')).respond(400, {
+                requisitionDtos: [serverRequisition],
+                requisitionErrors: [{
+                    requisitionId: 1
+                }]
+            });
+
+            var data;
+            requisitionBatchApprovalService.get(['1', '3']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data.length).toEqual(2);
+            expect(findById(data, 1)).toEqual(reducedRequisition);
+            expect(findById(data, 3).$modified).toBe(false);
+            expect(batchRequisitionsStorage.put).toHaveBeenCalledWith(findById(data, 3));
+        });
+
+        it('should reject when the server refuses a not stored requisition', function() {
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1,3')).respond(400, {
+                requisitionDtos: [requisitions[0]],
+                requisitionErrors: [{
+                    requisitionId: 3
+                }]
+            });
+
+            var rejected = false;
+            requisitionBatchApprovalService.get(['1', '3']).catch(function() {
+                rejected = true;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should return it as stored when the request for it twice fails', function() {
+            httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1,1')).respond(500, {});
+
+            var data;
+            requisitionBatchApprovalService.get(['1', '1']).then(function(response) {
+                data = response;
+            });
+            httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data).toEqual([reducedRequisition, reducedRequisition]);
+        });
+
         it('should return it unchanged while offline', function() {
             spyOn(offlineService, 'isOffline').andReturn(true);
             batchRequisitionsStorage.getBy.andReturn(angular.copy(reducedRequisition));
@@ -390,6 +444,33 @@ describe('requisitionBatchApprovalService', function() {
         var storedRequisition = angular.copy(requisitions[0]);
         storedRequisition.$modified = true;
         batchRequisitionsStorage.search.andReturn([storedRequisition]);
+        httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1')).respond(200, {
+            requisitionDtos: [requisitions[0]]
+        });
+
+        var data;
+        requisitionBatchApprovalService.get(['1']).then(function(response) {
+            data = response;
+        });
+        $rootScope.$apply();
+
+        httpBackend.verifyNoOutstandingRequest();
+
+        expect(data).toEqual([storedRequisition]);
+    });
+
+    it('should not request a modified requisition whose only reduced products are skipped', function() {
+        var storedRequisition = angular.copy(requisitions[0]);
+        storedRequisition.$modified = true;
+        storedRequisition.requisitionLineItems[1].skipped = true;
+        storedRequisition.requisitionLineItems[1].orderable = {
+            id: storedRequisition.requisitionLineItems[1].orderable.id,
+            versionNumber: 1
+        };
+        batchRequisitionsStorage.search.andReturn([storedRequisition]);
+        httpBackend.when('GET', requisitionUrlFactory('/api/requisitions?retrieveAll&id=1')).respond(200, {
+            requisitionDtos: [requisitions[0]]
+        });
 
         var data;
         requisitionBatchApprovalService.get(['1']).then(function(response) {
