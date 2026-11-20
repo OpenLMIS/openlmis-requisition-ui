@@ -48,13 +48,18 @@
          *
          * @param  {Scope}              scope       scope that requisition is in
          * @param  {Object}             requisition requisition to set watcher on
+         * @param  {Object}             storage     local storage to save the requisition to
+         * @param  {Object}             options     (optional) minimize: false stores the requisition as it is,
+         *                                          without reducing its products to version references
          * @return {RequisitionWatcher}             watcher object
          */
-        function RequisitionWatcher(scope, requisition, storage) {
+        function RequisitionWatcher(scope, requisition, storage, options) {
+            var minimize = !options || options.minimize !== false;
+
             this.enabled = true;
 
-            addWatcher(scope, requisition, 'requisitionLineItems', this, storage);
-            addWatcher(scope, requisition, 'draftStatusMessage', this, storage);
+            addWatcher(scope, requisition, 'requisitionLineItems', this, storage, minimize);
+            addWatcher(scope, requisition, 'draftStatusMessage', this, storage, minimize);
         }
 
         function enableWatcher() {
@@ -65,7 +70,7 @@
             this.enabled = false;
         }
 
-        function addWatcher(scope, requisition, valueToWatch, watcher, storage) {
+        function addWatcher(scope, requisition, valueToWatch, watcher, storage, minimize) {
             scope.$watch(function() {
                 return requisition[valueToWatch];
             }, function(oldValue, newValue) {
@@ -73,7 +78,11 @@
                     $timeout.cancel(watcher.syncTimeout);
                     watcher.syncTimeout = $timeout(function() {
                         requisition.$modified = true;
-                        requisitionCacheService.cacheRequisitionToStorage(requisition, storage);
+                        if (minimize) {
+                            requisitionCacheService.cacheRequisitionToStorage(requisition, storage);
+                        } else {
+                            storage.put(requisition);
+                        }
                         watcher.syncTimeout = undefined;
                     }, 500);
                 }
