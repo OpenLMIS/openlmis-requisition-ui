@@ -16,16 +16,19 @@
 describe('RequisitionBatchApprovalController', function() {
 
     //injects
-    var confirmDeferred, requisitionsStorage, batchRequisitionsStorage, notificationServiceSpy, batchDeferred;
+    var confirmDeferred, requisitionsStorage, batchRequisitionsStorage, notificationServiceSpy, batchDeferred,
+        requisitionWatcherConstructor;
 
     beforeEach(function() {
         module('requisition-batch-approval');
         module('requisition-view-tab');
 
         var requisitionWatcherMock = jasmine.createSpy('RequisitionWatcher');
+        requisitionWatcherConstructor = jasmine.createSpy('RequisitionWatcherConstructor');
         module(function($provide) {
             $provide.factory('RequisitionWatcher', function() {
                 return function() {
+                    requisitionWatcherConstructor.apply(this, arguments);
                     this.enableWatcher = requisitionWatcherMock;
                 };
             });
@@ -189,6 +192,17 @@ describe('RequisitionBatchApprovalController', function() {
             this.$rootScope.$apply();
 
             expect(this.vm.lineItems).toEqual(this.lineItems);
+        });
+
+        it('should watch requisitions in batch storage without reducing them', function() {
+            this.vm.$onInit();
+            this.$rootScope.$apply();
+
+            expect(requisitionWatcherConstructor).toHaveBeenCalledWith(
+                this.$scope, this.requisition, batchRequisitionsStorage, {
+                    minimize: false
+                }
+            );
         });
     });
 

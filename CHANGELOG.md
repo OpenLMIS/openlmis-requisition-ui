@@ -3,6 +3,7 @@
 Bug fixes:
 * [OLMIS-8375](https://openlmis.atlassian.net/browse/OLMIS-8375): "Search offline" on View Requisitions no longer stays on after the application is back online; only a choice the user made while online is kept.
 * [OLMIS-8416](https://openlmis.atlassian.net/browse/OLMIS-8416): Batch approval no longer hangs when a selected requisition was already approved elsewhere.
+* [OLMIS-8386](https://openlmis.atlassian.net/browse/OLMIS-8386): Batch Approve no longer shows blank product Code and Name, or a total cost of 0, for requisitions edited on that screen and not yet synced; this was the case since 7.0.0. Requisitions stored by an earlier version get their product details back the next time Batch Approve is opened online, keeping their unsynced changes.
 
 7.1.1 / 2026-10-16
 ==================
