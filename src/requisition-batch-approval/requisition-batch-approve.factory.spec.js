@@ -119,4 +119,17 @@ describe('RequisitionBatchApproveFactory', function() {
 
         expect(response.length).toEqual(requisitions.length - 1);
     });
+
+    it('does not approve if no requisition was saved', function() {
+        var response;
+        requisitionBatchSaveFactory.saveRequisitions.andReturn($q.reject([]));
+
+        requisitionBatchApproveFactory.batchApprove(requisitions).then(function(returnedRequisitions) {
+            response = returnedRequisitions;
+        });
+        $rootScope.$apply();
+
+        expect(requisitionBatchApprovalService.approveAll).not.toHaveBeenCalled();
+        expect(response).toEqual([]);
+    });
 });

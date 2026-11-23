@@ -298,7 +298,8 @@
                 vm.requisitions.forEach(function(requisition) {
                     if (!isFoundInSuccessfulRequisitions(requisition, successfulRequisitions)) {
                         requisitionIds.push(requisition.id);
-                        errors[requisition.id] = messageService.get('requisitionBatchApproval.invalidRequisition');
+                        errors[requisition.id] = requisition.$error ||
+                            messageService.get('requisitionBatchApproval.invalidRequisition');
                     }
                 });
 
