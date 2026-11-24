@@ -26,7 +26,7 @@
     function routes(selectProductsModalStateProvider) {
         selectProductsModalStateProvider
             .stateWithAddOrderablesChildState('openlmis.requisitions.requisition.fullSupply', {
-                url: '/fullSupply?fullSupplyListPage&fullSupplyListSize',
+                url: '/fullSupply?fullSupplyListPage&fullSupplyListSize&showSkippedLineItems',
                 templateUrl: 'requisition-view-tab/requisition-view-tab.html',
                 controller: 'ViewTabController',
                 controllerAs: 'vm',

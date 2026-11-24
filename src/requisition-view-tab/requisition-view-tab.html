@@ -12,14 +12,14 @@
 		<input type="text" placeholder="{{ 'requisitionViewTab.filterPlaceholder' | message}}"
 			ng-model="vm.orderableFilterProperties.name" ng-change="vm.filterByOrderableParams()">
 	</div>
-	<div ng-show="vm.showSkipControls" id="skipped-line-items-visibility">
+	<div ng-show="vm.showSkippedLineItemsToggle" id="skipped-line-items-visibility">
 		<label for="skippedItemsVisibility">{{:: 'requisitionViewTab.skippedItemsVisibility' | message  }}</label>
 		<input
 			type="checkbox"
 			name="skippedItemsVisibility"
 			id="skippedItemsVisibility"
 			ng-model="vm.showSkippedLineItems"
-			ng-change="vm.filterByOrderableParams()">
+			ng-change="vm.showSkippedLineItemsChanged()">
 	</div>
 	<button class="add" ng-if="vm.showAddFullSupplyProductsButton" ng-click="vm.addFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showAddNonFullSupplyProductsButton" ng-click="vm.addNonFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
