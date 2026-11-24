@@ -100,4 +100,32 @@ describe('RequisitionWatcher', function() {
             expect(this.requisition.$modified).toBe(undefined);
         });
     });
+
+    describe('with minimize disabled', function() {
+
+        beforeEach(function() {
+            this.scope = this.$rootScope.$new();
+            this.requisition = new this.RequisitionDataBuilder().buildJson();
+
+            new this.RequisitionWatcher(this.scope, this.requisition, requisitionsStorage, {
+                minimize: false
+            });
+            this.scope.$digest();
+        });
+
+        it('should store the requisition with its full products', function() {
+            var orderable = this.requisition.requisitionLineItems[0].orderable;
+
+            this.requisition.requisitionLineItems[0].beginningBalance = 20;
+            this.scope.$digest();
+            this.$timeout.flush();
+
+            expect(this.requisitionCacheService.cacheRequisitionToStorage).not.toHaveBeenCalled();
+            expect(requisitionsStorage.put).toHaveBeenCalledWith(this.requisition);
+            expect(requisitionsStorage.put.mostRecentCall.args[0].requisitionLineItems[0].orderable.productCode)
+                .toEqual(orderable.productCode);
+
+            expect(this.requisition.$modified).toBe(true);
+        });
+    });
 });

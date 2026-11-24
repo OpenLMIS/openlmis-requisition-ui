@@ -62,7 +62,10 @@
          * @name get
          *
          * @description
-         * Retrieves requisitions by ids.
+         * Retrieves requisitions by ids. Requisitions modified locally are taken from the local storage. When online,
+         * the ones stored with products reduced to version references are also fetched, and get their products back
+         * from the server copy while keeping the local changes. If only those fail to be fetched, they are returned
+         * as stored.
          *
          * @param  {String}  ids Requisition UUIDs
          * @return {Promise}    requisition promise
@@ -85,6 +88,7 @@
 
                 deferred.resolve(offlineResponse);
             } else {
+                var reducedById = {};
 
                 angular.forEach(ids, function(id) {
                     var requisition = offlineRequisitions.search({
@@ -93,21 +97,46 @@
                     });
                     if (!requisition || !requisition.length) {
                         idsArray.push(id);
+                    } else if (hasReducedProducts(requisition[0])) {
+                        idsArray.push(id);
+                        reducedById[requisition[0].id] = requisition[0];
+                        offlineResponse.push(requisition[0]);
                     } else {
                         offlineResponse.push(requisition[0]);
                     }
                 });
 
                 if (idsArray.length > 0) {
-                    getRequisitions(idsArray).then(function(response) {
-                        var requisitionDtos = response.requisitionDtos;
+                    var resolveWith = function(requisitionDtos) {
+                        var fetched = [];
 
                         angular.forEach(requisitionDtos, function(requisitionDto) {
-                            saveToLocalStorage(requisitionDto);
+                            var reducedRequisition = reducedById[requisitionDto.id];
+                            if (reducedRequisition) {
+                                restoreProducts(reducedRequisition, requisitionDto);
+                                offlineRequisitions.put(reducedRequisition);
+                            } else {
+                                saveToLocalStorage(requisitionDto);
+                                fetched.push(requisitionDto);
+                            }
                         });
-                        requisitionDtos = requisitionDtos.concat(offlineResponse);
-                        deferred.resolve(requisitionDtos);
-                    }, deferred.reject);
+                        deferred.resolve(fetched.concat(offlineResponse));
+                    };
+
+                    getRequisitions(idsArray).then(function(response) {
+                        resolveWith(response.requisitionDtos);
+                    }, function(response) {
+                        var failedIds = getFailedIds(response, idsArray),
+                            onlyStoredFailed = failedIds.every(function(id) {
+                                return reducedById[id];
+                            });
+
+                        if (onlyStoredFailed) {
+                            resolveWith(response.data && response.data.requisitionDtos);
+                        } else {
+                            deferred.reject(response);
+                        }
+                    });
                 } else {
                     deferred.resolve(offlineResponse);
                 }
@@ -131,6 +160,34 @@
             return resource.get({
                 id: ids.join(',')
             }).$promise;
+        }
+
+        function getFailedIds(response, requestedIds) {
+            var errors = response && response.status === 400 && response.data && response.data.requisitionErrors;
+            if (!errors || !errors.length) {
+                return requestedIds;
+            }
+            return errors.map(function(error) {
+                return error.requisitionId;
+            });
+        }
+
+        // The server leaves out a product that every requisition in the response skips, so a skipped line
+        // may never get its product back.
+        function hasReducedProducts(requisition) {
+            return requisition.requisitionLineItems.some(function(lineItem) {
+                return !lineItem.skipped && !lineItem.orderable.productCode;
+            });
+        }
+
+        function restoreProducts(requisition, requisitionDto) {
+            requisition.requisitionLineItems.forEach(function(lineItem) {
+                requisitionDto.requisitionLineItems.forEach(function(lineItemDto) {
+                    if (lineItemDto.orderable.id === lineItem.orderable.id) {
+                        lineItem.orderable = lineItemDto.orderable;
+                    }
+                });
+            });
         }
 
         function saveToLocalStorage(requisition) {
