@@ -60,7 +60,8 @@
                 .filter(byInitiatedDateFrom(params.initiatedDateFrom))
                 .filter(byInitiatedDateTo(params.initiatedDateTo))
                 .filter(byEmergency(params.emergency))
-                .filter(byStatus(params.status));
+                .filter(byStatus(params.status))
+                .filter(byCode(params.code));
         };
 
         function byProgram(program) {
@@ -98,6 +99,12 @@
         function byStatus(status) {
             return function(requisition) {
                 return !status || matchStatus(requisition.status, status);
+            };
+        }
+
+        function byCode(code) {
+            return function(requisition) {
+                return !code || code === requisition.code;
             };
         }
 

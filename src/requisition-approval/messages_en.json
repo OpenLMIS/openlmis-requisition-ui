@@ -11,6 +11,7 @@
     "requisitionApproval.none": "None",
     "requisitionApproval.noRnrPendingForApproval": "No R&Rs pending for approval",
     "requisitionApproval.period": "Period",
+    "requisitionApproval.code": "Requisition code",
     "requisitionApproval.program": "Program",
     "requisitionApproval.offline": "Offline",
     "requisitionApproval.search": "Search",

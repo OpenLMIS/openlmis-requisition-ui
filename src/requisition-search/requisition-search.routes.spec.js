@@ -134,6 +134,24 @@ describe('openlmis.requisitions.search', function() {
         });
     });
 
+    it('should search by code without a facility', function() {
+        this.goToUrl('/requisitions/view?code=REQ-001&page=0&size=10');
+
+        expect(this.getResolvedValue('requisitions')).toEqual(this.requisitions);
+        expect(this.requisitionService.search).toHaveBeenCalledWith(false, {
+            code: 'REQ-001',
+            page: '0',
+            size: '10',
+            sort: 'createdDate,desc'
+        });
+    });
+
+    it('should not search without a facility and a code', function() {
+        this.goToUrl('/requisitions/view?page=0&size=10');
+
+        expect(this.requisitionService.search).not.toHaveBeenCalled();
+    });
+
     it('should not be accessible if fetching requisitions fails', function() {
         this.requisitionService.search.andReturn(this.$q.reject());
 

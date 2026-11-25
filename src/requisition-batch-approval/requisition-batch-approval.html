@@ -20,6 +20,7 @@
                             colspan="2"
                             ng-class="{'requisition-error': requisition.$error,
                                        'is-hidden': !(requisition)}">
+                            {{requisition.code}}<br/>
                             {{requisition.facilityName}} - {{requisition.periodName}}
                         </th>
                         <th class="col-sticky sticky-right" colspan="2">{{'requisitionBatchApproval.totalForAllFacilities' | message}}</th>

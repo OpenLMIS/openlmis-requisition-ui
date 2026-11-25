@@ -24,6 +24,7 @@
             <th class="col-sticky" ng-if="vm.isBatchApproveScreenActive">
                 {{ 'requisitionApproval.approve' | message }}
             </th>
+            <th>{{'requisitionApproval.code' | message}}</th>
             <th>{{'requisitionApproval.program' | message}}</th>
             <th>{{'requisitionApproval.facility' | message}}</th>
             <th>{{'requisitionApproval.period' | message}}</th>
@@ -41,6 +42,7 @@
             <td ng-if="vm.isBatchApproveScreenActive">
                 <input type="checkbox" ng-model="requisition.$selected">
             </td>
+            <td>{{requisition.code}}</td>
             <td>{{requisition.program.name}}</td>
             <td>{{requisition.facility.code}} - {{requisition.facility.name}}</td>
             <td>{{requisition.processingPeriod.name}}</td>

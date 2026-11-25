@@ -105,6 +105,17 @@
         /**
          * @ngdoc property
          * @propertyOf requisition-search.controller:RequisitionViewController
+         * @name code
+         * @type {String}
+         *
+         * @description
+         * The requisition code to search for.
+         */
+        vm.code = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-search.controller:RequisitionViewController
          * @name startDate
          * @type {Object}
          *
@@ -189,6 +200,10 @@
 
             if ($stateParams.requisitionStatus) {
                 vm.selectedStatus = $stateParams.requisitionStatus;
+            }
+
+            if ($stateParams.code) {
+                vm.code = $stateParams.code;
             }
         }
 
@@ -296,6 +311,7 @@
             stateParams.initiatedDateTo = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
             stateParams.offline = vm.offline;
             stateParams.requisitionStatus = vm.selectedStatus;
+            stateParams.code = vm.code && vm.code.trim() ? vm.code.trim() : undefined;
 
             $state.go('openlmis.requisitions.search', stateParams, {
                 reload: true

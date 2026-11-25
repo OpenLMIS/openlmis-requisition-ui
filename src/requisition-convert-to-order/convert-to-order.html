@@ -21,6 +21,7 @@
 					<input type="checkbox" ng-model="vm.selectAll"
 						   ng-change="vm.toggleSelectAll(vm.selectAll)">
 				</th>
+				<th>{{'requisitionConvertToOrder.code' | message}}</th>
 				<th>{{'requisitionConvertToOrder.program' | message}}</th>
 				<th>{{'requisitionConvertToOrder.facility' | message}}</th>
 				<th>{{'requisitionConvertToOrder.districtName' | message}}</th>
@@ -38,6 +39,7 @@
 					<input type="checkbox" ng-model="item.$selected"
 						   ng-change="vm.onRequisitionSelect(item)">
 				</td>
+				<td>{{item.requisition.code}}</td>
 				<td>{{item.requisition.program.name}}</td>
 				<td>{{item.requisition.facility.code}} - {{item.requisition.facility.name}}</td>
 				<td>{{item.requisition.facility.geographicZone.name}}</td>

@@ -1,5 +1,6 @@
 {
     "requisitionSearch.actions": "Actions",
+    "requisitionSearch.code": "Requisition code",
     "requisitionSearch.dateInitiated": "Date initiated",
     "requisitionSearch.emergency": "Emergency",
     "requisitionSearch.endDate": "End date",

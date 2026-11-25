@@ -27,7 +27,8 @@
             showInNavigation: true,
             isOffline: true,
             label: 'requisitionSearch.view',
-            url: '/view?program&facility&initiatedDateFrom&initiatedDateTo&page&size&offline&sort&requisitionStatus',
+            url: '/view?program&facility&initiatedDateFrom&initiatedDateTo&page&size&offline&sort' +
+                '&requisitionStatus&code',
             params: {
                 sort: ['createdDate,desc']
             },
@@ -43,7 +44,7 @@
                 },
                 requisitions: function(paginationService, requisitionService, offlineService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        if (stateParams.facility) {
+                        if (stateParams.facility || stateParams.code) {
                             var offline = stateParams.offline === 'true' || offlineService.isOffline();
                             delete stateParams.offline;
                             return requisitionService.search(offline, stateParams);
