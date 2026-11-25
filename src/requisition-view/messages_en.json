@@ -25,6 +25,7 @@
   "requisitionView.delete.label": "Delete",
   "requisitionView.delete.success": "Requisition has been deleted!",
   "requisitionView.emergency": "Emergency",
+  "requisitionView.code": "Requisition code",
   "requisitionView.facility": "Facility",
   "requisitionView.fullSupplyProducts": "Full supply product(s)",
   "requisitionView.priorityDrugsAndMedicalSupplies": "Priority drugs and medical supplies",

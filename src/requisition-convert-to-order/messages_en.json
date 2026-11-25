@@ -19,6 +19,7 @@
     "requisitionConvertToOrder.noSearchResults": "No requisitions for convert found",
     "requisitionConvertToOrder.noSupplyingDepotSelected": "Supplying depot not selected",
     "requisitionConvertToOrder.period": "Period",
+    "requisitionConvertToOrder.code": "Requisition code",
     "requisitionConvertToOrder.program": "Program",
     "requisitionConvertToOrder.search": "Search",
     "requisitionConvertToOrder.selectAtLeastOneRnr": "Please select at least one requisition for converting to order.",

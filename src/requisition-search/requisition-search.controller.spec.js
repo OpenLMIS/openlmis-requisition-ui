@@ -189,6 +189,22 @@ describe('RequisitionSearchController', function() {
             expect(this.vm.selectedStatus).toBeUndefined();
         });
 
+        it('should set code if it was passed through the URL', function() {
+            this.$stateParams.code = 'REQ-001';
+
+            this.vm.$onInit();
+
+            expect(this.vm.code).toEqual('REQ-001');
+        });
+
+        it('should not set code if not passed through the URL', function() {
+            this.$stateParams.code = undefined;
+
+            this.vm.$onInit();
+
+            expect(this.vm.code).toBeUndefined();
+        });
+
         it('should set endDate if initiated date to was passed through the URL', function() {
             this.$stateParams.initiatedDateTo = '2017-01-31';
 
@@ -238,6 +254,22 @@ describe('RequisitionSearchController', function() {
             }, {
                 reload: true
             });
+        });
+
+        it('should set trimmed code', function() {
+            this.vm.code = '  REQ-001 ';
+
+            this.vm.search();
+
+            expect(this.$state.go.calls[0].args[1].code).toEqual('REQ-001');
+        });
+
+        it('should not set blank code', function() {
+            this.vm.code = '   ';
+
+            this.vm.search();
+
+            expect(this.$state.go.calls[0].args[1].code).toBeUndefined();
         });
 
         it('should set facility', function() {

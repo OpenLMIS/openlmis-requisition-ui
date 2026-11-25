@@ -158,6 +158,23 @@ describe('requisitionSearch filter', function() {
         })).toEqual(this.requisitions);
     });
 
+    it('should filter by code', function() {
+        this.requisitions[0].code = 'REQ-001';
+        this.requisitions[1].code = 'REQ-002';
+
+        expect(this.$filter('requisitionSearch')(this.requisitions, {
+            code: 'REQ-002'
+        })).toEqual([
+            this.requisitions[1]
+        ]);
+    });
+
+    it('should not filter by code if it is undefined', function() {
+        expect(this.$filter('requisitionSearch')(this.requisitions, {
+            code: undefined
+        })).toEqual(this.requisitions);
+    });
+
     it('should filter by multiple conditions', function() {
         expect(this.$filter('requisitionSearch')(this.requisitions, {
             status: [this.REQUISITION_STATUS.INITIATED],
